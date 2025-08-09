@@ -5,4 +5,5 @@ public class Kniffel {
 	int x = 2;
 	
 	
+	int babadook = 1;
 }
