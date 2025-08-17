@@ -13,9 +13,11 @@ public class SpielfeldGUI {
 	// Konstruktor
 	// Fläche und sichbarkeit müssen noch gemacht werden
 	// Fläche mit ...setSize() und sichtbarkeit mit ...setVisible(true)
-	public SpielfeldGUI() {
+	public SpielfeldGUI () {
 		
 		spielflaecheGesamt = new JFrame("Spielfeld");
+		spielflaecheGesamt.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
+		spielflaecheGesamt.setSize(800,700);
 		
 		wuerfelflaeche = new WuerfelflacheGUI();
 		
@@ -25,6 +27,7 @@ public class SpielfeldGUI {
 		
 		spielbank = new SpielbankGUI();
 			
+		spielflaecheGesamt.setVisible(true);
 	}
 	
 	public void aktualisieren() {

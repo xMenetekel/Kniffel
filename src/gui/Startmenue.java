@@ -1,7 +1,9 @@
 package gui;
 
+
 public class Startmenue {
 
+	
 	public void moeglicheSpielModi() {
 		
 	}
