@@ -2,8 +2,10 @@ package model;
 
 public interface WuerfelInfo {
 
-	void wuerfel();
+	void wuerfeln();
 	int getAugen();
+	int getSeiten();
 	void setBehalten(boolean behalten);
+	void nichtBehalten();
 	
 }

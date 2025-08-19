@@ -43,6 +43,7 @@ public class WuerfelGUI {
 		alleWuerfel.setVisible(true);
 		alleWuerfel.setLayout(null);
 		alleWuerfel.setBounds(0, 0, 120, 40);
+
 		
 	}
 	
