@@ -31,9 +31,7 @@ public class Startmenue {
 		exit.setBounds         (100, 300, 600, 50);
 		
 		exit.addActionListener(klick -> {System.exit(0);});
-		starteSpiel.addActionListener(klick -> {Eimer.removeAll();
-												new SpielfeldGUI(Eimer);
-												Eimer.repaint();});
+		starteSpiel.addActionListener(klick -> {new SpielfeldGUI(Eimer);});
 		startmenueGesamt.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
 		
 		
