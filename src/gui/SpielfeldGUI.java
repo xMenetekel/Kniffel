@@ -29,7 +29,7 @@ public class SpielfeldGUI {
 		spielbank = new SpielbankGUI();
 		
 		wuerfelflaeche.getPanel().setBounds(50, 200, 350, 200);
-		wuerfel.getPanel().setBounds(170, 435, 120, 20);
+		wuerfel.getPanel().setBounds(100, 435, 270, 50);
 		punktetabelle.getPanel().setBounds(440, 50, 300, 550);
 		spielbank.getPanel().setBounds(50, 500, 350, 100);
 		

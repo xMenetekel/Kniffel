@@ -17,19 +17,19 @@ public class WuerfelGUI {
 		wuerfel4 = new JButton("4");
 		wuerfel5 = new JButton("5");
 		
-		wuerfel1.setBounds(0,0, 20, 20);
+		wuerfel1.setBounds(0,0, 50, 50);
 		wuerfel1.setVisible(true);
 		
-		wuerfel2.setBounds(25, 0, 20, 20);
+		wuerfel2.setBounds(55, 0, 50, 50);
 		wuerfel2.setVisible(true);
 		
-		wuerfel3.setBounds(50, 0, 20, 20);
+		wuerfel3.setBounds(110, 0, 50, 50);
 		wuerfel3.setVisible(true);
 		
-		wuerfel4.setBounds(75, 0, 20, 20);
+		wuerfel4.setBounds(165, 0, 50, 50);
 		wuerfel4.setVisible(true);
 		
-		wuerfel5.setBounds(100, 0, 20, 20);
+		wuerfel5.setBounds(220, 0, 50, 50);
 		wuerfel5.setVisible(true);
 		
 		alleWuerfel = new JPanel();
