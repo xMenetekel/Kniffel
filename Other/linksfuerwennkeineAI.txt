@@ -1,2 +1,3 @@
 https://codingtechroom.com/question/resize-imageicon-jbutton-java
 wie man einen jbutton resized weil das image einfach nicht draufpasst lmao
+also das ging nicht yay

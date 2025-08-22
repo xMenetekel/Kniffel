@@ -34,7 +34,7 @@ public class SpielfeldGUI {
 		spielbank.getPanel().setBounds(50, 500, 350, 100);
 		
 		wuerfelflaeche.getPanel().setBackground(Color.RED);
-		wuerfel.getPanel().setBackground(Color.BLUE);
+		wuerfel.getPanel().setBackground(Color.BLACK);
 		punktetabelle.getPanel().setBackground(Color.CYAN);
 		spielbank.getPanel().setBackground(Color.GREEN);
 		
