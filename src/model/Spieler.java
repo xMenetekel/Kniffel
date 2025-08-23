@@ -1,27 +1,28 @@
 package model;
 
-public class Spieler  implements SpielerInfo {
-
-	private String name;
-	private int punkte = 0;
+public class Spieler{
+	private String name = "Spieler";
+	private int punktestand = 0;
+	private int reihenfolge = 0;
 	
-	public Spieler() {
-		
-	}
-
-	@Override
+	
 	public String getName() {
-		return null;
+		return name;
 	}
-
 	public void setName(String name) {
-
-		
+		this.name = name;
 	}
-
-	@Override
-	public int getGesamtpunkte() {
-		return 0;
+	public int getPunktestand() {
+		return punktestand;
+	}
+	public void setPunktestand(int punktestand) {
+		this.punktestand = punktestand;
+	}
+	public int getReihenfolge() {
+		return reihenfolge;
+	}
+	public void setReihenfolge(int reihenfolge) {
+		this.reihenfolge = reihenfolge;
 	}
 	
 }

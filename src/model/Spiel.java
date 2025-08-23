@@ -14,5 +14,29 @@ public class Spiel {
 	public void eintragen(Moeglichkeit moeglichkeit) {
 		
 	}
+
+	public int getAktiverSpielerIndex() {
+		return aktiverSpielerIndex;
+	}
+
+	public void setAktiverSpielerIndex(int aktiverSpielerIndex) {
+		this.aktiverSpielerIndex = aktiverSpielerIndex;
+	}
+
+	public int getWuerfeAnzahl() {
+		return wuerfeAnzahl;
+	}
+
+	public void setWuerfeAnzahl(int wuerfeAnzahl) {
+		this.wuerfeAnzahl = wuerfeAnzahl;
+	}
+
+	public List<Spieler> getSpieler() {
+		return spieler;
+	}
+
+	public void setSpieler(List<Spieler> spieler) {
+		this.spieler = spieler;
+	}
 	
 }
