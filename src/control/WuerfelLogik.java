@@ -47,6 +47,11 @@ public class WuerfelLogik implements WuerfelInfo {
 		this.behalten = behalten;
 		
 	}
+	
+	//Getter
+	public boolean istBhalten() {
+		return behalten;
+	}
 
 	@Override
 	public void nichtBehalten() {
