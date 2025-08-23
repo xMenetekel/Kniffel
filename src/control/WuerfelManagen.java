@@ -3,24 +3,24 @@ package control;
 import java.util.ArrayList;
 import java.util.List;
 
-import model.WuerfelInfo;
+import model.WuerfelDaten;
 
 public class WuerfelManagen {
 
-	private List<WuerfelInfo> wuerfel;
+	private List<WuerfelDaten> wuerfel;
 	int wurfAnzahl = 0;
 	int maxWuerfe = 3;
 	
-	public WuerfelManagen(List<WuerfelInfo> wuerfel) {
+	public WuerfelManagen(List<WuerfelDaten> wuerfel) {
 		this.wuerfel = new ArrayList<>(wuerfel); //Kopie 
 	}
 
 	//Getter und Setter Methoden generiert
-	public List<WuerfelInfo> getWuerfel() {
+	public List<WuerfelDaten> getWuerfel() {
 		return wuerfel;
 	}
 
-	public void setWuerfel(List<WuerfelInfo> wuerfel) {
+	public void setWuerfel(List<WuerfelDaten> wuerfel) {
 		this.wuerfel = wuerfel;
 	}
 
@@ -45,7 +45,7 @@ public class WuerfelManagen {
 		if(wurfAnzahl >= maxWuerfe) {
 			return;
 		}
-		for(WuerfelInfo w : wuerfel) {
+		for(WuerfelDaten w : wuerfel) {
 			w.wuerfeln(); //wenn behalten bleibt
 		}
 		wurfAnzahl++;

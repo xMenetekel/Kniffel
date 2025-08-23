@@ -1,20 +1,22 @@
 package main;
 
+import gui.StartmenueGUI;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Scanner;
 
 import control.WuerfelManagen;
-import gui.Startmenue;
 import model.WuerfelFactory;
-import model.WuerfelInfo;
+import model.WuerfelDaten;
+import gui.StartmenueGUI;
 
 public class Main {
 	public static void main(String[] args) {
 	
 		System.out.println("Test es funktionert! UwU");
 		
-		new Startmenue();
+
+		new StartmenueGUI();
 		
 		
 		
@@ -22,7 +24,7 @@ public class Main {
 		
 		//Das ist nur ein Test für die Würfel kann später wider gelöscht werden!
 		//5 W6 Wuerfel erstellen
-		List<WuerfelInfo> wuerfelListe = new ArrayList<>();
+		List<WuerfelDaten> wuerfelListe = new ArrayList<>();
 		for(int i = 0; i < 5; i++) {
 			wuerfelListe.add(WuerfelFactory.createWuerfel("W6"));
 		}
@@ -76,11 +78,12 @@ public class Main {
 		}
 		scanner.close();
 		
+
 	}
 	
 	private static void ausgabe(WuerfelManagen manager) {
 		int i = 1;
-		for(WuerfelInfo w : manager.getWuerfel()) {
+		for(WuerfelDaten w : manager.getWuerfel()) {
 			System.out.println("Wuerfel " + i + ": " + w.getAugen());
 			i++;
 		}

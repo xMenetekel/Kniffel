@@ -1,9 +1,9 @@
 package control;
 
 import java.util.Random;
-import model.WuerfelInfo;
+import model.WuerfelDaten;
 
-public class WuerfelLogik implements WuerfelInfo {
+public class WuerfelLogik implements WuerfelDaten {
 	
 	private int  seiten;
 	private int augen;
