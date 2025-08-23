@@ -2,7 +2,7 @@ package model;
 
 import java.util.Random;
 
-public class W6 implements WuerfelInfo {
+public class W6 implements WuerfelDaten {
 	private int augen;
 	private int seiten = 6;
 	private boolean behalten = false;

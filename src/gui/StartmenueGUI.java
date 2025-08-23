@@ -5,7 +5,7 @@ import java.awt.Container;
 import javax.swing.JButton;
 import javax.swing.JFrame;
 
-public class Startmenue {
+public class StartmenueGUI {
 		private JFrame startmenueGesamt;
 		private JButton starteSpiel;
 		private JButton einstellungen;
@@ -14,7 +14,7 @@ public class Startmenue {
 			
 	
 	
-	public Startmenue() {
+	public StartmenueGUI() {
 		startmenueGesamt = new JFrame("Startmenue");
 		startmenueGesamt.setSize(800, 700);
 		

@@ -2,7 +2,7 @@ package model;
 
 import java.awt.Color;
 
-public class Hauptmenue {
+public class StartmenueDaten {
 	
 	private boolean spielGestartet = false;
 	private boolean einstellungenOffen = false;

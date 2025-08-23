@@ -1,6 +1,6 @@
 package model;
 
-public class Spieler{
+public class SpielerDaten{
 	private String name = "Spieler";
 	private int punktestand = 0;
 	private int reihenfolge = 0;

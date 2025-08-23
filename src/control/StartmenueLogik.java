@@ -1,6 +1,6 @@
 package control;
 
-public class MenueLogik {
+public class StartmenueLogik {
 	// da muss noch was gemacht werden!
 	public void starteSpiel() {
 		
