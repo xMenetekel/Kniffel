@@ -15,7 +15,8 @@ public class StartmenueLogik {
 	}
 	
 	private void starteStartmenue() {
-		
+		menueGUI.getExit().addActionListener(klick -> {System.exit(0);});
+		menueGUI.getStarteSpiel().addActionListener(klick -> {new SpielfeldGUI();}););
 		
 	}
 	

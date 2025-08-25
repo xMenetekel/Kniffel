@@ -68,7 +68,7 @@ public class WuerfelGUI {
 		int zielX = (new Random().nextInt(350))+50;  //die werte später anpassen auf werte zum skalieren!!!!!!!!!! TODO TODO TODO 
 		int zielY = (new Random().nextInt(200))+200; //lol die werte schon jetzt anpassen, die werden nämlich immer unter dem würfelpanel sein weil das als 0,0 zählt. irgendwie müssen die aus dem panel rausgeholt werden. flag probably boolean für ob unten oder oben problem für später
 		
-		Timer timer = new Timer(16, e -> {
+		Timer timer = new Timer(6, e -> {
 			int xJetzt = wuerfel.getX();
 			int yJetzt = wuerfel.getY();
 			

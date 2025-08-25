@@ -118,7 +118,7 @@ public class PunkteTabelleGUI {
 		@Override
 		// Datentype der Spalten 
 		public Class<?> getColumnClass(int column){
-			if(column == 0) return Object.class; // Bilder und Text
+			if(column == 0) return ImageIcon.class; // Bilder und Text
 			if(column >= 2) return Integer.class; // Spieler
 			return String.class; // Kombinationen spalte 1	
 		}
