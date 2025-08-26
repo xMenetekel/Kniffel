@@ -14,6 +14,9 @@ public class StartmenueGUI {
 			
 	
 	
+	
+
+
 	public StartmenueGUI() {
 		this.startmenueGesamt = new JFrame("Startmenue");
 		this.startmenueGesamt.setSize(800, 700);
@@ -100,6 +103,24 @@ public class StartmenueGUI {
 	
 	public void exit() {
 		
+	}
+	public JFrame getStartmenueGesamt() {
+		return startmenueGesamt;
+	}
+
+
+	public void setStartmenueGesamt(JFrame startmenueGesamt) {
+		this.startmenueGesamt = startmenueGesamt;
+	}
+
+
+	public Container getEimer() {
+		return Eimer;
+	}
+
+
+	public void setEimer(Container eimer) {
+		Eimer = eimer;
 	}
 	
 }
