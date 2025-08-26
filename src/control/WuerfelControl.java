@@ -19,7 +19,7 @@ public class WuerfelControl  {
 		
 		for(int i = 0; i < 5; i++) {		//das erstellt 5 würfel und fügt in jeder iteration den wuerfel den entsprechenden arrays hinzu
 		WuerfelLogik model = new WuerfelLogik(6);
-		WuerfelGUI view = new WuerfelGUI(model, i*55, 350);
+		WuerfelGUI view = new WuerfelGUI(model, i*55+80, 420);
 		alleWuerfelGUI.add(view);
 		alleWuerfelLogik.add(model);
 		}
