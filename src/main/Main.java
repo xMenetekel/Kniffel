@@ -5,7 +5,7 @@ import java.util.ArrayList;
 import java.util.List;
 import java.util.Scanner;
 
-import control.WuerfelManagen;
+import control.WuerfelControl;
 import model.WuerfelFactory;
 import model.WuerfelLogik;
 import gui.StartmenueGUI;
@@ -30,7 +30,7 @@ public class Main {
 		}
 		
 		//Ubergabe an den Manager
-		WuerfelManagen manager = new WuerfelManagen(wuerfelListe);
+		WuerfelControl manager = new WuerfelControl();
 		Scanner scanner = new Scanner(System.in);
 				
 		//Wurfabfrage nochmal Würfeln
@@ -44,11 +44,11 @@ public class Main {
 			}
 			
 			//Meherer Wuerfel behalten
-			System.out.println("Würfel bahalten 1-5, 0 kein würfel behalten");
+			System.out.println("Würfel behalten 1-5, 0 kein Würfel behalten");
 			String zeile = scanner.nextLine().trim();
 			
 			//zuerst alle auf nichtbehalten
-			for(int i = 0; i < manager.getWuerfel().size(); i++) {
+			for(int i = 0; i < manager.getAlleWuerfelLogik().size(); i++) {
 				manager.setBehalten(i, false);
 			}
 			
@@ -57,7 +57,7 @@ public class Main {
 				for(String t : teile) {
 					try {
 						int index = Integer.parseInt(t);
-						if(index >= 1 && index <= manager.getWuerfel().size()) {
+						if(index >= 1 && index <= manager.getAlleWuerfelLogik().size()) {
 							manager.setBehalten(index-1, true);
 							System.out.println("Wuerfel " + index + "behalten.");
 						}
@@ -81,9 +81,9 @@ public class Main {
 
 	}
 	
-	private static void ausgabe(WuerfelManagen manager) {
+	private static void ausgabe(WuerfelControl manager) {
 		int i = 1;
-		for(WuerfelLogik w : manager.getWuerfel()) {
+		for(WuerfelLogik w : manager.getAlleWuerfelLogik()) {
 			System.out.println("Wuerfel " + i + ": " + w.getAugen());
 			i++;
 		}

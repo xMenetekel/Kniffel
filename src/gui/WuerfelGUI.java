@@ -1,14 +1,63 @@
 package gui;
 
 import javax.swing.JButton;
+import model.*;
 
 
-import java.util.Random;
+
 
 import javax.swing.*;
 
 public class WuerfelGUI {
-	JButton wuerfel1, wuerfel2, wuerfel3, wuerfel4, wuerfel5;
+	JButton wuerfel;
+	WuerfelLogik model;
+	int xPos;
+	int yPos;
+	
+	
+	public WuerfelGUI(WuerfelLogik model, int startX, int startY){
+		this.model = model;
+		this.wuerfel = new JButton();
+		wuerfel.addActionListener(klick -> { model.wuerfelAngeklickt(wuerfel, model.istBehalten()); } );
+		this.xPos = startX;
+		this.yPos = startY;
+		fresherButton();
+		
+	}
+	public void fresherButton() {
+		ImageIcon bildi = new ImageIcon("Other/" + model.getAugen() + ".jpg" );
+		wuerfel.setIcon(bildi);
+		wuerfel.setVisible(true);
+		wuerfel.setBounds(this.xPos, this.yPos, 50, 50);
+	
+	}
+	public JButton getButton() {
+		return this.wuerfel;
+	}
+	public WuerfelLogik getLogik() {
+		return this.model;
+	}
+	public int getxPos() {
+		return xPos;
+	}
+	public void setxPos(int xPos) {
+		this.xPos = xPos;
+	}
+	public int getyPos() {
+		return yPos;
+	}
+	public void setyPos(int yPos) {
+		this.yPos = yPos;
+	}
+}
+
+
+
+
+
+
+
+	/*JButton wuerfel1, wuerfel2, wuerfel3, wuerfel4, wuerfel5;
 	JPanel alleWuerfel;
 	int wuerfellIndex = 0;
 	
@@ -64,39 +113,9 @@ public class WuerfelGUI {
 
 		
 	}
-	
-	private Object wuerfelAngeklickt(JButton wuerfel) {
-		int zielX = (new Random().nextInt(300))+50;  //die werte später anpassen auf werte zum skalieren!!!!!!!!!! TODO TODO TODO 
-		int zielY = (new Random().nextInt(150))+200; //lol die werte schon jetzt anpassen, die werden nämlich immer unter dem würfelpanel sein weil das als 0,0 zählt. irgendwie müssen die aus dem panel rausgeholt werden. flag probably boolean für ob unten oder oben problem für später
-		
-		
-		
-		Timer timer = new Timer(6, e -> {
-			int xJetzt = wuerfel.getX();
-			int yJetzt = wuerfel.getY();
-			
-			if (xJetzt > zielX) xJetzt--;
-			if (xJetzt < zielX) xJetzt++;
-			if (yJetzt > zielY) yJetzt--;		//lol
-			if (yJetzt < zielY) yJetzt++;
-			
-			wuerfel.setLocation(xJetzt, yJetzt);
-			
-			if(xJetzt == zielX && yJetzt == zielY) {
-				((Timer)e.getSource()).stop();
-			}
-			
-		});
-		timer.start();
-		
-		return null;
-	}
-
-	public void setBehalten() {
-		
-	}
 
 	public JPanel getPanel() {
 		return this.alleWuerfel;
 	}
 }
+*/

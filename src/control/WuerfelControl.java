@@ -1,70 +1,78 @@
 package control;
 
-import java.util.Random;
+
+import java.util.ArrayList;
+import java.util.List;
+
+import gui.WuerfelGUI;
 import model.WuerfelLogik;
 
-public class WuerfelControl implements WuerfelLogik {
+public class WuerfelControl  {
+	private List<WuerfelGUI> alleWuerfelGUI = new ArrayList<>();
+	private List<WuerfelLogik> alleWuerfelLogik = new ArrayList<>();
 	
-	private int  seiten;
-	private int augen;
-	private boolean behalten;
-	private Random zufall;
 	
-	//Konstruktor 
-	public WuerfelControl(int seiten) {
-		this.seiten = seiten;
-		this.behalten = false;
-		this.zufall = new Random();
-		wuerfeln();
-	}
+	int wurfAnzahl = 0;
+	int maxWuerfe = 3;
 	
-
-	
-	@Override
-	public void wuerfeln() {
-		if(!behalten) {
-			augen = zufall.nextInt(seiten)+1; //keine 0 seiten
+	public WuerfelControl(){
+		
+		for(int i = 0; i < 5; i++) {		//das erstellt 5 würfel und fügt in jeder iteration den wuerfel den entsprechenden arrays hinzu
+		WuerfelLogik model = new WuerfelLogik(6);
+		WuerfelGUI view = new WuerfelGUI(model, i*55, 350);
+		alleWuerfelGUI.add(view);
+		alleWuerfelLogik.add(model);
 		}
 		
 	}
-
-	
-	@Override
-	public int getAugen() {
-		return augen;
+	public int getWurfAnzahl() {
+		return wurfAnzahl;
 	}
 
-
-	@Override
-	public int getSeiten() {
-		return seiten;
+	public void setWurfAnzahl(int wurfAnzahl) {
+		this.wurfAnzahl = wurfAnzahl;
 	}
 
+	public int getMaxWuerfe() {
+		return maxWuerfe;
+	}
 
-
-	@Override
-	public void setBehalten(boolean behalten) {
-		this.behalten = behalten;
+	public void setMaxWuerfe(int maxWuerfe) {
+		this.maxWuerfe = maxWuerfe;
+	}
+	//Methoden 
+		public void wuerfeln() {
+			if(wurfAnzahl >= maxWuerfe) {
+				return;
+			}
+			for(WuerfelLogik w : alleWuerfelLogik) {
+				w.wuerfeln(); //wenn behalten bleibt
+			}
+			wurfAnzahl++;
+		}
 		
-	}
-	
-	//Getter
-	public boolean istBhalten() {
-		return behalten;
-	}
-
-	@Override
-	public void nichtBehalten() {
-		behalten = false;
-	}
-
-
-	public void anzahlZuege() {
+		public void setBehalten(int index, boolean behalten) {
+			if(index >= 0 && index < alleWuerfelLogik.size()) {
+				alleWuerfelLogik.get(index).setBehalten(behalten);
+			}
+		}
 		
-	}
+		public void neueRunde() {
+			
+		}
 	
-	public void positionWuerfel() {
-		
-	}
-
+		public List<WuerfelGUI> getAlleWuerfelGUI() {
+			return alleWuerfelGUI;
+		}
+		public void setAlleWuerfelGUI(List<WuerfelGUI> alleWuerfelGUI) {
+			this.alleWuerfelGUI = alleWuerfelGUI;
+		}
+		public List<WuerfelLogik> getAlleWuerfelLogik() {
+			return alleWuerfelLogik;
+		}
+		public void setAlleWuerfelLogik(List<WuerfelLogik> alleWuerfelLogik) {
+			this.alleWuerfelLogik = alleWuerfelLogik;
+		}
 }
+	
+	
