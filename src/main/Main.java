@@ -7,7 +7,7 @@ import java.util.Scanner;
 
 import control.WuerfelManagen;
 import model.WuerfelFactory;
-import model.WuerfelDaten;
+import model.WuerfelLogik;
 import gui.StartmenueGUI;
 
 public class Main {
@@ -24,7 +24,7 @@ public class Main {
 		
 		//Das ist nur ein Test für die Würfel kann später wider gelöscht werden!
 		//5 W6 Wuerfel erstellen
-		List<WuerfelDaten> wuerfelListe = new ArrayList<>();
+		List<WuerfelLogik> wuerfelListe = new ArrayList<>();
 		for(int i = 0; i < 5; i++) {
 			wuerfelListe.add(WuerfelFactory.createWuerfel("W6"));
 		}
@@ -83,7 +83,7 @@ public class Main {
 	
 	private static void ausgabe(WuerfelManagen manager) {
 		int i = 1;
-		for(WuerfelDaten w : manager.getWuerfel()) {
+		for(WuerfelLogik w : manager.getWuerfel()) {
 			System.out.println("Wuerfel " + i + ": " + w.getAugen());
 			i++;
 		}

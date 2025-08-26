@@ -37,7 +37,7 @@ public class SpielfeldGUI {
 		punktetabelle.getPanel().setBounds(440, 50, 300, 550);
 		spielbank.getPanel().setBounds(50, 500, 350, 100);
 		
-		Eimer.addComponentListener(new ComponentAdapter() {
+		Eimer.addComponentListener(new ComponentAdapter() { //der ganze spaß hier ist dafür da das beim neu ziehen alles prozentual angepasst wird
 			@Override
 			public void componentResized(ComponentEvent e) {
 				rearrangiereWuerfelflaeche(Eimer, wuerfelflaeche);
@@ -51,8 +51,23 @@ public class SpielfeldGUI {
 		
 		wuerfelflaeche.getPanel().setBackground(Color.RED);
 		wuerfel.getPanel().setBackground(Color.BLACK);
+		
 		punktetabelle.getPanel().setBackground(Color.CYAN);
 		spielbank.getPanel().setBackground(Color.GREEN);
+		
+
+		wuerfel.wuerfel1.setBounds(100, 435, 50, 50);
+		wuerfel.wuerfel2.setBounds(155, 435, 50, 50);
+		wuerfel.wuerfel3.setBounds(210, 435, 50, 50);
+		wuerfel.wuerfel4.setBounds(265, 435, 50, 50);
+		wuerfel.wuerfel5.setBounds(320, 435, 50, 50);
+		
+		Eimer.add(wuerfel.wuerfel1);
+		Eimer.add(wuerfel.wuerfel2);
+		Eimer.add(wuerfel.wuerfel3);
+		Eimer.add(wuerfel.wuerfel4);
+		Eimer.add(wuerfel.wuerfel5);
+		
 		
 		Eimer.add(wuerfelflaeche.getPanel());
 		Eimer.add(wuerfel.getPanel());

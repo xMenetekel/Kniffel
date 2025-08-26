@@ -1,9 +1,9 @@
 package control;
 
 import java.util.Random;
-import model.WuerfelDaten;
+import model.WuerfelLogik;
 
-public class WuerfelLogik implements WuerfelDaten {
+public class WuerfelControl implements WuerfelLogik {
 	
 	private int  seiten;
 	private int augen;
@@ -11,7 +11,7 @@ public class WuerfelLogik implements WuerfelDaten {
 	private Random zufall;
 	
 	//Konstruktor 
-	public WuerfelLogik(int seiten) {
+	public WuerfelControl(int seiten) {
 		this.seiten = seiten;
 		this.behalten = false;
 		this.zufall = new Random();

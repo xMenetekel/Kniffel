@@ -2,10 +2,10 @@ package model;
 
 public class SpielerFactory {
 	
-	public static SpielerDaten createSpieler(String typ) { 
+	public static SpielerLogik createSpieler(String typ) { 
 		switch(typ) {
 			case "ErsterSpieler":
-				return new SpielerDaten();
+				return new SpielerLogik();
 			default:
 				return null;
 		}

@@ -1,7 +1,7 @@
 package model;
 
 
-public class PunktestandDaten {
+public class PunktestandLogik {
 	private int einer = 0;
 	private int zweier = 0;
 	private int dreier = 0;

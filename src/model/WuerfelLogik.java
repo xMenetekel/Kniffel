@@ -1,6 +1,6 @@
 package model;
 
-public interface WuerfelDaten {
+public interface WuerfelLogik {
 
 	void wuerfeln();
 	int getAugen();

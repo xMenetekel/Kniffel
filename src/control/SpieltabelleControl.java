@@ -2,7 +2,7 @@ package control;
 
 import java.util.List;
 
-public abstract class SpielLogicTabelle {
+public abstract class SpieltabelleControl {
 
 	public abstract List<String> getMoeglicheZuege();
 	

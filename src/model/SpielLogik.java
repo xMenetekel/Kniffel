@@ -3,15 +3,15 @@ package model;
 import java.util.ArrayList;
 import java.util.List;
 
-public class SpielDaten {
+public class SpielLogik {
 
-	private List<SpielerDaten> spieler = new ArrayList<>();
+	private List<SpielerLogik> spieler = new ArrayList<>();
 	
 	private int aktiverSpielerIndex = 0;
 	
 	private int wuerfeAnzahl = 0;
 	
-	public void eintragen(MoeglichkeitDaten moeglichkeit) { //?
+	public void eintragen(MoeglichkeitLogik moeglichkeit) { //?
 		
 	}
 
@@ -31,11 +31,11 @@ public class SpielDaten {
 		this.wuerfeAnzahl = wuerfeAnzahl;
 	}
 
-	public List<SpielerDaten> getSpieler() {
+	public List<SpielerLogik> getSpieler() {
 		return spieler;
 	}
 
-	public void setSpieler(List<SpielerDaten> spieler) {
+	public void setSpieler(List<SpielerLogik> spieler) {
 		this.spieler = spieler;
 	}
 	
