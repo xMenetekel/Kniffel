@@ -18,7 +18,8 @@ public class WuerfelGUI {
 	public WuerfelGUI(WuerfelLogik model, int startX, int startY){
 		this.model = model;
 		this.wuerfel = new JButton();
-		wuerfel.addActionListener(klick -> { model.wuerfelAngeklickt(wuerfel, model.istBehalten()); } );
+		wuerfel.addActionListener(klick -> { model.wuerfelAngeklickt(wuerfel, model.istBehalten()); 
+											model.setBehalten(!model.istBehalten());} );
 		this.xPos = startX;
 		this.yPos = startY;
 		fresherButton();

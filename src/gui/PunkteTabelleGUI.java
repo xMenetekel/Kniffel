@@ -54,17 +54,17 @@ public class PunkteTabelleGUI {
 		
 			//19 Zeilen
 			data = new Object[19][columnNames.length];
-			data[0][0] = new ImageIcon("Other/eins.jpg");
+			data[0][0] = new ImageIcon("Other/1.jpg");
 			data[0][1] = "nur Einsen zaehlen";
-			data[1][0] = new ImageIcon("Other/zwei.jpg");
+			data[1][0] = new ImageIcon("Other/2.jpg");
 			data[1][1] = "nur Zweier zaehlen";
-			data[2][0] = new ImageIcon("Other/drei.jpg");
+			data[2][0] = new ImageIcon("Other/3.jpg");
 			data[2][1] = "nur Dreier zeahlen";
-			data[3][0] = new ImageIcon("Other/vier.jpg");
+			data[3][0] = new ImageIcon("Other/4.jpg");
 			data[3][1] = "nur Vierer zeahlen";
-			data[4][0] = new ImageIcon("Other/fuenf.jpg");
+			data[4][0] = new ImageIcon("Other/5.jpg");
 			data[4][1] = "nur Fuenfen zeahlen";
-			data[5][0] = new ImageIcon("Other/sechs.jpg");
+			data[5][0] = new ImageIcon("Other/6.jpg");
 			data[5][1] = "nur Sechsen zeahlen";
 			data[6][0] = "gesamt";
 			data[6][1] = "--->";
