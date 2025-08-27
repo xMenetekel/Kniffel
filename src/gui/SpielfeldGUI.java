@@ -5,19 +5,13 @@ import java.awt.Component;
 import java.awt.Container;
 import java.awt.event.ComponentAdapter;
 import java.awt.event.ComponentEvent;
-import java.awt.event.ComponentListener;
-
-import javax.swing.JButton;
 import javax.swing.JFrame;
-
 import control.WuerfelControl;
 
 public class SpielfeldGUI {
 	
-	private JFrame spielflaecheGesamt;
 	private WuerfelflaecheGUI wuerfelflaeche;
-	private WuerfelGUI wuerfel;
-	private WuerfelControl test;
+	private WuerfelControl wuerfel;
 	private PunkteTabelleGUI punktetabelle;
 	private SpielbankGUI spielbank;
 
@@ -29,14 +23,12 @@ public class SpielfeldGUI {
 		
 		Eimer.setLayout(null);
 		
-		test = new WuerfelControl();
+		wuerfel = new WuerfelControl(Eimer);
 		wuerfelflaeche = new WuerfelflaecheGUI();
-	//	wuerfel = new WuerfelGUI();
 		punktetabelle = new PunkteTabelleGUI();
 		spielbank = new SpielbankGUI();
 		
 		wuerfelflaeche.getPanel().setBounds(50, 200, 350, 200);
-		//wuerfel.getPanel().setBounds(100, 435, 270, 50);
 		punktetabelle.getPanel().setBounds(440, 50, 300, 550);
 		spielbank.getPanel().setBounds(50, 500, 350, 100);
 		
@@ -44,7 +36,7 @@ public class SpielfeldGUI {
 			@Override
 			public void componentResized(ComponentEvent e) {
 				rearrangiereWuerfelflaeche(Eimer, wuerfelflaeche);
-			//	rearrangiereWuerfel(Eimer, wuerfel);
+				rearrangiereWuerfel(Eimer, wuerfel);
 				rearrangierePunktetabelle(Eimer, punktetabelle);
 				rearrangiereSpielbank(Eimer, spielbank);
 			}
@@ -52,33 +44,16 @@ public class SpielfeldGUI {
 			
 		});
 		
-		wuerfelflaeche.getPanel().setBackground(Color.RED);
-	//	wuerfel.getPanel().setBackground(Color.BLACK);
-		
+		wuerfelflaeche.getPanel().setBackground(Color.RED);		
 		punktetabelle.getPanel().setBackground(Color.CYAN);
-		spielbank.getPanel().setBackground(Color.GREEN);
-		
+		spielbank.getPanel().setBackground(Color.GREEN);		
 
-	/*	wuerfel.wuerfel1.setBounds(100, 435, 50, 50);
-		wuerfel.wuerfel2.setBounds(155, 435, 50, 50);
-		wuerfel.wuerfel3.setBounds(210, 435, 50, 50);
-		wuerfel.wuerfel4.setBounds(265, 435, 50, 50);
-		wuerfel.wuerfel5.setBounds(320, 435, 50, 50);
-		
-		Eimer.add(wuerfel.wuerfel1);
-		Eimer.add(wuerfel.wuerfel2);
-		Eimer.add(wuerfel.wuerfel3);
-		Eimer.add(wuerfel.wuerfel4);
-		Eimer.add(wuerfel.wuerfel5);
-		
-		
-		*/
-		for (WuerfelGUI wuerfelGUI : test.getAlleWuerfelGUI()) {
+
+		for (WuerfelGUI wuerfelGUI : wuerfel.getAlleWuerfelGUI()) {
 	        Eimer.add(wuerfelGUI.getButton());
 	    }
 		
 		Eimer.add(wuerfelflaeche.getPanel());
-	//	Eimer.add(wuerfel.getPanel());
 		Eimer.add(punktetabelle.getPanel());
 		Eimer.add(spielbank.getPanel());
 				
@@ -95,13 +70,24 @@ public class SpielfeldGUI {
 		sb.getPanel().setBounds((int)Math.floor(breite*0.0625), (int)Math.floor(hoehe*0.71428), (int)Math.floor(breite*0.4375),(int)Math.floor(hoehe*0.142857));
 	
 	}
-/*	protected void rearrangiereWuerfel(Component e, WuerfelGUI w) {
+	/**
+	 * junge ich hab das selber ohne KI geschrieben ich werde nie wieder so einen höhenflug erleben wie grade
+	 * 
+	 * @param e
+	 * @param w
+	 */
+	protected void rearrangiereWuerfel(Component e, WuerfelControl w) {
 		int breite = e.getWidth();
 		int hoehe = e.getHeight();
 		
-		w.getPanel().setBounds((int)Math.floor(breite*0.125), (int)Math.floor(hoehe*0.6214), (int)Math.floor(breite*0.3375),(int)Math.floor(hoehe*0.0714));
-		
-	}*/
+		w.getAlleWuerfelGUI().forEach(t -> { t.setxPos( (int) Math.round(t.prozentXAufFeld * breite)  );
+											 t.setyPos( (int) Math.round(t.prozentYAufFeld * hoehe));
+											 t.setProzentXAufFeld(t.getxPos() *1.0 / breite);
+											 t.setProzentYAufFeld(t.getyPos() *1.0 / hoehe);
+											 t.getButton().setBounds(t.getxPos(), t.getyPos(), 50, 50);
+											 });
+			
+	}
 	protected void rearrangierePunktetabelle(Component e, PunkteTabelleGUI p) {
 		int breite = e.getWidth();
 		int hoehe = e.getHeight();

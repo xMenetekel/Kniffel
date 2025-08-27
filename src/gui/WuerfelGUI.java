@@ -3,8 +3,7 @@ package gui;
 import javax.swing.JButton;
 import model.*;
 
-
-
+import java.awt.Container;
 
 import javax.swing.*;
 
@@ -13,15 +12,24 @@ public class WuerfelGUI {
 	WuerfelLogik model;
 	int xPos;
 	int yPos;
+	double prozentXAufFeld;
+	double prozentYAufFeld;
+	Container Eimer;
 	
-	
-	public WuerfelGUI(WuerfelLogik model, int startX, int startY){
+
+	public WuerfelGUI(WuerfelLogik model, int startX, int startY, Container Eimer){
 		this.model = model;
 		this.wuerfel = new JButton();
-		wuerfel.addActionListener(klick -> { model.wuerfelAngeklickt(wuerfel, model.istBehalten()); } );
+		wuerfel.addActionListener(klick -> { model.wuerfelAngeklickt(this, model.istBehalten()); 
+											model.setBehalten(!model.istBehalten());											
+											} );
+		this.Eimer = Eimer;
 		this.xPos = startX;
 		this.yPos = startY;
 		fresherButton();
+		this.prozentXAufFeld = startX * 1.0 / Eimer.getWidth();
+		this.prozentYAufFeld = startY * 1.0 / Eimer.getHeight();
+		
 		
 	}
 	public void fresherButton() {
@@ -48,6 +56,24 @@ public class WuerfelGUI {
 	}
 	public void setyPos(int yPos) {
 		this.yPos = yPos;
+	}
+	public double getProzentXAufFeld() {
+		return prozentXAufFeld;
+	}
+	public void setProzentXAufFeld(double prozentXAufFeld) {
+		this.prozentXAufFeld = prozentXAufFeld;
+	}
+	public double getProzentYAufFeld() {
+		return prozentYAufFeld;
+	}
+	public void setProzentYAufFeld(double prozentYAufFeld) {
+		this.prozentYAufFeld = prozentYAufFeld;
+	}
+	public Container getEimer() {
+		return Eimer;
+	}
+	public void setEimer(Container eimer) {
+		Eimer = eimer;
 	}
 }
 

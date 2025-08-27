@@ -1,6 +1,7 @@
 package control;
 
 
+import java.awt.Container;
 import java.util.ArrayList;
 import java.util.List;
 
@@ -15,11 +16,11 @@ public class WuerfelControl  {
 	int wurfAnzahl = 0;
 	int maxWuerfe = 3;
 	
-	public WuerfelControl(){
+	public WuerfelControl(Container Eimer){
 		
 		for(int i = 0; i < 5; i++) {		//das erstellt 5 würfel und fügt in jeder iteration den wuerfel den entsprechenden arrays hinzu
 		WuerfelLogik model = new WuerfelLogik(6);
-		WuerfelGUI view = new WuerfelGUI(model, i*55+80, 420);
+		WuerfelGUI view = new WuerfelGUI(model, i*55+80, 420, Eimer);
 		alleWuerfelGUI.add(view);
 		alleWuerfelLogik.add(model);
 		}
