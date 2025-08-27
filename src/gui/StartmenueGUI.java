@@ -1,6 +1,8 @@
 package gui;
 
 import java.awt.Container;
+import java.awt.event.ComponentAdapter;
+import java.awt.event.ComponentEvent;
 
 import javax.swing.JButton;
 import javax.swing.JFrame;
@@ -22,22 +24,28 @@ public class StartmenueGUI {
 		this.startmenueGesamt.setSize(800, 700);
 		
 		this.Eimer = startmenueGesamt.getContentPane();		
-		this.Eimer.setLayout(null); //Hab erstmal den Layout Manager ausgemacht um es manuell anzuordnen, können wir später aber noch ändern
+		this.Eimer.setLayout(null); //Hab erstmal den Layout Manager ausgemacht um es manuell anzuordnen, können wir später aber noch ändern : famous last words
 		
 		this.starteSpiel = new JButton("Starte Spiel");
 		this.einstellungen = new JButton("Einstellungen");
 		this.exit = new JButton("Schließen");
 		
 		
-		this.starteSpiel.setBounds  (100, 100, 600, 50);
-		this.einstellungen.setBounds(100, 200, 600, 50);
-		this.exit.setBounds         (100, 300, 600, 50);
 		
 		this.exit.addActionListener(klick -> {System.exit(0);});
 		this.starteSpiel.addActionListener(klick -> {new SpielfeldGUI(Eimer);});
 		this.startmenueGesamt.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
 		
-		
+		this.Eimer.addComponentListener(new ComponentAdapter() { //der ganze spaß hier ist dafür da das beim neu ziehen alles prozentual angepasst wird
+			@Override
+			public void componentResized(ComponentEvent e) {
+				rearrangiereFelder(Eimer, starteSpiel, einstellungen, exit);
+			}
+
+			
+
+			
+		});
 		
 		
 		
@@ -46,6 +54,17 @@ public class StartmenueGUI {
 		this.Eimer.add(einstellungen); //junge ich hab keine ahnung warum man alles dem content pane zufügen muss und dann aber das gesamte menü visible sein muss, make it make sense
 		
 		this.startmenueGesamt.setVisible(true);
+		
+	}
+	private void rearrangiereFelder(Container eimer, JButton starteSpiel, JButton einstellungen, JButton exit) {
+		int breite = eimer.getWidth();
+		int hoehe = eimer.getHeight();
+		
+		starteSpiel.setBounds((int)Math.floor(breite*0.125), (int)Math.floor(hoehe*0.14285), (int)Math.floor(breite*0.75),(int)Math.floor(hoehe*0.071));
+		einstellungen.setBounds((int)Math.floor(breite*0.125), (int)Math.floor(hoehe*0.28571), (int)Math.floor(breite*0.75),(int)Math.floor(hoehe*0.071));
+		exit.setBounds((int)Math.floor(breite*0.125), (int)Math.floor(hoehe*0.42857), (int)Math.floor(breite*0.75),(int)Math.floor(hoehe*0.071));
+		
+		
 		
 	}
 

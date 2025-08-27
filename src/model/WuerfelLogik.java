@@ -5,6 +5,8 @@ import java.util.Random;
 import javax.swing.JButton;
 import javax.swing.Timer;
 
+import gui.WuerfelGUI;
+
 
 public class WuerfelLogik {
 
@@ -71,6 +73,7 @@ public class WuerfelLogik {
 		
 	}
 	/**
+	 * /**
 	 * Rechnet mit der Gradengleichung die neuen Werte aus um dann Schrittweise in einer schöden Gerade den Würfel von A nach B zu transportieren
 	 * 
 	 * Bei flachem Anstieg muss man x Schrittweise berechnen und bei starken Anstieg y Schrittweise. Wenn m nicht mit 1.0 multipliziert wird dann
@@ -79,11 +82,12 @@ public class WuerfelLogik {
 	 * 
 	 * Für langsamer / Schneller das x bei new Timer{x, e -> ...} vergrößern / verkleinern
 	 * 
-	 * @param wuerfel der WürfelBoi welcher uns unsere x und y Werte gibt
+	 * @param gui welche ich mitgebe um da die positionen zu ändern und da den würfelbutton rauszuziehen
 	 * @param behalten die Flag ob der Würfel grade auf der Auswechselbank sitzt oder nicht
 	 * @return NIX, ändert ja nur Bild
 	 */
-	public Object wuerfelAngeklickt(JButton wuerfel, boolean behalten) { //methode irgendwann nochmal ausseinanderziehen da zu uncleancodig TODO
+	public Object wuerfelAngeklickt(WuerfelGUI gui, boolean behalten) { //methode irgendwann nochmal ausseinanderziehen da zu uncleancodig TODO
+		JButton wuerfel = gui.getButton();
 		int zielX;
 		int zielY;
 		if(behalten) { //will die werte auf die positionsdinge im vektor draufpacken
@@ -107,13 +111,23 @@ public class WuerfelLogik {
 				if (xJetzt > zielX) xJetzt--;
 				if (xJetzt < zielX) xJetzt++;	
 				int yNeu = (int) Math.round(m * xJetzt + n);				
-				wuerfel.setLocation(xJetzt, yNeu);				
+				wuerfel.setLocation(xJetzt, yNeu);	
+				gui.setyPos(yNeu);
+				gui.setxPos(xJetzt);
+				gui.setProzentXAufFeld(gui.getxPos() * 1.0 / gui.getEimer().getWidth());
+				gui.setProzentYAufFeld(gui.getyPos() * 1.0 / gui.getEimer().getHeight());
+			
 				if(xJetzt == zielX && yNeu == zielY) { ((Timer)e.getSource()).stop();	}
 			} else {
 				if (yJetzt > zielY) yJetzt--;	
 				if (yJetzt < zielY) yJetzt++;				
 				int xNeu = (int) Math.round((yJetzt - n) / m);				
-				wuerfel.setLocation(xNeu, yJetzt);				
+				wuerfel.setLocation(xNeu, yJetzt);	
+				gui.setyPos(yJetzt);
+				gui.setxPos(xNeu);
+				gui.setProzentXAufFeld(gui.getxPos() * 1.0 / gui.getEimer().getWidth());
+				gui.setProzentYAufFeld(gui.getyPos() * 1.0 / gui.getEimer().getHeight());
+				
 				if(xNeu == zielX && yJetzt == zielY) { ((Timer)e.getSource()).stop();	}
 			}
 		});

@@ -19,11 +19,12 @@ public class Main {
 
 		new StartmenueControl();
 		
+	}
+}
 		
 		
-		
-		
-		//Das ist nur ein Test für die Würfel kann später wider gelöscht werden!
+/*	
+	//Das ist nur ein Test für die Würfel kann später wider gelöscht werden!
 		//5 W6 Wuerfel erstellen
 		List<WuerfelLogik> wuerfelListe = new ArrayList<>();
 		for(int i = 0; i < 5; i++) {
@@ -31,7 +32,7 @@ public class Main {
 		}
 		
 		//Ubergabe an den Manager
-		WuerfelControl manager = new WuerfelControl();
+		WuerfelControl manager = new WuerfelControl(); //das geht grade nicht weil ich den konstruktor geändert hab sorry
 		Scanner scanner = new Scanner(System.in);
 				
 		//Wurfabfrage nochmal Würfeln
@@ -91,7 +92,7 @@ public class Main {
 		System.out.println("Aktuelle Wurfanzahl: " + manager.getWurfAnzahl());
 	}
 	
-
+*/
 	
 
-}
+
