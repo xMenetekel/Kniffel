@@ -25,7 +25,7 @@ public class WuerfelGUI {
 		
 	}
 	public void fresherButton() {
-		ImageIcon bildi = new ImageIcon("Other/" + model.getAugen() + ".jpg" );
+		ImageIcon bildi = new ImageIcon("Other/" + model.getAugen() + ":50.png" );
 		wuerfel.setIcon(bildi);
 		wuerfel.setVisible(true);
 		wuerfel.setBounds(this.xPos, this.yPos, 50, 50);

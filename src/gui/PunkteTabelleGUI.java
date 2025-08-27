@@ -1,12 +1,14 @@
 package gui;
 
 import java.awt.BorderLayout;
+import java.awt.Component;
 
 import javax.swing.ImageIcon;
 import javax.swing.JPanel;
 import javax.swing.JScrollPane;
 import javax.swing.JTable;
 import javax.swing.table.AbstractTableModel;
+import javax.swing.table.DefaultTableCellRenderer;
 
 public class PunkteTabelleGUI {
 	private JPanel tabelle;
@@ -16,8 +18,9 @@ public class PunkteTabelleGUI {
 		tabelle = new JPanel(new BorderLayout());
 		
 		table = new JTable(new ZugTableModel());
-		//Zeilenhoehe Größer noch anpassen!!!!!!!!!!Wichtig!!! ToDo!!!!
-		table.setRowHeight(35);
+		table.setRowHeight(40); // habs von 35 auf 40 angepasst idk if this is too high tho?
+		
+		table.getColumnModel().getColumn(0).setCellRenderer(new SymbolCellRenderer());	//Brauchen CellRenderer um in der ersten spalte sowohl Bilder als auch Text verwenden zu können
 		
 		JScrollPane scroll = new JScrollPane(table);
 		tabelle.add(scroll, BorderLayout.CENTER);
@@ -29,6 +32,30 @@ public class PunkteTabelleGUI {
 	
 	public JPanel getPanel() {
 		return this.tabelle;
+	}
+	
+	static class SymbolCellRenderer extends DefaultTableCellRenderer{
+		@Override
+		public Component getTableCellRendererComponent(JTable table, Object value, boolean isSelected, boolean hasFocus, int row, int column) {
+			super.getTableCellRendererComponent(table, value, isSelected, hasFocus, row, column);
+			if (row < 6 && value instanceof ImageIcon) {
+				setIcon((ImageIcon) value);
+				setText(null);
+			} else {
+				setIcon(null);
+				if (value != null) {
+					setText(value.toString());
+				}else {
+					setText("");
+				}
+				
+			}
+            setHorizontalAlignment(CENTER);
+            setVerticalAlignment(CENTER);
+            
+            return this;
+				
+		}
 	}
 	
 	
@@ -54,17 +81,17 @@ public class PunkteTabelleGUI {
 		
 			//19 Zeilen
 			data = new Object[19][columnNames.length];
-			data[0][0] = new ImageIcon("Other/eins.jpg");
-			data[0][1] = "nur Einsen zaehlen";
-			data[1][0] = new ImageIcon("Other/zwei.jpg");
+			data[0][0] = new ImageIcon("Other/1:20.png");
+			data[0][1] = "nur Einser zaehlen";
+			data[1][0] = new ImageIcon("Other/2:20.png");
 			data[1][1] = "nur Zweier zaehlen";
-			data[2][0] = new ImageIcon("Other/drei.jpg");
+			data[2][0] = new ImageIcon("Other/3:20.png");
 			data[2][1] = "nur Dreier zeahlen";
-			data[3][0] = new ImageIcon("Other/vier.jpg");
+			data[3][0] = new ImageIcon("Other/4:20.png");
 			data[3][1] = "nur Vierer zeahlen";
-			data[4][0] = new ImageIcon("Other/fuenf.jpg");
+			data[4][0] = new ImageIcon("Other/5:20.png");
 			data[4][1] = "nur Fuenfen zeahlen";
-			data[5][0] = new ImageIcon("Other/sechs.jpg");
+			data[5][0] = new ImageIcon("Other/6:20.png");
 			data[5][1] = "nur Sechsen zeahlen";
 			data[6][0] = "gesamt";
 			data[6][1] = "--->";
@@ -100,10 +127,14 @@ public class PunkteTabelleGUI {
 		
 		
 		@Override
-		public int getRowCount() {return data.length;}
+		public int getRowCount() {
+			return data.length;
+		}
 		
 		@Override
-		public int getColumnCount() {return columnNames.length;}
+		public int getColumnCount() {
+			return columnNames.length;
+		}
 		
 		@Override
 		public Object getValueAt(int row, int column) {
