@@ -2,7 +2,7 @@
 
 
 ## Name
-Kniffel aber wir haben es Skribl genannt weil wir erst dachten das wir von Scrabble ausgehen aber dann ist uns die Zeit ausgegangen und jetzt sind wir hier
+Kniffel aber wir haben es Skribl genannt weil wir erst dachten das wir von Scrabble ausgehen\ aber dann ist uns die Zeit ausgegangen und jetzt sind wir hier
 
 ## Description
 Kifel
@@ -15,23 +15,23 @@ Hier Bild einfügen später
 Keine Ahnung tbh, Problem für später
 
 ## Usage
-Ich weiß nicht was das bedeutet
+Ich weiß nicht was das bedeutet\
 Man benutzt es um Kniffel zu spielen
 
 ## Support
 Kakaocremehörnchen an alle beteiligten ist ein guter Schritt um zu helfen.
 
 ## Roadmap
-Mehr Logik, das es so richtig logisch ist
-Würfelfeld Hintergrund malen
-Spielbank Hintergrund malen
-Hintergrund Hintergrund malen
-Logik für Würfel das wenn man sie anklickt sie runter auf die Würfelbank kommen und da behalten werden
-Logik das man nur drei mal würfeln kann
-Logik für mehrere Spieler einfügen
-Speichern damit auch ahahhaha
-Die komplette Punktetabelle Logik
-Punktetabelle Bilder aktualisieren für die special sachen und oben bei den simplen sachen das immer drei nebeneinander sind
+Mehr Logik, das es so richtig logisch ist\
+Würfelfeld Hintergrund malen\
+Spielbank Hintergrund malen\
+Hintergrund Hintergrund malen\
+Logik für Würfel das wenn man sie anklickt sie runter auf die Würfelbank kommen und da behalten werden\
+Logik das man nur drei mal würfeln kann\
+Logik für mehrere Spieler einfügen\
+Speichern damit auch ahahhaha\
+Die komplette Punktetabelle Logik\
+Punktetabelle Bilder aktualisieren für die special sachen und oben bei den simplen sachen das immer drei nebeneinander sind\
 
 
 
@@ -39,11 +39,11 @@ Punktetabelle Bilder aktualisieren für die special sachen und oben bei den simp
 No
 
 ## Authors and acknowledgment
-Corinna Huber
-Anne Göbel
-Anthony Lachmann
+Corinna Huber\
+Anne Göbel\
+Anthony Lachmann\
 
-Acknowledgement an 
+Acknowledgement an \
 Bubu, Bebi, Crystal, Kiki, Fay, Lotte, Marie
 
 ## License
