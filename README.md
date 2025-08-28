@@ -31,7 +31,7 @@ Logik das man nur drei mal würfeln kann\
 Logik für mehrere Spieler einfügen\
 Speichern damit auch ahahhaha\
 Die komplette Punktetabelle Logik\
-Punktetabelle Bilder aktualisieren für die special sachen und oben bei den simplen sachen das immer drei nebeneinander sind\
+Punktetabelle Bilder aktualisieren für die special sachen und oben bei den simplen sachen das immer drei nebeneinander sind
 
 
 
@@ -41,7 +41,7 @@ No
 ## Authors and acknowledgment
 Corinna Huber\
 Anne Göbel\
-Anthony Lachmann\
+Anthony Lachmann
 
 Acknowledgement an \
 Bubu, Bebi, Crystal, Kiki, Fay, Lotte, Marie
