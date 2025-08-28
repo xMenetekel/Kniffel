@@ -11,6 +11,7 @@ import model.WuerfelLogik;
 public class WuerfelControl  {
 	private List<WuerfelGUI> alleWuerfelGUI = new ArrayList<>();
 	private List<WuerfelLogik> alleWuerfelLogik = new ArrayList<>();
+	private List<WuerfelGUI> Wuerfelbank = new ArrayList<>();
 	
 	
 	int wurfAnzahl = 0;
@@ -22,6 +23,7 @@ public class WuerfelControl  {
 		WuerfelLogik model = new WuerfelLogik(6);
 		WuerfelGUI view = new WuerfelGUI(model, i*55+80, 420, Eimer);
 		alleWuerfelGUI.add(view);
+		Wuerfelbank.add(view);
 		alleWuerfelLogik.add(model);
 		}
 		

@@ -5,6 +5,8 @@ import java.awt.Component;
 import java.awt.Container;
 import java.awt.event.ComponentAdapter;
 import java.awt.event.ComponentEvent;
+
+import javax.swing.JButton;
 import javax.swing.JFrame;
 import control.WuerfelControl;
 
@@ -14,6 +16,7 @@ public class SpielfeldGUI {
 	private WuerfelControl wuerfel;
 	private PunkteTabelleGUI punktetabelle;
 	private SpielbankGUI spielbank;
+	private JButton wuerfeln;
 
 	// Konstruktor
 	// Fläche und sichbarkeit müssen noch gemacht werden
@@ -27,10 +30,14 @@ public class SpielfeldGUI {
 		wuerfelflaeche = new WuerfelflaecheGUI();
 		punktetabelle = new PunkteTabelleGUI();
 		spielbank = new SpielbankGUI();
+		wuerfeln = new JButton ("Würfeln");
 		
 		wuerfelflaeche.getPanel().setBounds(50, 200, 350, 200);
 		punktetabelle.getPanel().setBounds(440, 50, 300, 550);
 		spielbank.getPanel().setBounds(50, 500, 350, 100);
+		wuerfeln.setBounds(160, 475, 120, 20);
+		wuerfeln.addActionListener(klick -> {wuerfel.getAlleWuerfelGUI().forEach(w -> {w.getLogik().wuerfelAngeklickt(w, false);});});
+		
 		
 		Eimer.addComponentListener(new ComponentAdapter() { //der ganze spaß hier ist dafür da das beim neu ziehen alles prozentual angepasst wird
 			@Override
@@ -56,7 +63,8 @@ public class SpielfeldGUI {
 		Eimer.add(wuerfelflaeche.getPanel());
 		Eimer.add(punktetabelle.getPanel());
 		Eimer.add(spielbank.getPanel());
-				
+		Eimer.add(wuerfeln);
+		
 		Eimer.revalidate();
 		Eimer.repaint();
 		
