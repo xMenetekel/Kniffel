@@ -4,6 +4,7 @@ package control;
 import java.awt.Container;
 import java.util.ArrayList;
 import java.util.List;
+import java.util.Random;
 
 import gui.WuerfelGUI;
 import model.WuerfelLogik;
@@ -43,37 +44,56 @@ public class WuerfelControl  {
 	public void setMaxWuerfe(int maxWuerfe) {
 		this.maxWuerfe = maxWuerfe;
 	}
-	//Methoden 
-		public void wuerfeln() {
-			if(wurfAnzahl >= maxWuerfe) {
-				return;
-			}
-			for(WuerfelLogik w : alleWuerfelLogik) {
-				w.wuerfeln(); //wenn behalten bleibt
-			}
-			wurfAnzahl++;
-		}
-		
-		public void setBehalten(int index, boolean behalten) {
-			if(index >= 0 && index < alleWuerfelLogik.size()) {
-				alleWuerfelLogik.get(index).setBehalten(behalten);
-			}
-		}
-		
-		public void neueRunde() {
-			
-		}
 	
-		public List<WuerfelGUI> getAlleWuerfelGUI() {
-			return alleWuerfelGUI;
+	//Methoden 
+	public void wuerfeln() {
+		if(wurfAnzahl >= maxWuerfe) {
+			return;
 		}
-		public void setAlleWuerfelGUI(List<WuerfelGUI> alleWuerfelGUI) {
-			this.alleWuerfelGUI = alleWuerfelGUI;
+		for(int i = 0; i < alleWuerfelLogik.size(); i++) {
+			WuerfelLogik logik = alleWuerfelLogik.get(i);
+			WuerfelGUI gui = alleWuerfelGUI.get(i);
+			
+			if(!logik.istBehalten()) {
+				logik.wuerfeln();
+				gui.fresherButton();
+				
+				bewegeWuerfelInFeld(gui);
+			}
 		}
-		public List<WuerfelLogik> getAlleWuerfelLogik() {
-			return alleWuerfelLogik;
+		wurfAnzahl++;
+	}
+		
+	private void bewegeWuerfelInFeld(WuerfelGUI gui) {
+		int zielX = (new Random().nextInt(250))+50;
+		int zielY = (new Random().nextInt(150))+200;
+		
+		gui.getLogik().wuerfelAngeklickt(gui, false);
+	}
+	
+	public void setBehalten(int index, boolean behalten) {
+		if(index >= 0 && index < alleWuerfelLogik.size()) {
+		alleWuerfelLogik.get(index).setBehalten(behalten);
 		}
-		public void setAlleWuerfelLogik(List<WuerfelLogik> alleWuerfelLogik) {
-			this.alleWuerfelLogik = alleWuerfelLogik;
-		}
+	}
+		
+	public void neueRunde() {
+			
+	}
+	
+	public List<WuerfelGUI> getAlleWuerfelGUI() {
+		return alleWuerfelGUI;
+	}
+	
+	public void setAlleWuerfelGUI(List<WuerfelGUI> alleWuerfelGUI) {
+		this.alleWuerfelGUI = alleWuerfelGUI;
+	}
+	
+	public List<WuerfelLogik> getAlleWuerfelLogik() {
+		return alleWuerfelLogik;
+	}
+	
+	public void setAlleWuerfelLogik(List<WuerfelLogik> alleWuerfelLogik) {
+		this.alleWuerfelLogik = alleWuerfelLogik;
+	}
 }
