@@ -39,6 +39,10 @@ public class WuerfelLogik {
 	public int getAugen() {
 		return augen;
 	}
+	
+	public void setAugen(int augen) {
+		this.augen = augen;
+	}
 
 
 	
@@ -91,8 +95,8 @@ public class WuerfelLogik {
 		int zielX;
 		int zielY;
 		if(behalten) { //will die werte auf die positionsdinge im vektor draufpacken
-			zielX = (new Random().nextInt(700))+50;  //die werte später anpassen auf werte zum skalieren!!!!!!!!!! TODO TODO TODO 
-			zielY = (new Random().nextInt(750))+200; //lol die werte schon jetzt anpassen, die werden nämlich immer unter dem würfelpanel sein weil das als 0,0 zählt. irgendwie müssen die aus dem panel rausgeholt werden. flag probably boolean für ob unten oder oben problem für später
+			zielX = gui.getStartX(); //die werte später anpassen auf werte zum skalieren!!!!!!!!!! TODO TODO TODO 
+			zielY = gui.getStartY(); //lol die werte schon jetzt anpassen, die werden nämlich immer unter dem würfelpanel sein weil das als 0,0 zählt. irgendwie müssen die aus dem panel rausgeholt werden. flag probably boolean für ob unten oder oben problem für später
 		}
 		else {
 			zielX = (new Random().nextInt(300))+50;  //die werte später anpassen auf werte zum skalieren!!!!!!!!!! TODO TODO TODO 

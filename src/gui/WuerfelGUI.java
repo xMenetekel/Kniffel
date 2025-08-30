@@ -12,6 +12,8 @@ public class WuerfelGUI {
 	WuerfelLogik model;
 	int xPos;
 	int yPos;
+	int startX;
+	int startY;
 	double prozentXAufFeld;
 	double prozentYAufFeld;
 	Container Eimer;
@@ -20,8 +22,12 @@ public class WuerfelGUI {
 	public WuerfelGUI(WuerfelLogik model, int startX, int startY, Container Eimer){
 		this.model = model;
 		this.wuerfel = new JButton();
-		wuerfel.addActionListener(klick -> { model.wuerfelAngeklickt(this, model.istBehalten()); 
-											model.setBehalten(!model.istBehalten());											
+		this.startX = startX;
+		this.startY = startY;
+		wuerfel.addActionListener(klick -> { boolean neuerZustand = !model.istBehalten();										
+											model.setBehalten(neuerZustand);
+											
+											model.wuerfelAngeklickt(this, neuerZustand);
 											} );
 		this.Eimer = Eimer;
 		this.xPos = startX;
@@ -39,39 +45,60 @@ public class WuerfelGUI {
 		wuerfel.setBounds(this.xPos, this.yPos, 50, 50);
 	
 	}
+	
+	
 	public JButton getButton() {
 		return this.wuerfel;
 	}
+	
 	public WuerfelLogik getLogik() {
 		return this.model;
 	}
+	
 	public int getxPos() {
 		return xPos;
 	}
+	
 	public void setxPos(int xPos) {
 		this.xPos = xPos;
 	}
+	
 	public int getyPos() {
 		return yPos;
 	}
+	
 	public void setyPos(int yPos) {
 		this.yPos = yPos;
 	}
+	
+	public int getStartX() {
+		return startX;
+	}
+	
+	public int getStartY() {
+		return startY;
+	}
+	
 	public double getProzentXAufFeld() {
 		return prozentXAufFeld;
 	}
+	
 	public void setProzentXAufFeld(double prozentXAufFeld) {
 		this.prozentXAufFeld = prozentXAufFeld;
 	}
+	
 	public double getProzentYAufFeld() {
 		return prozentYAufFeld;
 	}
+	
 	public void setProzentYAufFeld(double prozentYAufFeld) {
 		this.prozentYAufFeld = prozentYAufFeld;
 	}
+	
 	public Container getEimer() {
 		return Eimer;
 	}
+	
 	public void setEimer(Container eimer) {
 		Eimer = eimer;
 	}
