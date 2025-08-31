@@ -3,6 +3,7 @@ package control;
 
 import java.awt.Container;
 import java.util.ArrayList;
+import java.util.Collections;
 import java.util.List;
 import java.util.Random;
 
@@ -15,6 +16,7 @@ public class WuerfelControl  {
 	private List<WuerfelGUI> Wuerfelbank = new ArrayList<>();
 	private Container container;
 	
+	private List<int[]> freiePlaetze;
 	
 	int wurfAnzahl = 0;
 	int maxWuerfe = 3;
@@ -24,12 +26,19 @@ public class WuerfelControl  {
 		this.container = Eimer;
 		
 		for(int i = 0; i < 5; i++) {		//das erstellt 5 würfel und fügt in jeder iteration den wuerfel den entsprechenden arrays hinzu
-		WuerfelLogik model = new WuerfelLogik(6);
-		WuerfelGUI view = new WuerfelGUI(model, i*55+80, 420, Eimer);
-		alleWuerfelGUI.add(view);
-		Wuerfelbank.add(view);
-		alleWuerfelLogik.add(model);
+			WuerfelLogik model = new WuerfelLogik(6);
+			WuerfelGUI view = new WuerfelGUI(model, i*55+80, 420, Eimer);
+			alleWuerfelGUI.add(view);
+			Wuerfelbank.add(view);
+			alleWuerfelLogik.add(model);
+		
+			container.add(view.getButton());
 		}
+		freiePlaetze = generiereRasterPlaetze(50,200, 65, 5, 3);
+		Collections.shuffle(freiePlaetze);
+		
+		container.revalidate();
+		container.repaint();	
 	}
 	
 	public Container getContainer() {
@@ -65,94 +74,58 @@ public class WuerfelControl  {
 				logik.wuerfeln();
 				gui.fresherButton();
 				
-				bewegeWuerfelInFeld(gui);
+				int[] platz = freiePlaetze.remove(0);
+				gui.setPositionUndRefresh(platz[0], platz[1]);
 			}
 		}
 		wurfAnzahl++;
 	}
 		
-	private void bewegeWuerfelInFeld(WuerfelGUI gui) {
-		int zielX = (new Random().nextInt(250))+50;
-		int zielY = (new Random().nextInt(150))+200;
+	
+		
+		
 		
 		//Position auf Wuerfelflaeche korrigieren wenn Würfel kollidieren gott was für ein satz...
-		int[] korrigiertePosition = korrigierteKollision(gui, zielX, zielY);
-		zielX = korrigiertePosition[0];
-		zielY = korrigiertePosition[1];
+		//int[] korrigiertePosition = korrigierteKollision(gui, zielX, zielY);
+		//zielX = korrigiertePosition[0];
+		//zielY = korrigiertePosition[1];
 		
 		//Po speicherun und Neupos
-		gui.setProzentXAufFeld(zielX * 1.0 / container.getWidth());
-		gui.setProzentYAufFeld(zielY * 1.0 / container.getHeight());		
+		//gui.setProzentXAufFeld(zielX * 1.0 / container.getWidth());
+		//gui.setProzentYAufFeld(zielY * 1.0 / container.getHeight());		
 		
-		gui.getLogik().wuerfelAngeklickt(gui, false);
-	}
+		//gui.getLogik().wuerfelAngeklickt(gui, false);
+		
 	
 	
-	//TODO WICHTIG muss noch umgeschrieben werden zu verschachtelt und macht
-	// noch nicht was es soll!!!!!!!!!!!!
-	private int[] korrigierteKollision(WuerfelGUI aktuellerWuerfel, int zielX, int zielY) {
-		final int WUERFEL_GROESSE = 50;
-		final int ABSTAND = 15;
-		int korrekturVersuch = 0;
-		final int MAX_KORREKTUREN = 10; //sonst haben wir wenns blöd läuft ne endlosschleife
-		
-		boolean kollisionGefunden;
-		do {
-			kollisionGefunden = false;
-			
-			for(WuerfelGUI andererWuerfel : alleWuerfelGUI) {
-				if(andererWuerfel == aktuellerWuerfel || andererWuerfel.getLogik().istBehalten()) {
-					continue;
-				}
-			
-				int andererX = andererWuerfel.getButton().getX();
-				int andererY = andererWuerfel.getButton().getY();
-			
-				//Kollisions Prüfung
-				boolean kollisionX = zielX < andererX + WUERFEL_GROESSE + ABSTAND && 
-						zielX + WUERFEL_GROESSE + ABSTAND > andererX;
-				boolean kollisionY = zielY < andererY + WUERFEL_GROESSE + ABSTAND &&
-						zielY+ WUERFEL_GROESSE + ABSTAND > andererY;
-			
-				if(kollisionX && kollisionY) {
-					kollisionGefunden = true;
-					korrekturVersuch++;
-				
-					if(zielX > andererX) {
-						zielX = andererX + WUERFEL_GROESSE + ABSTAND; //nach rechts schieben
-					}else {
-						zielX = andererX - WUERFEL_GROESSE - ABSTAND; //nach links schieben
-				
-					}
-			
-					if(zielY > andererY) {
-						zielY = andererY + WUERFEL_GROESSE + ABSTAND; //nach oben schieben
-					}else {
-						zielY = andererY - WUERFEL_GROESSE - ABSTAND; //nach unten schieben
-					}
-					// Begrenzung WuerfelFläche
-					zielX = Math.max(50,  Math.min(300, zielX));
-					zielY = Math.max(200,  Math.min(350, zielY));
-			
-					break; 
-				}
-				
-			}
-		} while (kollisionGefunden && korrekturVersuch < MAX_KORREKTUREN);
-			
-		return new int[] {zielX, zielY};
-	}
+	
+	
 	
 	public void setBehalten(int index, boolean behalten) {
 		if(index >= 0 && index < alleWuerfelLogik.size()) {
 		alleWuerfelLogik.get(index).setBehalten(behalten);
 		}
 	}
+	
+	private List<int[]> generiereRasterPlaetze(int startX, int startY,
+			int rasterGroesse, int spalten, int zeilen){
+		List<int[]> allePlaetze = new ArrayList<>();
+		for(int x = 0; x < spalten; x++) {
+			for(int y = 0; y < zeilen; y++) {
+				int posX = startX + x * rasterGroesse;
+				int posY = startY + y * rasterGroesse;
+				allePlaetze.add(new int[] {posX, posY});
+			}
+		}
+		return allePlaetze;
+	}
 		
 	public void neueRunde() {
-			
+		freiePlaetze = generiereRasterPlaetze(50, 200, 65, 5, 3);
+		Collections.shuffle(freiePlaetze);
+		wurfAnzahl = 0;
 	}
-	
+		
 	public List<WuerfelGUI> getAlleWuerfelGUI() {
 		return alleWuerfelGUI;
 	}

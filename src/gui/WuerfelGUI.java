@@ -46,6 +46,12 @@ public class WuerfelGUI {
 	
 	}
 	
+	public void setPositionUndRefresh(int x, int y) {
+		this.getButton().setLocation(x,y);
+		this.getButton().revalidate();
+		this.getButton().repaint();
+	}
+	
 	
 	public JButton getButton() {
 		return this.wuerfel;
