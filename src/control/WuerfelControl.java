@@ -13,7 +13,6 @@ import model.WuerfelLogik;
 public class WuerfelControl  {
 	private List<WuerfelGUI> alleWuerfelGUI = new ArrayList<>();
 	private List<WuerfelLogik> alleWuerfelLogik = new ArrayList<>();
-	private List<WuerfelGUI> Wuerfelbank = new ArrayList<>();
 	private Container container;
 	
 	private List<int[]> freiePlaetze;
@@ -29,12 +28,11 @@ public class WuerfelControl  {
 			WuerfelLogik model = new WuerfelLogik(6);
 			WuerfelGUI view = new WuerfelGUI(model, i*55+80, 420, Eimer);
 			alleWuerfelGUI.add(view);
-			Wuerfelbank.add(view);
 			alleWuerfelLogik.add(model);
 		
 			container.add(view.getButton());
 		}
-		freiePlaetze = generiereRasterPlaetze(50,200, 65, 5, 3);
+		freiePlaetze = generiereRasterPlaetze(50, 200, 65, 5, 3);
 		Collections.shuffle(freiePlaetze);
 		
 		container.revalidate();
@@ -72,18 +70,16 @@ public class WuerfelControl  {
 			
 			if(!logik.istBehalten()) {
 				logik.wuerfeln();
+				
 				gui.fresherButton();
 				
 				int[] platz = freiePlaetze.remove(0);
+				gui.zeichneLinie(gui.getButton(), platz[0], platz[1]);
 				gui.setPositionUndRefresh(platz[0], platz[1]);
 			}
 		}
 		wurfAnzahl++;
 	}
-		
-	
-		
-		
 		
 		//Position auf Wuerfelflaeche korrigieren wenn Würfel kollidieren gott was für ein satz...
 		//int[] korrigiertePosition = korrigierteKollision(gui, zielX, zielY);
@@ -96,9 +92,6 @@ public class WuerfelControl  {
 		
 		//gui.getLogik().wuerfelAngeklickt(gui, false);
 		
-	
-	
-	
 	
 	
 	public void setBehalten(int index, boolean behalten) {

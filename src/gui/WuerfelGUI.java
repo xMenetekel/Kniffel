@@ -1,6 +1,5 @@
 package gui;
 
-import javax.swing.JButton;
 import model.*;
 
 import java.awt.Container;
@@ -26,8 +25,7 @@ public class WuerfelGUI {
 		this.startY = startY;
 		wuerfel.addActionListener(klick -> { boolean neuerZustand = !model.istBehalten();										
 											model.setBehalten(neuerZustand);
-											
-											model.wuerfelAngeklickt(this, neuerZustand);
+											this.hochRunterhochRunter();
 											} );
 		this.Eimer = Eimer;
 		this.xPos = startX;
@@ -38,6 +36,7 @@ public class WuerfelGUI {
 		
 		
 	}
+	
 	public void fresherButton() {
 		ImageIcon bildi = new ImageIcon("Other/" + model.getAugen() + ":50.png" );
 		wuerfel.setIcon(bildi);
@@ -47,12 +46,31 @@ public class WuerfelGUI {
 	}
 	
 	public void setPositionUndRefresh(int x, int y) {
-		this.getButton().setLocation(x,y);
+		zeichneLinie(this.getButton(), x,y);
 		this.getButton().revalidate();
 		this.getButton().repaint();
 	}
 	
+	private void hochRunterhochRunter() { //das muss irgednwo anders hin ich diskutier da grade mit chatgpt drüber ich hasse mvc
+		if(this.model.istBehalten()) {
+			this.runter();
+		
+		} else {
+			this.hoch();
+		}
+		
+	}
 	
+	private void runter() {
+		// TODO Auto-generated method stub
+		
+	}
+
+	private void hoch() {
+		// TODO Auto-generated method stub
+		
+	}
+
 	public JButton getButton() {
 		return this.wuerfel;
 	}
@@ -108,73 +126,59 @@ public class WuerfelGUI {
 	public void setEimer(Container eimer) {
 		Eimer = eimer;
 	}
-}
-
-
-
-
-
-
-
-	/*JButton wuerfel1, wuerfel2, wuerfel3, wuerfel4, wuerfel5;
-	JPanel alleWuerfel;
-	int wuerfellIndex = 0;
+	/**
+	 * /**
+	 * Rechnet mit der Gradengleichung die neuen Werte aus um dann Schrittweise in einer schöden Gerade den Würfel von A nach B zu transportieren
+	 * 
+	 * Bei flachem Anstieg muss man x Schrittweise berechnen und bei starken Anstieg y Schrittweise. Wenn m nicht mit 1.0 multipliziert wird dann
+	 * wertet es nicht als Double aus und das ganze kriegt einen hässligen Knick, das plus Hilfe bei der Geschwindigkeit vom Timer (Also das eben erwähnte
+	 * ob man x oder y Schritweise inkrementiert) wurde mit KI Hilfe verstanden. 
+	 * 
+	 * Für langsamer / Schneller das x bei new Timer{x, e -> ...} vergrößern / verkleinern
+	 * 
+	 * @param wuerfel welche ich mitgebe um da die positionen zu ändern und da den würfelbutton rauszuziehen
+	 * @param zielX der x wert wo es hingezeichnet werden soll
+	 * @param zielY der y wert wo es hingezeichnet werden soll
+	 */
 	
-	
-	public WuerfelGUI() { //DAS MUSS ALLES WOANDERS HIN AHAHAHA ICH HAB KEINE AHNUNG WO 
-		wuerfel1 = new JButton("1");
-		wuerfel2 = new JButton("2");
-		wuerfel3 = new JButton("3");
-		wuerfel4 = new JButton("4");
-		wuerfel5 = new JButton("5");
+	public void zeichneLinie(JButton wuerfel, int zielX, int zielY) { //methode irgendwann nochmal ausseinanderziehen da zu uncleancodig TODO
 		
-		wuerfel1.setBounds(0,0, 50, 50);
-		ImageIcon eins = new ImageIcon("Other/eins.jpg");
-		wuerfel1.setIcon(eins);		
-		wuerfel1.setVisible(true);
-		wuerfel1.addActionListener(klick -> wuerfelAngeklickt(wuerfel1));
+		double m;
+		if(zielX - wuerfel.getX() == 0) { m = 0; }
+		else { m =(zielY - wuerfel.getY()) * 1.0 / ( zielX - wuerfel.getX()); } 
+		double n = zielY - (zielX * m);
 		
-		wuerfel2.setBounds(55, 0, 50, 50);		
-		ImageIcon zwei = new ImageIcon("Other/zwei.jpg");
-		wuerfel2.setIcon(zwei);		
-		wuerfel2.setVisible(true);
-		wuerfel2.addActionListener(klick -> wuerfelAngeklickt(wuerfel2));
+		Timer timer = new Timer(4, e -> {
+			int xJetzt = wuerfel.getX();
+			int yJetzt = wuerfel.getY();
+			
+			if(Math.abs(m) <= 1) {
+				if (xJetzt > zielX) xJetzt--;
+				if (xJetzt < zielX) xJetzt++;	
+				int yNeu = (int) Math.round(m * xJetzt + n);				
+				wuerfel.setLocation(xJetzt, yNeu);	
+				this.setyPos(yNeu);
+				this.setxPos(xJetzt);
+				this.setProzentXAufFeld(this.getxPos() * 1.0 / this.getEimer().getWidth());
+				this.setProzentYAufFeld(this.getyPos() * 1.0 / this.getEimer().getHeight());
+			
+				if(xJetzt == zielX && yNeu == zielY) { ((Timer)e.getSource()).stop();	}
+			} else {
+				if (yJetzt > zielY) yJetzt--;	
+				if (yJetzt < zielY) yJetzt++;				
+				int xNeu = (int) Math.round((yJetzt - n) / m);				
+				wuerfel.setLocation(xNeu, yJetzt);	
+				this.setyPos(yJetzt);
+				this.setxPos(xNeu);
+				this.setProzentXAufFeld(this.getxPos() * 1.0 / this.getEimer().getWidth());
+				this.setProzentYAufFeld(this.getyPos() * 1.0 / this.getEimer().getHeight());
+				
+				if(xNeu == zielX && yJetzt == zielY) { ((Timer)e.getSource()).stop();	}
+			}
+		});
+		timer.start();		
 		
-		wuerfel3.setBounds(110, 0, 50, 50);
-		ImageIcon drei = new ImageIcon("Other/drei.jpg");
-		wuerfel3.setIcon(drei);
-		wuerfel3.setVisible(true);
-		wuerfel3.addActionListener(klick -> wuerfelAngeklickt(wuerfel3));
-		
-		wuerfel4.setBounds(165, 0, 50, 50);
-		ImageIcon vier = new ImageIcon("Other/vier.jpg");
-		wuerfel4.setIcon(vier);
-		wuerfel4.setVisible(true);
-		wuerfel4.addActionListener(klick -> wuerfelAngeklickt(wuerfel4));
-		
-		wuerfel5.setBounds(220, 0, 50, 50);
-		ImageIcon fuenf = new ImageIcon("Other/fuenf.jpg");
-		wuerfel5.setIcon(fuenf);
-		wuerfel5.setVisible(true);
-		wuerfel5.addActionListener(klick -> wuerfelAngeklickt(wuerfel5));
-		
-		alleWuerfel = new JPanel();
-		
-		alleWuerfel.add(wuerfel1);
-		alleWuerfel.add(wuerfel2);
-		alleWuerfel.add(wuerfel3);
-		alleWuerfel.add(wuerfel4);
-		alleWuerfel.add(wuerfel5);
-		
-		alleWuerfel.setVisible(true);
-		alleWuerfel.setLayout(null);
-		alleWuerfel.setBounds(0, 0, 270, 50);
-
 		
 	}
-
-	public JPanel getPanel() {
-		return this.alleWuerfel;
-	}
 }
-*/
+
