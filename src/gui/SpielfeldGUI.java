@@ -44,10 +44,10 @@ public class SpielfeldGUI {
 		Eimer.addComponentListener(new ComponentAdapter() { //der ganze spaß hier ist dafür da das beim neu ziehen alles prozentual angepasst wird
 			@Override
 			public void componentResized(ComponentEvent e) {
-				rearrangiereWuerfelflaeche(Eimer, wuerfelflaeche);
+				rearrangiere(Eimer, wuerfelflaeche);
 				rearrangiereWuerfel(Eimer, wuerfel);
-				rearrangierePunktetabelle(Eimer, punktetabelle);
-				rearrangiereSpielbank(Eimer, spielbank);
+				rearrangiere(Eimer, punktetabelle);
+				rearrangiere(Eimer, spielbank);
 			}
 
 			
@@ -73,13 +73,7 @@ public class SpielfeldGUI {
 		
 		
 	}
-	protected void rearrangiereSpielbank(Component e, SpielbankGUI sb) {
-		int breite = e.getWidth();
-		int hoehe = e.getHeight();
-		
-		sb.getPanel().setBounds((int)Math.floor(breite*0.0625), (int)Math.floor(hoehe*0.71428), (int)Math.floor(breite*0.4375),(int)Math.floor(hoehe*0.142857));
 	
-	}
 	/**
 	 * junge ich hab das selber ohne KI geschrieben ich werde nie wieder so einen höhenflug erleben wie grade
 	 * jedenfalls resized das alle würfel auf ihre prozentualen werte auf dem bildschirm wenn man das spielfeld größer oder kleinerzieht
@@ -98,19 +92,15 @@ public class SpielfeldGUI {
 											 });
 			
 	}
-	protected void rearrangierePunktetabelle(Component e, PunkteTabelleGUI p) {
+	
+	public void rearrangiere(Component e, AbstractGUI wf) {
 		int breite = e.getWidth();
 		int hoehe = e.getHeight();
 		
-		p.getPanel().setBounds((int)Math.floor(breite*0.55), (int)Math.floor(hoehe*0.0714), (int)Math.floor(breite*0.375),(int)Math.floor(hoehe*0.7857));
-		
-	}
-	public void rearrangiereWuerfelflaeche(Component e, WuerfelflaecheGUI wf) {
-		int breite = e.getWidth();
-		int hoehe = e.getHeight();
-		
-		wf.getPanel().setBounds((int)Math.floor(breite*0.0625), (int)Math.floor(hoehe*0.285), (int)Math.floor(breite*0.4375),(int)Math.floor(hoehe*0.25));
-		
+		wf.getPanel().setBounds((int)Math.floor(breite*wf.getProzentFlaecheX()), 
+								(int)Math.floor(hoehe*wf.getProzentFlaecheY()), 
+								(int)Math.floor(breite*wf.getProzentFlaecheBreite()),
+								(int)Math.floor(hoehe*wf.getProzentFlaecheHoehe()));
 		
 	}
 	

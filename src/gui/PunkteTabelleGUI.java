@@ -12,10 +12,16 @@ import javax.swing.table.DefaultTableCellRenderer;
 
 import model.Kategorie;
 
-public class PunkteTabelleGUI {
+public class PunkteTabelleGUI extends AbstractGUI {
 	private JPanel tabelle;
 	private JTable table;
+	private final double prozentFlaecheX = 0.55;
+	private final double prozentFlaecheHoehe = 0.7857;
+	private final double prozentFlaecheY = 0.0714;
+	private final double prozentFlaecheBreite = 0.375;	
 	
+	
+
 	public PunkteTabelleGUI() {
 		tabelle = new JPanel(new BorderLayout());
 		
@@ -165,7 +171,25 @@ public class PunkteTabelleGUI {
 		}
 		
 		
+		
+		
+		
 
+	}
+	public double getProzentFlaecheX() {
+		return prozentFlaecheX;
+	}
+
+	public double getProzentFlaecheHoehe() {
+		return prozentFlaecheHoehe;
+	}
+
+	public double getProzentFlaecheY() {
+		return prozentFlaecheY;
+	}
+
+	public double getProzentFlaecheBreite() {
+		return prozentFlaecheBreite;
 	}
 
 }
