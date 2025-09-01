@@ -36,7 +36,9 @@ public class SpielfeldGUI {
 		punktetabelle.getPanel().setBounds(440, 50, 300, 550);
 		spielbank.getPanel().setBounds(50, 500, 350, 100);
 		wuerfeln.setBounds(160, 475, 120, 20);
-		wuerfeln.addActionListener(klick -> {wuerfel.getAlleWuerfelGUI().forEach(w -> {w.getLogik().wuerfelAngeklickt(w, false);});}); //schiebt alle würfel hoch beim klicken auf würfeln
+		wuerfeln.addActionListener(klick -> {wuerfel.wuerfeln();});
+		
+
 		
 		
 		Eimer.addComponentListener(new ComponentAdapter() { //der ganze spaß hier ist dafür da das beim neu ziehen alles prozentual angepasst wird

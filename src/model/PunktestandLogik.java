@@ -1,5 +1,8 @@
 package model;
 
+import java.util.Map;
+import java.util.HashMap;
+
 
 public class PunktestandLogik {
 	private int einer = 0;
@@ -135,4 +138,12 @@ public class PunktestandLogik {
 		this.summeGesamt = summeGesamt;
 	}
 	
+	
+/*	public Map<String,Integer> berechneMoeglicheZuege(int[] wuerfel){
+		Map<String,Integer> moeglicheZuege = new HashMap<>();
+	}*/ 
+	
 }
+
+
+
