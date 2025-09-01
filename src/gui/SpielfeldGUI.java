@@ -36,7 +36,7 @@ public class SpielfeldGUI {
 		punktetabelle.getPanel().setBounds(440, 50, 300, 550);
 		spielbank.getPanel().setBounds(50, 500, 350, 100);
 		wuerfeln.setBounds(160, 475, 120, 20);
-		wuerfeln.addActionListener(klick -> {wuerfel.getAlleWuerfelGUI().forEach(w -> {w.getLogik().wuerfelAngeklickt(w, false);});});
+		wuerfeln.addActionListener(klick -> {wuerfel.getAlleWuerfelGUI().forEach(w -> {w.getLogik().wuerfelAngeklickt(w, false);});}); //schiebt alle würfel hoch beim klicken auf würfeln
 		
 		
 		Eimer.addComponentListener(new ComponentAdapter() { //der ganze spaß hier ist dafür da das beim neu ziehen alles prozentual angepasst wird
@@ -80,7 +80,7 @@ public class SpielfeldGUI {
 	}
 	/**
 	 * junge ich hab das selber ohne KI geschrieben ich werde nie wieder so einen höhenflug erleben wie grade
-	 * 
+	 * jedenfalls resized das alle würfel auf ihre prozentualen werte auf dem bildschirm wenn man das spielfeld größer oder kleinerzieht
 	 * @param e
 	 * @param w
 	 */
