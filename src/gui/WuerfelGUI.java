@@ -23,10 +23,7 @@ public class WuerfelGUI {
 		this.wuerfel = new JButton();
 		this.startX = startX;
 		this.startY = startY;
-		wuerfel.addActionListener(klick -> { boolean neuerZustand = !model.istBehalten();										
-											model.setBehalten(neuerZustand);
-											this.hochRunterhochRunter();
-											} );
+		
 		this.Eimer = Eimer;
 		this.xPos = startX;
 		this.yPos = startY;
@@ -45,25 +42,7 @@ public class WuerfelGUI {
 	
 	}
 	
-	private void hochRunterhochRunter() { //das muss irgednwo anders hin ich diskutier da grade mit chatgpt drüber ich hasse mvc
-		if(this.model.istBehalten()) {
-			this.runter();
-		
-		} else {
-			this.hoch();
-		}
-		
-	}
 	
-	private void runter() {
-		// TODO Auto-generated method stub
-		
-	}
-
-	private void hoch() {
-		
-		
-	}
 	/**
 	 * /**
 	 * Rechnet mit der Gradengleichung die neuen Werte aus um dann Schrittweise in einer schöden Gerade den Würfel von A nach B zu transportieren

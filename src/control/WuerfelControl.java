@@ -31,6 +31,11 @@ public class WuerfelControl  {
 		for(int i = 0; i < 5; i++) {		//das erstellt 5 würfel und fügt in jeder iteration den wuerfel den entsprechenden arrays hinzu
 			WuerfelLogik model = new WuerfelLogik(6);
 			WuerfelGUI view = new WuerfelGUI(model, i*55+80, 420, Eimer);
+			model.setGui(view);
+			view.getButton().addActionListener(klick -> { boolean neuerZustand = !model.istBehalten();										
+														model.setBehalten(neuerZustand);
+														hochRunterhochRunter(model);
+														} );
 			alleWuerfelGUI.add(view);
 			alleWuerfelLogik.add(model);		
 			container.add(view.getButton());
@@ -65,6 +70,26 @@ public class WuerfelControl  {
 		
 		
 		return validesY;
+	}
+	private void hochRunterhochRunter(WuerfelLogik wuerfel) { 
+		
+		if(wuerfel.istBehalten()) {
+			this.runter(wuerfel.getGui());
+		
+		} else {
+			this.hoch(wuerfel.getGui());
+		}
+		
+	}
+	
+	private void runter(WuerfelGUI gui) {
+		// TODO Auto-generated method stub
+		
+	}
+
+	private void hoch(WuerfelGUI gui) {
+		gui.zeichneLinie(gui.getButton(), getValidesX(flaeche), getValidesY(flaeche));
+		
 	}
 	
 	public Container getContainer() {
