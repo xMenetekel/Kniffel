@@ -2,7 +2,7 @@ package gui;
 
 import javax.swing.JPanel;
 
-public abstract class AbstractGUI {
+public interface GUIProzente {
 	
 	public abstract double getProzentFlaecheX();
 	public abstract double getProzentFlaecheHoehe();

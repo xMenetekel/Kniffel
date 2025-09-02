@@ -1,9 +1,12 @@
 package gui;
 
+import javax.swing.ImageIcon;
+import javax.swing.JLabel;
 import javax.swing.JPanel;
 
-public class SpielbankGUI extends AbstractGUI{
+public class SpielbankGUI implements GUIProzente{
 	JPanel bank;
+	JLabel bild;
 	private final double prozentFlaecheX = 0.0625;
 	private final double prozentFlaecheHoehe =0.142857;
 	private final double prozentFlaecheY = 0.71428;
@@ -11,9 +14,15 @@ public class SpielbankGUI extends AbstractGUI{
 	
 
 	public SpielbankGUI() {
+		ImageIcon bildi = new ImageIcon("Other/spielerbank.jpg" );
 		bank = new JPanel();
+		bild = new JLabel();
+		bild.setIcon(bildi);
+		bild.setVisible(true);
+		bild.setBounds(0, 0, 350,100);
+		bank.add(bild);		
 		bank.setVisible(true);
-		bank.setBounds(0, 0, 300, 100);
+		bank.setBounds(0, 0, 350, 100);
 		bank.setLayout(null);
 	}
 	

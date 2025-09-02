@@ -6,8 +6,11 @@ import java.awt.Container;
 import java.awt.event.ComponentAdapter;
 import java.awt.event.ComponentEvent;
 
+import javax.swing.ImageIcon;
 import javax.swing.JButton;
 import javax.swing.JFrame;
+import javax.swing.JLabel;
+
 import control.WuerfelControl;
 
 public class SpielfeldGUI {
@@ -15,8 +18,10 @@ public class SpielfeldGUI {
 	private WuerfelflaecheGUI wuerfelflaeche;
 	private WuerfelControl wuerfel;
 	private PunkteTabelleGUI punktetabelle;
+	private WuerfelBankGUI wuerfelbankGUI;
 	private SpielbankGUI spielbank;
 	private JButton wuerfeln;
+	private JLabel hintergrund;
 
 	// Konstruktor
 	// Fläche und sichbarkeit müssen noch gemacht werden
@@ -26,18 +31,25 @@ public class SpielfeldGUI {
 		
 		Eimer.setLayout(null);
 		
-		wuerfel = new WuerfelControl(Eimer);
+		
 		wuerfelflaeche = new WuerfelflaecheGUI();
+		wuerfel = new WuerfelControl(Eimer, wuerfelflaeche);
 		punktetabelle = new PunkteTabelleGUI();
 		spielbank = new SpielbankGUI();
 		wuerfeln = new JButton ("Würfeln");
+		wuerfelbankGUI = new WuerfelBankGUI();
+		hintergrund = new JLabel();
 		
 		wuerfelflaeche.getPanel().setBounds(50, 200, 350, 200);
 		punktetabelle.getPanel().setBounds(440, 50, 300, 550);
 		spielbank.getPanel().setBounds(50, 500, 350, 100);
-		wuerfeln.setBounds(160, 475, 120, 20);
+		wuerfelbankGUI.getPanel().setBounds(75,415,280,60);
+		wuerfeln.setBounds(160, 477, 120, 20);
 		wuerfeln.addActionListener(klick -> {wuerfel.wuerfeln();});
-		
+		ImageIcon bildi = new ImageIcon("Other/hintergrund.jpg" );
+		hintergrund.setIcon(bildi);
+		hintergrund.setBounds(0,0,800,700);
+		hintergrund.setVisible(true);
 
 		
 		
@@ -48,14 +60,13 @@ public class SpielfeldGUI {
 				rearrangiereWuerfel(Eimer, wuerfel);
 				rearrangiere(Eimer, punktetabelle);
 				rearrangiere(Eimer, spielbank);
+				rearrangiere(Eimer, wuerfelbankGUI);
 			}
 
 			
 		});
 		
-		wuerfelflaeche.getPanel().setBackground(Color.RED);		
-		punktetabelle.getPanel().setBackground(Color.CYAN);
-		spielbank.getPanel().setBackground(Color.GREEN);		
+			
 
 
 		for (WuerfelGUI wuerfelGUI : wuerfel.getAlleWuerfelGUI()) {
@@ -66,6 +77,8 @@ public class SpielfeldGUI {
 		Eimer.add(punktetabelle.getPanel());
 		Eimer.add(spielbank.getPanel());
 		Eimer.add(wuerfeln);
+		Eimer.add(wuerfelbankGUI.getPanel());
+		Eimer.add(hintergrund);
 		
 		Eimer.revalidate();
 		Eimer.repaint();
@@ -93,14 +106,14 @@ public class SpielfeldGUI {
 			
 	}
 	
-	public void rearrangiere(Component e, AbstractGUI wf) {
+	public void rearrangiere(Component e, GUIProzente gui) {
 		int breite = e.getWidth();
 		int hoehe = e.getHeight();
 		
-		wf.getPanel().setBounds((int)Math.floor(breite*wf.getProzentFlaecheX()), 
-								(int)Math.floor(hoehe*wf.getProzentFlaecheY()), 
-								(int)Math.floor(breite*wf.getProzentFlaecheBreite()),
-								(int)Math.floor(hoehe*wf.getProzentFlaecheHoehe()));
+		gui.getPanel().setBounds((int)Math.floor(breite*gui.getProzentFlaecheX()), 
+								(int)Math.floor(hoehe*gui.getProzentFlaecheY()), 
+								(int)Math.floor(breite*gui.getProzentFlaecheBreite()),
+								(int)Math.floor(hoehe*gui.getProzentFlaecheHoehe()));
 		
 	}
 	

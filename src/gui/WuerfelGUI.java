@@ -61,7 +61,7 @@ public class WuerfelGUI {
 	}
 
 	private void hoch() {
-		// TODO Auto-generated method stub
+		
 		
 	}
 	/**

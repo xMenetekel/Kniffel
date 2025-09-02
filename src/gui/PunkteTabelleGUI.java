@@ -12,7 +12,7 @@ import javax.swing.table.DefaultTableCellRenderer;
 
 import model.Kategorie;
 
-public class PunkteTabelleGUI extends AbstractGUI {
+public class PunkteTabelleGUI implements GUIProzente {
 	private JPanel tabelle;
 	private JTable table;
 	private final double prozentFlaecheX = 0.55;
