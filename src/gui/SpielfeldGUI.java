@@ -31,12 +31,14 @@ public class SpielfeldGUI {
 		
 		Eimer.setLayout(null);
 		
-		wuerfelbankGUI = new WuerfelBankGUI();
+		punktetabelle = new PunkteTabelleGUI();
+		wuerfel = new WuerfelControl(Eimer, punktetabelle);
 		wuerfelflaeche = new WuerfelflaecheGUI();
 		wuerfel = new WuerfelControl(Eimer, wuerfelflaeche, wuerfelbankGUI);
 		punktetabelle = new PunkteTabelleGUI();
 		spielbank = new SpielbankGUI();
 		wuerfeln = new JButton ("Würfeln");
+		punkteEintragen = new JButton("Punkte eintragen");
 		
 		hintergrund = new JLabel();
 		
@@ -74,6 +76,7 @@ public class SpielfeldGUI {
 	    }
 		
 		Eimer.add(wuerfelflaeche.getPanel());
+		Eimer.add(punkteEintragen);
 		Eimer.add(punktetabelle.getPanel());
 		Eimer.add(spielbank.getPanel());
 		Eimer.add(wuerfeln);
@@ -84,8 +87,22 @@ public class SpielfeldGUI {
 		Eimer.repaint();
 		
 		
-		
 	}
+	
+	
+    private void aktualisierePunkteTabelle() {
+        System.out.println("Tabelle sollte aktualisiert werden");	// Damit die Tabelle aktualisiert werden kann
+    }
+    
+    private void eintragePunkteFuerAktuellenSpieler() {	//damit Punkte eingetragen werden köennen
+        System.out.println("Punkte eintragen für aktuellen Spieler");
+    }
+    
+	protected void rearrangiereSpielbank(Component e, SpielbankGUI sb) {
+		int breite = e.getWidth();
+		int hoehe = e.getHeight();
+		
+		sb.getPanel().setBounds((int)Math.floor(breite*0.0625), (int)Math.floor(hoehe*0.71428), (int)Math.floor(breite*0.4375),(int)Math.floor(hoehe*0.142857));
 	
 	/**
 	 * junge ich hab das selber ohne KI geschrieben ich werde nie wieder so einen höhenflug erleben wie grade

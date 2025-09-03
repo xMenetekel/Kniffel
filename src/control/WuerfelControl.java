@@ -4,7 +4,9 @@ package control;
 import java.awt.Container;
 import java.util.ArrayList;
 import java.util.Collections;
+import java.util.HashMap;
 import java.util.List;
+import java.util.Map;
 import java.util.Random;
 
 import javax.swing.ImageIcon;
@@ -18,6 +20,9 @@ import model.WuerfelbankLogik;
 public class WuerfelControl  {
 	private List<WuerfelGUI> alleWuerfelGUI = new ArrayList<>();
 	private List<WuerfelLogik> alleWuerfelLogik = new ArrayList<>();
+	private Container container;
+	private MoeglicheZuege moeglicheZuege = new MoeglicheZuege();
+	private PunkteTabelleGUI punkteTabelle;
 	
 	private Container container;
 	private WuerfelflaecheGUI flaeche;
@@ -29,6 +34,7 @@ public class WuerfelControl  {
 	public WuerfelControl(Container Eimer, WuerfelflaecheGUI flaeche, WuerfelBankGUI bankGUI){
 		
 		this.container = Eimer;
+		this.punkteTabelle = punkteTabelle;
 		
 		this.setFlaeche(flaeche);
 		this.bankGUI = bankGUI;
@@ -173,9 +179,111 @@ public class WuerfelControl  {
 	public void setMaxWuerfe(int maxWuerfe) {
 		this.maxWuerfe = maxWuerfe;
 	}
+	
+	//Methoden 
+	public void wuerfeln() {
+		if(wurfAnzahl >= maxWuerfe) {
+			return;
+		}
+		for(int i = 0; i < alleWuerfelLogik.size(); i++) {
+			WuerfelLogik logik = alleWuerfelLogik.get(i);
+			WuerfelGUI gui = alleWuerfelGUI.get(i);
+			
+			if(!logik.istBehalten()) {
+				logik.wuerfeln();
+				
+				gui.fresherButton();
+				
+				int[] platz = freiePlaetze.remove(0);
+				gui.zeichneLinie(gui.getButton(), platz[0], platz[1]);
+				gui.setPositionUndRefresh(platz[0], platz[1]);
+			}
+		}
+		wurfAnzahl++;
 		
-	public void neueRunde() {		
+		//Hier habe ich eine Kleinigkeit eingefügt, damit unsere Würfelergebnisse zwischengespeichert werden 
+		
+		
+		if(wurfAnzahl == maxWuerfe) {
+			speichereWuerfelWerte();
+			
+			aktualisierePunkteTabelle();	//Damit die Punktetabelle aktualisiert wird
+		}
+		
+	}
+	
+	private void aktualisierePunkteTabelle() {
+	    Map<Kategorie, Integer> moeglichePunkte = moeglicheZuege.berechneAlleMoeglichenPunkte();
+	    if (punkteTabelle != null) {
+	        punkteTabelle.zeigeMoeglichePunkte(moeglichePunkte);
+	    }
+	}
+    
+	
+    private void speichereWuerfelWerte() {
+        List<Integer> werte = new ArrayList<>();
+        for (int i = 0; i < alleWuerfelLogik.size(); i++) {
+            werte.add(alleWuerfelLogik.get(i).getAugen());
+        }
+        moeglicheZuege.setWuerfelWerte(werte);
+    }
+	
+    public MoeglicheZuege getMoeglicheZuege() {
+        return moeglicheZuege;
+    }
+    
+    public List<Integer> getAktuelleWuerfelwerte() {
+        List<Integer> werte = new ArrayList<>();
+        for (WuerfelLogik wuerfel : alleWuerfelLogik) {
+            werte.add(wuerfel.getAugen());
+        }
+        return werte;
+    }
+    
+    
+		//Position auf Wuerfelflaeche korrigieren wenn Würfel kollidieren gott was für ein satz...
+		//int[] korrigiertePosition = korrigierteKollision(gui, zielX, zielY);
+		//zielX = korrigiertePosition[0];
+		//zielY = korrigiertePosition[1];
+		
+		//Po speicherun und Neupos
+		//gui.setProzentXAufFeld(zielX * 1.0 / container.getWidth());
+		//gui.setProzentYAufFeld(zielY * 1.0 / container.getHeight());		
+		
+		//gui.getLogik().wuerfelAngeklickt(gui, false);
+		
+	
+	
+	public void setBehalten(int index, boolean behalten) {
+		if(index >= 0 && index < alleWuerfelLogik.size()) {
+		alleWuerfelLogik.get(index).setBehalten(behalten);
+		}
+	}
+	
+	private List<int[]> generiereRasterPlaetze(int startX, int startY,
+			int rasterGroesse, int spalten, int zeilen){
+		List<int[]> allePlaetze = new ArrayList<>();
+		for(int x = 0; x < spalten; x++) {
+			for(int y = 0; y < zeilen; y++) {
+				int posX = startX + x * rasterGroesse;
+				int posY = startY + y * rasterGroesse;
+				allePlaetze.add(new int[] {posX, posY});
+			}
+		}
+		return allePlaetze;
+	}
+		
+	public void neueRunde() {
+		freiePlaetze = generiereRasterPlaetze(50, 200, 65, 5, 3);
+		Collections.shuffle(freiePlaetze);
 		wurfAnzahl = 0;
+        for (WuerfelLogik wuerfel : alleWuerfelLogik) {
+            wuerfel.setBehalten(false);
+            wuerfel.wuerfeln();
+        }
+        for (WuerfelGUI gui : alleWuerfelGUI) {
+            gui.fresherButton();
+        }
 	}
 		
 	public List<WuerfelGUI> getAlleWuerfelGUI() {
