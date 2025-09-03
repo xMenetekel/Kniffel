@@ -9,6 +9,7 @@ import java.util.Random;
 
 import javax.swing.ImageIcon;
 
+import gui.WuerfelBankGUI;
 import gui.WuerfelGUI;
 import gui.WuerfelflaecheGUI;
 import model.WuerfelLogik;
@@ -17,19 +18,20 @@ import model.WuerfelbankLogik;
 public class WuerfelControl  {
 	private List<WuerfelGUI> alleWuerfelGUI = new ArrayList<>();
 	private List<WuerfelLogik> alleWuerfelLogik = new ArrayList<>();
-	private WuerfelbankLogik bank;
+	
 	private Container container;
 	private WuerfelflaecheGUI flaeche;
+	private WuerfelBankGUI bankGUI; //das muss so safe woanders hin aber ich will grade einfach nur das es geht
 	
 	int wurfAnzahl = 0;
 	int maxWuerfe = 3;
 	
-	public WuerfelControl(Container Eimer, WuerfelflaecheGUI flaeche){
+	public WuerfelControl(Container Eimer, WuerfelflaecheGUI flaeche, WuerfelBankGUI bankGUI){
 		
 		this.container = Eimer;
-		this.bank = new WuerfelbankLogik(alleWuerfelGUI);
-		this.setFlaeche(flaeche);
 		
+		this.setFlaeche(flaeche);
+		this.bankGUI = bankGUI;
 		for(int i = 0; i < 5; i++) {		//das erstellt 5 würfel und fügt in jeder iteration den wuerfel den entsprechenden arrays hinzu
 			WuerfelLogik model = new WuerfelLogik(6);
 			WuerfelGUI view = new WuerfelGUI(model, i*55+80, 420, Eimer);
@@ -47,6 +49,7 @@ public class WuerfelControl  {
 	}
 	
 	public void wuerfeln() {
+		
 		if(wurfAnzahl >= maxWuerfe) { return; } 				
 		getAlleWuerfelLogik().forEach(w -> {if (!w.istBehalten()) {w.wuerfeln(); } } );
 		getAlleWuerfelGUI().forEach(w -> {if (!w.getLogik().istBehalten()) {
@@ -123,13 +126,32 @@ public class WuerfelControl  {
 	}
 	
 	private void runter(WuerfelGUI gui) {
-		// TODO Auto-generated method stub
+		int x = (int)(container.getWidth() * bankGUI.getProzentFlaecheX());
+		int y = (int)(container.getHeight() * bankGUI.getProzentFlaecheY());
+		
+		x = (x + 5)* zaehleBankFuelle();
+		y = y + 5;
+		gui.zeichneLinie(gui.getButton(), x, y);
+		
+		
 		
 	}
 
 	private void hoch(WuerfelGUI gui) {
-		gui.zeichneLinie(gui.getButton(), getValidesX(flaeche), getValidesY(flaeche));
+		int x = getValidesX(flaeche);
+		int y = getValidesY(flaeche);
+		int xy[] = korrigierteKollision(gui, x, y);
+		gui.zeichneLinie(gui.getButton(), xy[0], xy[1]);
 		
+		
+	}
+	
+	private int zaehleBankFuelle() {
+		int bank = 0;
+		for (WuerfelLogik wuerfel : alleWuerfelLogik) {
+			if (wuerfel.istBehalten()) { bank++; }			
+		}		
+		return bank;
 	}
 	
 	public Container getContainer() {
@@ -179,4 +201,6 @@ public class WuerfelControl  {
 	public void setFlaeche(WuerfelflaecheGUI flaeche) {
 		this.flaeche = flaeche;
 	}
+	
+	
 }

@@ -31,13 +31,13 @@ public class SpielfeldGUI {
 		
 		Eimer.setLayout(null);
 		
-		
+		wuerfelbankGUI = new WuerfelBankGUI();
 		wuerfelflaeche = new WuerfelflaecheGUI();
-		wuerfel = new WuerfelControl(Eimer, wuerfelflaeche);
+		wuerfel = new WuerfelControl(Eimer, wuerfelflaeche, wuerfelbankGUI);
 		punktetabelle = new PunkteTabelleGUI();
 		spielbank = new SpielbankGUI();
 		wuerfeln = new JButton ("Würfeln");
-		wuerfelbankGUI = new WuerfelBankGUI();
+		
 		hintergrund = new JLabel();
 		
 		wuerfelflaeche.getPanel().setBounds(50, 200, 350, 200);
