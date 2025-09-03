@@ -17,6 +17,7 @@ public class SpielfeldGUI {
 	private PunkteTabelleGUI punktetabelle;
 	private SpielbankGUI spielbank;
 	private JButton wuerfeln;
+	private JButton punkteEintragen;
 
 	// Konstruktor
 	// Fläche und sichbarkeit müssen noch gemacht werden
@@ -26,17 +27,29 @@ public class SpielfeldGUI {
 		
 		Eimer.setLayout(null);
 		
-		wuerfel = new WuerfelControl(Eimer);
+		punktetabelle = new PunkteTabelleGUI();
+		wuerfel = new WuerfelControl(Eimer, punktetabelle);
 		wuerfelflaeche = new WuerfelflaecheGUI();
 		punktetabelle = new PunkteTabelleGUI();
 		spielbank = new SpielbankGUI();
 		wuerfeln = new JButton ("Würfeln");
+		punkteEintragen = new JButton("Punkte eintragen");
 		
 		wuerfelflaeche.getPanel().setBounds(50, 200, 350, 200);
 		punktetabelle.getPanel().setBounds(440, 50, 300, 550);
 		spielbank.getPanel().setBounds(50, 500, 350, 100);
 		wuerfeln.setBounds(160, 475, 120, 20);
-		wuerfeln.addActionListener(klick -> {wuerfel.wuerfeln();});
+		punkteEintragen.setBounds(290, 475, 150, 20);
+        wuerfeln.addActionListener(klick -> {
+            wuerfel.wuerfeln();
+            if (wuerfel.getWurfAnzahl() == wuerfel.getMaxWuerfe()) {
+                aktualisierePunkteTabelle();
+            }
+        });		
+        
+        punkteEintragen.addActionListener(klick -> {
+            eintragePunkteFuerAktuellenSpieler();
+        });
 		
 
 		
@@ -63,6 +76,7 @@ public class SpielfeldGUI {
 	    }
 		
 		Eimer.add(wuerfelflaeche.getPanel());
+		Eimer.add(punkteEintragen);
 		Eimer.add(punktetabelle.getPanel());
 		Eimer.add(spielbank.getPanel());
 		Eimer.add(wuerfeln);
@@ -71,8 +85,17 @@ public class SpielfeldGUI {
 		Eimer.repaint();
 		
 		
-		
 	}
+	
+	
+    private void aktualisierePunkteTabelle() {
+        System.out.println("Tabelle sollte aktualisiert werden");	// Damit die Tabelle aktualisiert werden kann
+    }
+    
+    private void eintragePunkteFuerAktuellenSpieler() {	//damit Punkte eingetragen werden köennen
+        System.out.println("Punkte eintragen für aktuellen Spieler");
+    }
+    
 	protected void rearrangiereSpielbank(Component e, SpielbankGUI sb) {
 		int breite = e.getWidth();
 		int hoehe = e.getHeight();

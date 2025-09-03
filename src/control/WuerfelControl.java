@@ -4,25 +4,31 @@ package control;
 import java.awt.Container;
 import java.util.ArrayList;
 import java.util.Collections;
+import java.util.HashMap;
 import java.util.List;
+import java.util.Map;
 import java.util.Random;
 
+import gui.PunkteTabelleGUI;
 import gui.WuerfelGUI;
+import model.Kategorie;
 import model.WuerfelLogik;
 
 public class WuerfelControl  {
 	private List<WuerfelGUI> alleWuerfelGUI = new ArrayList<>();
 	private List<WuerfelLogik> alleWuerfelLogik = new ArrayList<>();
 	private Container container;
+	private MoeglicheZuege moeglicheZuege = new MoeglicheZuege();
+	private PunkteTabelleGUI punkteTabelle;
 	
 	private List<int[]> freiePlaetze;
 	
 	int wurfAnzahl = 0;
 	int maxWuerfe = 3;
 	
-	public WuerfelControl(Container Eimer){
-		
+	public WuerfelControl(Container Eimer, PunkteTabelleGUI punkteTabelle){
 		this.container = Eimer;
+		this.punkteTabelle = punkteTabelle;
 		
 		for(int i = 0; i < 5; i++) {		//das erstellt 5 würfel und fügt in jeder iteration den wuerfel den entsprechenden arrays hinzu
 			WuerfelLogik model = new WuerfelLogik(6);
@@ -38,6 +44,7 @@ public class WuerfelControl  {
 		container.revalidate();
 		container.repaint();	
 	}
+	
 	
 	public Container getContainer() {
 		return container;
@@ -79,8 +86,47 @@ public class WuerfelControl  {
 			}
 		}
 		wurfAnzahl++;
-	}
 		
+		//Hier habe ich eine Kleinigkeit eingefügt, damit unsere Würfelergebnisse zwischengespeichert werden 
+		
+		
+		if(wurfAnzahl == maxWuerfe) {
+			speichereWuerfelWerte();
+			
+			aktualisierePunkteTabelle();	//Damit die Punktetabelle aktualisiert wird
+		}
+		
+	}
+	
+	private void aktualisierePunkteTabelle() {
+	    Map<Kategorie, Integer> moeglichePunkte = moeglicheZuege.berechneAlleMoeglichenPunkte();
+	    if (punkteTabelle != null) {
+	        punkteTabelle.zeigeMoeglichePunkte(moeglichePunkte);
+	    }
+	}
+    
+	
+    private void speichereWuerfelWerte() {
+        List<Integer> werte = new ArrayList<>();
+        for (int i = 0; i < alleWuerfelLogik.size(); i++) {
+            werte.add(alleWuerfelLogik.get(i).getAugen());
+        }
+        moeglicheZuege.setWuerfelWerte(werte);
+    }
+	
+    public MoeglicheZuege getMoeglicheZuege() {
+        return moeglicheZuege;
+    }
+    
+    public List<Integer> getAktuelleWuerfelwerte() {
+        List<Integer> werte = new ArrayList<>();
+        for (WuerfelLogik wuerfel : alleWuerfelLogik) {
+            werte.add(wuerfel.getAugen());
+        }
+        return werte;
+    }
+    
+    
 		//Position auf Wuerfelflaeche korrigieren wenn Würfel kollidieren gott was für ein satz...
 		//int[] korrigiertePosition = korrigierteKollision(gui, zielX, zielY);
 		//zielX = korrigiertePosition[0];
@@ -117,6 +163,13 @@ public class WuerfelControl  {
 		freiePlaetze = generiereRasterPlaetze(50, 200, 65, 5, 3);
 		Collections.shuffle(freiePlaetze);
 		wurfAnzahl = 0;
+        for (WuerfelLogik wuerfel : alleWuerfelLogik) {
+            wuerfel.setBehalten(false);
+            wuerfel.wuerfeln();
+        }
+        for (WuerfelGUI gui : alleWuerfelGUI) {
+            gui.fresherButton();
+        }
 	}
 		
 	public List<WuerfelGUI> getAlleWuerfelGUI() {

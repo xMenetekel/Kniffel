@@ -2,6 +2,8 @@ package gui;
 
 import java.awt.BorderLayout;
 import java.awt.Component;
+import java.util.HashMap;
+import java.util.Map;
 
 import javax.swing.ImageIcon;
 import javax.swing.JPanel;
@@ -15,10 +17,12 @@ import model.Kategorie;
 public class PunkteTabelleGUI {
 	private JPanel tabelle;
 	private JTable table;
+	private ZugTableModel tableModel;
 	
 	public PunkteTabelleGUI() {
 		tabelle = new JPanel(new BorderLayout());
 		
+		tableModel = new ZugTableModel();
 		table = new JTable(new ZugTableModel());
 		table.setRowHeight(40); // habs von 35 auf 40 angepasst idk if this is too high tho?
 		
@@ -28,6 +32,23 @@ public class PunkteTabelleGUI {
 		tabelle.add(scroll, BorderLayout.CENTER);
 				
 		}
+	
+    public void zeigeMoeglichePunkte(Map<Kategorie, Integer> moeglichePunkte) {
+        if (tableModel != null) {
+            tableModel.setMoeglichePunkte(moeglichePunkte);
+        }
+    }
+   
+	
+    public void setMoeglichePunkte(Map<Kategorie, Integer> moeglichePunkte) {
+        this.moeglichePunkte = moeglichePunkte;
+        fireTableDataChanged(); // Tabelle aktualisieren
+    }
+    
+    
+    public void tragePunkteEin(Kategorie kategorie, int punkte, int spielerIndex) {
+        tableModel.setValueAt(punkte, kategorie.getTabellenIndex(), 2 + spielerIndex);
+    }
 	
 	public JPanel getPanel() {
 		return this.tabelle;
@@ -71,6 +92,7 @@ public class PunkteTabelleGUI {
 		private String[] columnNames;
 		private Object[][] data;
 		private final int spielerAnzahl = 2; //muss später übergeben werden!!!!Wichtig!!!ToDo
+		private Map<Kategorie, Integer> moeglichePunkte = new HashMap<>();
 		
 		public ZugTableModel() {
 			columnNames = new String[2 + spielerAnzahl];
@@ -123,6 +145,12 @@ public class PunkteTabelleGUI {
 			
 		}
 		
+        public void setMoeglichePunkte(Map<Kategorie, Integer> moeglichePunkte) {
+            this.moeglichePunkte = moeglichePunkte;
+            fireTableDataChanged(); 
+        }
+
+		
 		
 		
 		@Override
@@ -135,10 +163,16 @@ public class PunkteTabelleGUI {
 			return columnNames.length;
 		}
 		
-		@Override
-		public Object getValueAt(int row, int column) {
-			return data[row][column];
-		}
+        @Override
+        public Object getValueAt(int row, int column) {
+            if (column >= 2 && !moeglichePunkte.isEmpty()) {
+                Kategorie kategorie = Kategorie.fromTabellenIndex(row);
+                if (kategorie != null && moeglichePunkte.containsKey(kategorie)) {
+                    return moeglichePunkte.get(kategorie);
+                }
+            }
+            return data[row][column];
+        }
 		
 		@Override
 		public String getColumnName(int column) {
