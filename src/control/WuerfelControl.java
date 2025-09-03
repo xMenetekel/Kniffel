@@ -79,6 +79,9 @@ public class WuerfelControl  {
 	 * den Timer sehr unterschiedliche x/y Werte und dann wird die Kollisionsprüfung absoluter Mist. 
 	 * KI viel befragt aber letztenendes hat die KI auch nicht die Lösung des Problems erkannt 
 	 * 
+	 * BLOSS NIEMALS ÄNDERN
+	 * es funktioniert !!!!!!!!!
+	 * 
 	 * @param aktuellerWuerfel 
 	 * @param zielX
 	 * @param zielY
@@ -148,25 +151,6 @@ public class WuerfelControl  {
 		return bank;
 	}
 	
-	public Container getContainer() {
-		return container;
-	}
-	
-	public int getWurfAnzahl() {
-		return wurfAnzahl;
-	}
-
-	public void setWurfAnzahl(int wurfAnzahl) {
-		this.wurfAnzahl = wurfAnzahl;
-	}
-
-	public int getMaxWuerfe() {
-		return maxWuerfe;
-	}
-
-	public void setMaxWuerfe(int maxWuerfe) {
-		this.maxWuerfe = maxWuerfe;
-	}
 	
 	//Methoden 
 	public void wuerfeln() {
@@ -222,39 +206,12 @@ public class WuerfelControl  {
         }
         return werte;
     }
-    
-    
-		//Position auf Wuerfelflaeche korrigieren wenn Würfel kollidieren gott was für ein satz...
-		//int[] korrigiertePosition = korrigierteKollision(gui, zielX, zielY);
-		//zielX = korrigiertePosition[0];
-		//zielY = korrigiertePosition[1];
-		
-		//Po speicherun und Neupos
-		//gui.setProzentXAufFeld(zielX * 1.0 / container.getWidth());
-		//gui.setProzentYAufFeld(zielY * 1.0 / container.getHeight());		
-		
-		//gui.getLogik().wuerfelAngeklickt(gui, false);
-		
-	
 	
 	public void setBehalten(int index, boolean behalten) {
 		if(index >= 0 && index < alleWuerfelLogik.size()) {
 		alleWuerfelLogik.get(index).setBehalten(behalten);
 		}
-	}
-	
-	private List<int[]> generiereRasterPlaetze(int startX, int startY,
-			int rasterGroesse, int spalten, int zeilen){
-		List<int[]> allePlaetze = new ArrayList<>();
-		for(int x = 0; x < spalten; x++) {
-			for(int y = 0; y < zeilen; y++) {
-				int posX = startX + x * rasterGroesse;
-				int posY = startY + y * rasterGroesse;
-				allePlaetze.add(new int[] {posX, posY});
-			}
-		}
-		return allePlaetze;
-	}
+	}	
 		
 	public void neueRunde() {
 		wurfAnzahl = 0;
@@ -289,6 +246,25 @@ public class WuerfelControl  {
 
 	public void setFlaeche(WuerfelflaecheGUI flaeche) {
 		this.flaeche = flaeche;
+	}
+	public Container getContainer() {
+		return container;
+	}
+	
+	public int getWurfAnzahl() {
+		return wurfAnzahl;
+	}
+
+	public void setWurfAnzahl(int wurfAnzahl) {
+		this.wurfAnzahl = wurfAnzahl;
+	}
+
+	public int getMaxWuerfe() {
+		return maxWuerfe;
+	}
+
+	public void setMaxWuerfe(int maxWuerfe) {
+		this.maxWuerfe = maxWuerfe;
 	}
 	
 	
