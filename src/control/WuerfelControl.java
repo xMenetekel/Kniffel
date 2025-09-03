@@ -16,6 +16,8 @@ import gui.WuerfelGUI;
 import gui.WuerfelflaecheGUI;
 import model.WuerfelLogik;
 import model.WuerfelbankLogik;
+import gui.PunkteTabelleGUI;
+import model.Kategorie;
 
 public class WuerfelControl  {
 	private List<WuerfelGUI> alleWuerfelGUI = new ArrayList<>();
@@ -23,15 +25,13 @@ public class WuerfelControl  {
 	private Container container;
 	private MoeglicheZuege moeglicheZuege = new MoeglicheZuege();
 	private PunkteTabelleGUI punkteTabelle;
-	
-	private Container container;
 	private WuerfelflaecheGUI flaeche;
 	private WuerfelBankGUI bankGUI; //das muss so safe woanders hin aber ich will grade einfach nur das es geht
 	
 	int wurfAnzahl = 0;
 	int maxWuerfe = 3;
 	
-	public WuerfelControl(Container Eimer, WuerfelflaecheGUI flaeche, WuerfelBankGUI bankGUI){
+	public WuerfelControl(Container Eimer, WuerfelflaecheGUI flaeche, WuerfelBankGUI bankGUI, PunkteTabelleGUI punkteTabelle){
 		
 		this.container = Eimer;
 		this.punkteTabelle = punkteTabelle;
@@ -54,19 +54,7 @@ public class WuerfelControl  {
 		container.repaint();	
 	}
 	
-	public void wuerfeln() {
-		
-		if(wurfAnzahl >= maxWuerfe) { return; } 				
-		getAlleWuerfelLogik().forEach(w -> {if (!w.istBehalten()) {w.wuerfeln(); } } );
-		getAlleWuerfelGUI().forEach(w -> {if (!w.getLogik().istBehalten()) {
-												int x, y;
-												x = getValidesX(flaeche);
-												y = getValidesY(flaeche);
-												int[] xy = korrigierteKollision(w, x, y);
-											  w.zeichneLinie(w.getButton(), xy[0], xy[1]);											  										  
-											  }	});		
-		wurfAnzahl++;
-	}
+	
 	
 	public int getValidesX(WuerfelflaecheGUI flaeche) {
 		int validesX;
@@ -182,23 +170,18 @@ public class WuerfelControl  {
 	
 	//Methoden 
 	public void wuerfeln() {
-		if(wurfAnzahl >= maxWuerfe) {
-			return;
-		}
-		for(int i = 0; i < alleWuerfelLogik.size(); i++) {
-			WuerfelLogik logik = alleWuerfelLogik.get(i);
-			WuerfelGUI gui = alleWuerfelGUI.get(i);
+		
+		if(wurfAnzahl >= maxWuerfe) { return; } 				
+		getAlleWuerfelLogik().forEach(w -> {if (!w.istBehalten()) {w.wuerfeln(); } } );
+		getAlleWuerfelGUI().forEach(w -> {if (!w.getLogik().istBehalten()) {
+												int x, y;
+												x = getValidesX(flaeche);
+												y = getValidesY(flaeche);
+												int[] xy = korrigierteKollision(w, x, y);
+											  w.zeichneLinie(w.getButton(), xy[0], xy[1]);											  										  
+											  }	});	
 			
-			if(!logik.istBehalten()) {
-				logik.wuerfeln();
-				
-				gui.fresherButton();
-				
-				int[] platz = freiePlaetze.remove(0);
-				gui.zeichneLinie(gui.getButton(), platz[0], platz[1]);
-				gui.setPositionUndRefresh(platz[0], platz[1]);
-			}
-		}
+		
 		wurfAnzahl++;
 		
 		//Hier habe ich eine Kleinigkeit eingefügt, damit unsere Würfelergebnisse zwischengespeichert werden 
@@ -274,8 +257,6 @@ public class WuerfelControl  {
 	}
 		
 	public void neueRunde() {
-		freiePlaetze = generiereRasterPlaetze(50, 200, 65, 5, 3);
-		Collections.shuffle(freiePlaetze);
 		wurfAnzahl = 0;
         for (WuerfelLogik wuerfel : alleWuerfelLogik) {
             wuerfel.setBehalten(false);

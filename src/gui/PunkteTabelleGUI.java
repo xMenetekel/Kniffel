@@ -21,7 +21,7 @@ public class PunkteTabelleGUI implements GUIProzente {
 	private final double prozentFlaecheHoehe = 0.7857;
 	private final double prozentFlaecheY = 0.0714;
 	private final double prozentFlaecheBreite = 0.375;	
-	
+	private ZugTableModel tableModel;
 	
 
 	public PunkteTabelleGUI() {

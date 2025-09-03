@@ -48,5 +48,7 @@ public class WuerfelBankGUI implements GUIProzente {
 		return this.WuerfelBankGUI;
 	}
 	
+	
+	
 
 }
