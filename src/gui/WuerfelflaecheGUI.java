@@ -14,14 +14,14 @@ public class WuerfelflaecheGUI implements GUIProzente {
 
 	public WuerfelflaecheGUI() {
 		ImageIcon bildi = new ImageIcon("Other/wuerfelflaeche.jpg" );
-		bild = new JLabel();
+		flaeche = new JPanel();
+		bild = new JLabel();		
 		bild.setIcon(bildi);
 		bild.setVisible(true);
-		bild.setBounds(0, 0, 350,200);		
-		flaeche = new JPanel();
+		bild.setBounds(0, 0, 350,200);			
 		flaeche.add(bild);	
-		flaeche.setBounds(0,0,300,100);
-		//flaeche.setVisible(true);
+		flaeche.setVisible(true);
+		flaeche.setBounds(0,0,350,200);		
 		flaeche.setLayout(null);
 	}
 	

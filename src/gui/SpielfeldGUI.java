@@ -57,10 +57,10 @@ public class SpielfeldGUI {
 			@Override
 			public void componentResized(ComponentEvent e) {
 				rearrangiere(Eimer, wuerfelflaeche);
-				rearrangiereWuerfel(Eimer, wuerfel);
+				rearrangiereWuerfel(Eimer, wuerfel, wuerfelbankGUI);
 				rearrangiere(Eimer, punktetabelle);
 				rearrangiere(Eimer, spielbank);
-				rearrangiere(Eimer, wuerfelbankGUI);
+				
 			}
 
 			
@@ -93,7 +93,7 @@ public class SpielfeldGUI {
 	 * @param e
 	 * @param w
 	 */
-	protected void rearrangiereWuerfel(Component e, WuerfelControl w) {
+	protected void rearrangiereWuerfel(Component e, WuerfelControl w, WuerfelBankGUI bank) {
 		int breite = e.getWidth();
 		int hoehe = e.getHeight();
 		
@@ -103,6 +103,8 @@ public class SpielfeldGUI {
 											 t.setProzentYAufFeld(t.getyPos() *1.0 / hoehe);
 											 t.getButton().setBounds(t.getxPos(), t.getyPos(), 50, 50);
 											 });
+		bank.getPanel().setBounds((int)Math.floor(breite*bank.getProzentFlaecheX()), 
+								  (int)Math.floor(hoehe*bank.getProzentFlaecheY()), 280, 60);
 			
 	}
 	

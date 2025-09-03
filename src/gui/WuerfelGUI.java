@@ -3,6 +3,7 @@ package gui;
 import model.*;
 
 import java.awt.Container;
+import java.util.Random;
 
 import javax.swing.*;
 
@@ -16,6 +17,7 @@ public class WuerfelGUI {
 	double prozentXAufFeld;
 	double prozentYAufFeld;
 	Container Eimer;
+	private Random rnjesus;
 	
 
 	public WuerfelGUI(WuerfelLogik model, int startX, int startY, Container Eimer){
@@ -23,7 +25,7 @@ public class WuerfelGUI {
 		this.wuerfel = new JButton();
 		this.startX = startX;
 		this.startY = startY;
-		
+		this.rnjesus = new Random();
 		this.Eimer = Eimer;
 		this.xPos = startX;
 		this.yPos = startY;
@@ -49,7 +51,7 @@ public class WuerfelGUI {
 	 * 
 	 * Bei flachem Anstieg muss man x Schrittweise berechnen und bei starken Anstieg y Schrittweise. Wenn m nicht mit 1.0 multipliziert wird dann
 	 * wertet es nicht als Double aus und das ganze kriegt einen hässligen Knick, das plus Hilfe bei der Geschwindigkeit vom Timer (Also das eben erwähnte
-	 * ob man x oder y Schritweise inkrementiert) wurde mit KI Hilfe verstanden. 
+	 * ob man x oder y Schritweise inkrementiert) und wie Timer generell funktionieren wurde mit KI Hilfe verstanden. 
 	 * 
 	 * Für langsamer / Schneller das x bei new Timer{x, e -> ...} vergrößern / verkleinern
 	 * 
@@ -59,13 +61,23 @@ public class WuerfelGUI {
 	 */
 	
 	public void zeichneLinie(JButton wuerfel, int zielX, int zielY) { //methode irgendwann nochmal ausseinanderziehen da zu uncleancodig TODO
-		
+		this.setxPos(zielX);
+		this.setyPos(zielY); //WICHTIG DAS NICHT ENTFERNEN ANSONSTEN KOLLISIONENNNNNNN
 		double m;
 		if(zielX - wuerfel.getX() == 0) { m = 0; }
 		else { m =(zielY - wuerfel.getY()) * 1.0 / ( zielX - wuerfel.getX()); } 
 		double n = zielY - (zielX * m);
 		
-		Timer timer = new Timer(4, e -> {
+		Timer bildTimer = new Timer(25, time -> {
+			
+			ImageIcon bildi = new ImageIcon("Other/" + (rnjesus.nextInt(5)+1) + ":50.png" );
+			wuerfel.setIcon(bildi);
+		});
+		
+		
+		bildTimer.start();
+		
+		Timer zeichnenTimer = new Timer(4, e -> {
 			int xJetzt = wuerfel.getX();
 			int yJetzt = wuerfel.getY();
 			
@@ -74,26 +86,33 @@ public class WuerfelGUI {
 				if (xJetzt < zielX) xJetzt++;	
 				int yNeu = (int) Math.round(m * xJetzt + n);				
 				wuerfel.setLocation(xJetzt, yNeu);	
-				this.setyPos(yNeu);
-				this.setxPos(xJetzt);
+				
 				this.setProzentXAufFeld(this.getxPos() * 1.0 / this.getEimer().getWidth());
 				this.setProzentYAufFeld(this.getyPos() * 1.0 / this.getEimer().getHeight());
 			
-				if(xJetzt == zielX && yNeu == zielY) { ((Timer)e.getSource()).stop();	}
+				if(xJetzt == zielX && yNeu == zielY) { ((Timer)e.getSource()).stop();
+				bildTimer.stop();
+				ImageIcon bildi = new ImageIcon("Other/" + this.model.getAugen() + ":50.png" );
+				wuerfel.setIcon(bildi);
+				
+				}
 			} else {
 				if (yJetzt > zielY) yJetzt--;	
 				if (yJetzt < zielY) yJetzt++;				
 				int xNeu = (int) Math.round((yJetzt - n) / m);				
 				wuerfel.setLocation(xNeu, yJetzt);	
-				this.setyPos(yJetzt);
-				this.setxPos(xNeu);
+				
 				this.setProzentXAufFeld(this.getxPos() * 1.0 / this.getEimer().getWidth());
 				this.setProzentYAufFeld(this.getyPos() * 1.0 / this.getEimer().getHeight());
 				
-				if(xNeu == zielX && yJetzt == zielY) { ((Timer)e.getSource()).stop();	}
+				if(xNeu == zielX && yJetzt == zielY) { ((Timer)e.getSource()).stop();
+				bildTimer.stop();
+				ImageIcon bildi = new ImageIcon("Other/" + this.model.getAugen() + ":50.png" );
+				wuerfel.setIcon(bildi);
+				}
 			}
 		});
-		timer.start();		
+		zeichnenTimer.start();		
 		
 		
 	}

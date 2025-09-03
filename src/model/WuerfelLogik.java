@@ -31,7 +31,7 @@ public class WuerfelLogik {
 	
 	public void wuerfeln() {
 		if(!behalten) {
-			augen = zufall.nextInt(seiten)+1; //keine 0 seiten
+			this.augen = zufall.nextInt(seiten)+1; //keine 0 seiten
 		}
 		
 	}

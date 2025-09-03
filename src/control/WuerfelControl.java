@@ -7,6 +7,8 @@ import java.util.Collections;
 import java.util.List;
 import java.util.Random;
 
+import javax.swing.ImageIcon;
+
 import gui.WuerfelGUI;
 import gui.WuerfelflaecheGUI;
 import model.WuerfelLogik;
@@ -47,8 +49,12 @@ public class WuerfelControl  {
 	public void wuerfeln() {
 		if(wurfAnzahl >= maxWuerfe) { return; } 				
 		getAlleWuerfelLogik().forEach(w -> {if (!w.istBehalten()) {w.wuerfeln(); } } );
-		getAlleWuerfelGUI().forEach(w -> {if (!w.getLogik().istBehalten()) {	
-											  w.zeichneLinie(w.getButton(), getValidesX(flaeche), getValidesY(flaeche));
+		getAlleWuerfelGUI().forEach(w -> {if (!w.getLogik().istBehalten()) {
+												int x, y;
+												x = getValidesX(flaeche);
+												y = getValidesY(flaeche);
+												int[] xy = korrigierteKollision(w, x, y);
+											  w.zeichneLinie(w.getButton(), xy[0], xy[1]);											  										  
 											  }	});		
 		wurfAnzahl++;
 	}
@@ -71,6 +77,40 @@ public class WuerfelControl  {
 		
 		return validesY;
 	}
+	/**
+	 * Der ganze Spaß korrigiert Kollisionen. Es muss die WuerfelGUI übergeben werden, da dort die fertigen x/y pos gespeichert werden. der JButton an sich hat durch
+	 * den Timer sehr unterschiedliche x/y Werte und dann wird die Kollisionsprüfung absoluter Mist. 
+	 * KI viel befragt aber letztenendes hat die KI auch nicht die Lösung des Problems erkannt 
+	 * 
+	 * @param aktuellerWuerfel 
+	 * @param zielX
+	 * @param zielY
+	 * @return
+	 */
+		private int[] korrigierteKollision(WuerfelGUI aktuellerWuerfel, int zielX, int zielY) {
+			final int WUERFEL_GROESSE = 50;			
+			boolean kollisionGefunden;
+			do {
+				kollisionGefunden = false;
+				for(WuerfelGUI andererWuerfel : alleWuerfelGUI) {
+					if(andererWuerfel == aktuellerWuerfel || andererWuerfel.getLogik().istBehalten()) {	continue; }				
+					int andererX = andererWuerfel.getxPos(); //Es muss das von der gui sein, weil das die zielpositionen sind die auf kollisionen gecheckt werden omg
+					int andererY = andererWuerfel.getyPos(); // this mf cost me 3 hours of my life						
+					boolean kollisionX = (zielX < andererX + WUERFEL_GROESSE)   &&   (zielX + WUERFEL_GROESSE > andererX);
+					boolean kollisionY = (zielY < andererY + WUERFEL_GROESSE)   &&   (zielY + WUERFEL_GROESSE > andererY);										
+					if(kollisionX && kollisionY) {
+						kollisionGefunden = true;
+						zielX = getValidesX(flaeche);
+						zielY = getValidesY(flaeche);
+						break;
+					}
+				}					
+		} while (kollisionGefunden);
+			return new int[] {zielX, zielY};
+		}
+		
+
+
 	private void hochRunterhochRunter(WuerfelLogik wuerfel) { 
 		
 		if(wuerfel.istBehalten()) {
