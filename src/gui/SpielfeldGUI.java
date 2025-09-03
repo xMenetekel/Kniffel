@@ -6,8 +6,11 @@ import java.awt.Container;
 import java.awt.event.ComponentAdapter;
 import java.awt.event.ComponentEvent;
 
+import javax.swing.ImageIcon;
 import javax.swing.JButton;
 import javax.swing.JFrame;
+import javax.swing.JLabel;
+
 import control.WuerfelControl;
 
 public class SpielfeldGUI {
@@ -15,9 +18,10 @@ public class SpielfeldGUI {
 	private WuerfelflaecheGUI wuerfelflaeche;
 	private WuerfelControl wuerfel;
 	private PunkteTabelleGUI punktetabelle;
+	private WuerfelBankGUI wuerfelbankGUI;
 	private SpielbankGUI spielbank;
 	private JButton wuerfeln;
-	private JButton punkteEintragen;
+	private JLabel hintergrund;
 
 	// Konstruktor
 	// Fläche und sichbarkeit müssen noch gemacht werden
@@ -30,45 +34,41 @@ public class SpielfeldGUI {
 		punktetabelle = new PunkteTabelleGUI();
 		wuerfel = new WuerfelControl(Eimer, punktetabelle);
 		wuerfelflaeche = new WuerfelflaecheGUI();
+		wuerfel = new WuerfelControl(Eimer, wuerfelflaeche, wuerfelbankGUI);
 		punktetabelle = new PunkteTabelleGUI();
 		spielbank = new SpielbankGUI();
 		wuerfeln = new JButton ("Würfeln");
 		punkteEintragen = new JButton("Punkte eintragen");
 		
+		hintergrund = new JLabel();
+		
 		wuerfelflaeche.getPanel().setBounds(50, 200, 350, 200);
 		punktetabelle.getPanel().setBounds(440, 50, 300, 550);
 		spielbank.getPanel().setBounds(50, 500, 350, 100);
-		wuerfeln.setBounds(160, 475, 120, 20);
-		punkteEintragen.setBounds(290, 475, 150, 20);
-        wuerfeln.addActionListener(klick -> {
-            wuerfel.wuerfeln();
-            if (wuerfel.getWurfAnzahl() == wuerfel.getMaxWuerfe()) {
-                aktualisierePunkteTabelle();
-            }
-        });		
-        
-        punkteEintragen.addActionListener(klick -> {
-            eintragePunkteFuerAktuellenSpieler();
-        });
-		
+		wuerfelbankGUI.getPanel().setBounds(75,415,280,60);
+		wuerfeln.setBounds(160, 477, 120, 20);
+		wuerfeln.addActionListener(klick -> {wuerfel.wuerfeln();});
+		ImageIcon bildi = new ImageIcon("Other/hintergrund.jpg" );
+		hintergrund.setIcon(bildi);
+		hintergrund.setBounds(0,0,800,700);
+		hintergrund.setVisible(true);
 
 		
 		
 		Eimer.addComponentListener(new ComponentAdapter() { //der ganze spaß hier ist dafür da das beim neu ziehen alles prozentual angepasst wird
 			@Override
 			public void componentResized(ComponentEvent e) {
-				rearrangiereWuerfelflaeche(Eimer, wuerfelflaeche);
-				rearrangiereWuerfel(Eimer, wuerfel);
-				rearrangierePunktetabelle(Eimer, punktetabelle);
-				rearrangiereSpielbank(Eimer, spielbank);
+				rearrangiere(Eimer, wuerfelflaeche);
+				rearrangiereWuerfel(Eimer, wuerfel, wuerfelbankGUI);
+				rearrangiere(Eimer, punktetabelle);
+				rearrangiere(Eimer, spielbank);
+				
 			}
 
 			
 		});
 		
-		wuerfelflaeche.getPanel().setBackground(Color.RED);		
-		punktetabelle.getPanel().setBackground(Color.CYAN);
-		spielbank.getPanel().setBackground(Color.GREEN);		
+			
 
 
 		for (WuerfelGUI wuerfelGUI : wuerfel.getAlleWuerfelGUI()) {
@@ -80,6 +80,8 @@ public class SpielfeldGUI {
 		Eimer.add(punktetabelle.getPanel());
 		Eimer.add(spielbank.getPanel());
 		Eimer.add(wuerfeln);
+		Eimer.add(wuerfelbankGUI.getPanel());
+		Eimer.add(hintergrund);
 		
 		Eimer.revalidate();
 		Eimer.repaint();
@@ -102,14 +104,13 @@ public class SpielfeldGUI {
 		
 		sb.getPanel().setBounds((int)Math.floor(breite*0.0625), (int)Math.floor(hoehe*0.71428), (int)Math.floor(breite*0.4375),(int)Math.floor(hoehe*0.142857));
 	
-	}
 	/**
 	 * junge ich hab das selber ohne KI geschrieben ich werde nie wieder so einen höhenflug erleben wie grade
 	 * jedenfalls resized das alle würfel auf ihre prozentualen werte auf dem bildschirm wenn man das spielfeld größer oder kleinerzieht
 	 * @param e
 	 * @param w
 	 */
-	protected void rearrangiereWuerfel(Component e, WuerfelControl w) {
+	protected void rearrangiereWuerfel(Component e, WuerfelControl w, WuerfelBankGUI bank) {
 		int breite = e.getWidth();
 		int hoehe = e.getHeight();
 		
@@ -119,21 +120,19 @@ public class SpielfeldGUI {
 											 t.setProzentYAufFeld(t.getyPos() *1.0 / hoehe);
 											 t.getButton().setBounds(t.getxPos(), t.getyPos(), 50, 50);
 											 });
+		bank.getPanel().setBounds((int)Math.floor(breite*bank.getProzentFlaecheX()), 
+								  (int)Math.floor(hoehe*bank.getProzentFlaecheY()), 280, 60);
 			
 	}
-	protected void rearrangierePunktetabelle(Component e, PunkteTabelleGUI p) {
+	
+	public void rearrangiere(Component e, GUIProzente gui) {
 		int breite = e.getWidth();
 		int hoehe = e.getHeight();
 		
-		p.getPanel().setBounds((int)Math.floor(breite*0.55), (int)Math.floor(hoehe*0.0714), (int)Math.floor(breite*0.375),(int)Math.floor(hoehe*0.7857));
-		
-	}
-	public void rearrangiereWuerfelflaeche(Component e, WuerfelflaecheGUI wf) {
-		int breite = e.getWidth();
-		int hoehe = e.getHeight();
-		
-		wf.getPanel().setBounds((int)Math.floor(breite*0.0625), (int)Math.floor(hoehe*0.285), (int)Math.floor(breite*0.4375),(int)Math.floor(hoehe*0.25));
-		
+		gui.getPanel().setBounds((int)Math.floor(breite*gui.getProzentFlaecheX()), 
+								(int)Math.floor(hoehe*gui.getProzentFlaecheY()), 
+								(int)Math.floor(breite*gui.getProzentFlaecheBreite()),
+								(int)Math.floor(hoehe*gui.getProzentFlaecheHoehe()));
 		
 	}
 	

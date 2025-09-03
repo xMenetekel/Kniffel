@@ -15,10 +15,6 @@ public class StartmenueGUI {
 		private Container Eimer;
 			
 	
-	
-	
-
-
 	public StartmenueGUI() {
 		this.startmenueGesamt = new JFrame("Startmenue");
 		this.startmenueGesamt.setSize(800, 700);
@@ -40,14 +36,8 @@ public class StartmenueGUI {
 			@Override
 			public void componentResized(ComponentEvent e) {
 				rearrangiereFelder(Eimer, starteSpiel, einstellungen, exit);
-			}
-
-			
-
-			
+			}			
 		});
-		
-		
 		
 		this.Eimer.add(starteSpiel);
 		this.Eimer.add(exit);

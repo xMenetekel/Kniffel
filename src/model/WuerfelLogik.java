@@ -14,6 +14,9 @@ public class WuerfelLogik {
 	private int augen;
 	private boolean behalten;
 	private Random zufall;
+	private int bankXPosition;
+	private int bankYPosition;
+	private WuerfelGUI gui;
 	
 	
 	//Konstruktor 
@@ -22,15 +25,17 @@ public class WuerfelLogik {
 		this.behalten = false;
 		this.zufall = new Random();
 		wuerfeln();
+		
 	}
 	
 	
 	public void wuerfeln() {
 		if(!behalten) {
-			augen = zufall.nextInt(seiten)+1; //keine 0 seiten
+			this.augen = zufall.nextInt(seiten)+1; //keine 0 seiten
 		}
 		
 	}
+	
 
 	
 	public int getAugen() {
@@ -68,6 +73,36 @@ public class WuerfelLogik {
 	
 	public void positionWuerfel() {
 		
+	}
+
+
+	public int getBankXPosition() {
+		return bankXPosition;
+	}
+
+
+	public void setBankXPosition(int bankXPosition) {
+		this.bankXPosition = bankXPosition;
+	}
+
+
+	public int getBankYPosition() {
+		return bankYPosition;
+	}
+
+
+	public void setBankYPosition(int bankYPosition) {
+		this.bankYPosition = bankYPosition;
+	}
+
+
+	public WuerfelGUI getGui() {
+		return gui;
+	}
+
+
+	public void setGui(WuerfelGUI gui) {
+		this.gui = gui;
 	}
 	
 }
