@@ -22,7 +22,7 @@ public class SpielfeldGUI {
 	private SpielbankGUI spielbank;
 	private JButton wuerfeln;
 	private JLabel hintergrund;
-
+	private JButton punkteEintragen;
 	// Konstruktor
 	// Fläche und sichbarkeit müssen noch gemacht werden
 	// Fläche mit ...setSize() und sichtbarkeit mit ...setVisible(true)
@@ -32,10 +32,10 @@ public class SpielfeldGUI {
 		Eimer.setLayout(null);
 		
 		punktetabelle = new PunkteTabelleGUI();
-		wuerfel = new WuerfelControl(Eimer, punktetabelle);
 		wuerfelflaeche = new WuerfelflaecheGUI();
-		wuerfel = new WuerfelControl(Eimer, wuerfelflaeche, wuerfelbankGUI);
 		punktetabelle = new PunkteTabelleGUI();
+		wuerfelbankGUI = new WuerfelBankGUI();
+		wuerfel = new WuerfelControl(Eimer, wuerfelflaeche, wuerfelbankGUI, punktetabelle);	
 		spielbank = new SpielbankGUI();
 		wuerfeln = new JButton ("Würfeln");
 		punkteEintragen = new JButton("Punkte eintragen");
@@ -47,11 +47,21 @@ public class SpielfeldGUI {
 		spielbank.getPanel().setBounds(50, 500, 350, 100);
 		wuerfelbankGUI.getPanel().setBounds(75,415,280,60);
 		wuerfeln.setBounds(160, 477, 120, 20);
-		wuerfeln.addActionListener(klick -> {wuerfel.wuerfeln();});
+		punkteEintragen.setBounds(290, 475, 150, 20);
+		wuerfeln.addActionListener(klick -> {wuerfel.wuerfeln(); 
+											if (wuerfel.getWurfAnzahl() == wuerfel.getMaxWuerfe()) {
+									            aktualisierePunkteTabelle();
+									        }
+									    });		
+									    
+		punkteEintragen.addActionListener(klick -> {
+		        eintragePunkteFuerAktuellenSpieler();
+		});
 		ImageIcon bildi = new ImageIcon("Other/hintergrund.jpg" );
 		hintergrund.setIcon(bildi);
 		hintergrund.setBounds(0,0,800,700);
 		hintergrund.setVisible(true);
+		
 
 		
 		
@@ -103,6 +113,7 @@ public class SpielfeldGUI {
 		int hoehe = e.getHeight();
 		
 		sb.getPanel().setBounds((int)Math.floor(breite*0.0625), (int)Math.floor(hoehe*0.71428), (int)Math.floor(breite*0.4375),(int)Math.floor(hoehe*0.142857));
+	}
 	
 	/**
 	 * junge ich hab das selber ohne KI geschrieben ich werde nie wieder so einen höhenflug erleben wie grade
