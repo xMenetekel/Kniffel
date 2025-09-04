@@ -72,7 +72,7 @@ public class PunkteTabelleGUI implements GUIProzente {
 	
 	public JPanel getPanel() {
 		return this.tabelle;
-	}
+		}
 	
 	static class SymbolCellRenderer extends DefaultTableCellRenderer {
 	    @Override

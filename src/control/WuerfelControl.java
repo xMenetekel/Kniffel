@@ -122,10 +122,10 @@ public class WuerfelControl  {
 	private void runter(WuerfelGUI gui) {
 		int x = (int)(container.getWidth() * bankGUI.getProzentFlaecheX());
 		int y = (int)(container.getHeight() * bankGUI.getProzentFlaecheY());
-		System.out.println(x + " " + y + " " + container.getWidth() + " " + bankGUI.getProzentFlaecheX() + " " + container.getHeight() + " " + bankGUI.getProzentFlaecheY());
-		x = ((gui.getButton().getWidth() + 5) * zaehleBankFuelle()) + x;
+		
+		x = ((gui.getButton().getWidth() + 5) * zaehleBankFuelle()-1) + x;
 		y = y + 5;
-		System.out.println(x + " " + y);
+	
 		gui.zeichneLinie(gui.getButton(), x, y, false);
 		
 		
