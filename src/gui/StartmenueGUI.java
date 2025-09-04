@@ -29,7 +29,6 @@ public class StartmenueGUI {
 		
 		
 		this.exit.addActionListener(klick -> {System.exit(0);});
-		this.starteSpiel.addActionListener(klick -> {new SpielfeldGUI(Eimer);});
 		this.startmenueGesamt.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
 		
 		this.Eimer.addComponentListener(new ComponentAdapter() { //der ganze spaß hier ist dafür da das beim neu ziehen alles prozentual angepasst wird

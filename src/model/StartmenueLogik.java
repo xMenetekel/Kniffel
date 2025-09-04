@@ -7,7 +7,7 @@ public class StartmenueLogik {
 	private boolean spielGestartet = false;
 	private boolean einstellungenOffen = false;
 	
-	private int spieleranzahl = 1;
+	private int spieleranzahl;
 	private String spielernamen = "Spieler";
 	
 	private Color hintergrundfarbe = Color.blue;

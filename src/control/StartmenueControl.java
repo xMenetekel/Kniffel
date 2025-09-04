@@ -25,8 +25,6 @@ public class StartmenueControl {
 	
 	private void starteStartmenue() {
 		menueGUI.getExit().addActionListener(klick -> {System.exit(0);});
-		//TODO Conny hier Spielerabfrage Einfügen
-		//menueGUI.getStarteSpiel().addActionListener(klick -> {new SpielfeldGUI(menueGUI.getEimer());});
 		menueGUI.getStarteSpiel().addActionListener(klick ->{
 			zeigeSpielerAuswahl();
 		});
@@ -50,6 +48,8 @@ public class StartmenueControl {
 			druecker.addActionListener(e ->{
 				menueDaten.setSpieleranzahl(anzahl); //speichern 
 				abfrage.dispose(); //schließen
+				
+				new SpielfeldGUI(menueGUI.getEimer(),menueDaten);
 			});
 			abfrage.add(druecker);
 		}
@@ -58,10 +58,6 @@ public class StartmenueControl {
 		abfrage.setVisible(true); 
 	}
 	
-	public StartmenueGUI getMenueGUI() {
-		return menueGUI;
-	}
-
 	public void setMenueGUI(StartmenueGUI menueGUI) {
 		this.menueGUI = menueGUI;
 	}
