@@ -28,8 +28,28 @@ public class PunkteTabelleGUI implements GUIProzente {
 		tabelle = new JPanel(new BorderLayout());
 		
 		tableModel = new ZugTableModel();
-		table = new JTable(new ZugTableModel());
+		table = new JTable(tableModel);
 		table.setRowHeight(40); // habs von 35 auf 40 angepasst idk if this is too high tho?
+		
+        table.addMouseListener(new java.awt.event.MouseAdapter() {
+            @Override
+            public void mouseClicked(java.awt.event.MouseEvent evt) {
+                int row = table.rowAtPoint(evt.getPoint());
+                int col = table.columnAtPoint(evt.getPoint());
+                
+                if (col >= 2) { // Nur Punkte-Spalten
+                    Kategorie kategorie = Kategorie.fromTabellenIndex(row);
+                    if (kategorie != null && tableModel.hatMoeglichePunkteFuerKategorie(kategorie)) {
+                        System.out.println("Spieler hat Kategorie gewählt: " + kategorie);
+                        int punkte = tableModel.getMoeglichePunkteFuerKategorie(kategorie);
+                        System.out.println("Punkte: " + punkte);
+                        
+                        // Hier kannst du die Logik für das Behalten der Punkte implementieren
+                        // z.B.: tragePunkteEin(kategorie, punkte, 0); // Für Spieler 1
+                    }
+                }
+            }
+        });
 		
 		table.getColumnModel().getColumn(0).setCellRenderer(new SymbolCellRenderer());	//Brauchen CellRenderer um in der ersten spalte sowohl Bilder als auch Text verwenden zu können
 		
@@ -38,21 +58,16 @@ public class PunkteTabelleGUI implements GUIProzente {
 				
 		}
 	
-    public void zeigeMoeglichePunkte(Map<Kategorie, Integer> moeglichePunkte) {
-        if (tableModel != null) {
-            tableModel.setMoeglichePunkte(moeglichePunkte);
-        }
-    }
-   
-	
-    public void setMoeglichePunkte(Map<Kategorie, Integer> moeglichePunkte) {
-        this.moeglichePunkte = moeglichePunkte;
-        fireTableDataChanged(); // Tabelle aktualisieren
-    }
-    
+	public void zeigeMoeglichePunkte(Map<Kategorie, Integer> moeglichePunkte) {
+	    if (tableModel != null) {
+	        tableModel.setMoeglichePunkte(moeglichePunkte); 
+	    }
+	}
+
     
     public void tragePunkteEin(Kategorie kategorie, int punkte, int spielerIndex) {
         tableModel.setValueAt(punkte, kategorie.getTabellenIndex(), 2 + spielerIndex);
+        tableModel.entferneMoeglicheKategorie(kategorie);
     }
 	
 	public JPanel getPanel() {
@@ -155,7 +170,23 @@ public class PunkteTabelleGUI implements GUIProzente {
             fireTableDataChanged(); 
         }
 
-		
+        public boolean hatMoeglichePunkteFuerKategorie(Kategorie kategorie) {
+            return moeglichePunkte.containsKey(kategorie);
+        }
+        
+        public int getMoeglichePunkteFuerKategorie(Kategorie kategorie) {
+            return moeglichePunkte.getOrDefault(kategorie, 0);
+        }
+        
+        public void entferneMoeglicheKategorie(Kategorie kategorie) {
+        	moeglichePunkte.remove(kategorie);
+        	fireTableDataChanged();
+        }
+        
+        public void resetMoeglichePunkte() {
+        	moeglichePunkte.clear();
+        	fireTableDataChanged();
+        }
 		
 		
 		@Override
@@ -168,8 +199,11 @@ public class PunkteTabelleGUI implements GUIProzente {
 			return columnNames.length;
 		}
 		
+		
+		
         @Override
         public Object getValueAt(int row, int column) {
+            // Zeige mögliche Punkte in grau oder speziell formatieren
             if (column >= 2 && !moeglichePunkte.isEmpty()) {
                 Kategorie kategorie = Kategorie.fromTabellenIndex(row);
                 if (kategorie != null && moeglichePunkte.containsKey(kategorie)) {

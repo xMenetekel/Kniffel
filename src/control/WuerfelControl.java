@@ -1,6 +1,5 @@
 package control;
 
-
 import java.awt.Container;
 import java.util.ArrayList;
 import java.util.Collections;
@@ -8,20 +7,18 @@ import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 import java.util.Random;
-
-import javax.swing.ImageIcon;
-
-import gui.WuerfelBankGUI;
 import gui.WuerfelGUI;
 import gui.WuerfelflaecheGUI;
-import model.WuerfelLogik;
-import model.WuerfelbankLogik;
+import gui.WuerfelBankGUI;
 import gui.PunkteTabelleGUI;
 import model.Kategorie;
+import model.WuerfelLogik;
 
 public class WuerfelControl  {
+
 	private List<WuerfelGUI> alleWuerfelGUI = new ArrayList<>();
 	private List<WuerfelLogik> alleWuerfelLogik = new ArrayList<>();
+	
 	private Container container;
 	private MoeglicheZuege moeglicheZuege = new MoeglicheZuege();
 	private PunkteTabelleGUI punkteTabelle;
@@ -36,7 +33,7 @@ public class WuerfelControl  {
 		this.container = Eimer;
 		this.punkteTabelle = punkteTabelle;
 		
-		this.setFlaeche(flaeche);
+		this.flaeche = flaeche;
 		this.bankGUI = bankGUI;
 		for(int i = 0; i < 5; i++) {		//das erstellt 5 würfel und fügt in jeder iteration den wuerfel den entsprechenden arrays hinzu
 			WuerfelLogik model = new WuerfelLogik(6);
@@ -169,9 +166,6 @@ public class WuerfelControl  {
 		
 		wurfAnzahl++;
 		
-		//Hier habe ich eine Kleinigkeit eingefügt, damit unsere Würfelergebnisse zwischengespeichert werden 
-		
-		
 		if(wurfAnzahl == maxWuerfe) {
 			speichereWuerfelWerte();
 			
@@ -181,92 +175,72 @@ public class WuerfelControl  {
 	}
 	
 	private void aktualisierePunkteTabelle() {
-	    Map<Kategorie, Integer> moeglichePunkte = moeglicheZuege.berechneAlleMoeglichenPunkte();
-	    if (punkteTabelle != null) {
-	        punkteTabelle.zeigeMoeglichePunkte(moeglichePunkte);
+        Map<Kategorie, Integer> moeglichePunkte = moeglicheZuege.berechneAlleMoeglichenPunkte();
+        System.out.println("Mögliche Punkte: " + moeglichePunkte); // DEBUG
+        if (punkteTabelle != null) {
+            punkteTabelle.zeigeMoeglichePunkte(moeglichePunkte);
+        }
+    }
+	  private void speichereWuerfelWerte() {
+	        List<Integer> werte = new ArrayList<>();
+	        for (int i = 0; i < alleWuerfelLogik.size(); i++) {
+	            werte.add(alleWuerfelLogik.get(i).getAugen());
+	        }
+	        moeglicheZuege.setWuerfelWerte(werte);
+	        System.out.println("Würfelwerte gespeichert: " + werte); // DEBUG
 	    }
-	}
-    
-	
-    private void speichereWuerfelWerte() {
-        List<Integer> werte = new ArrayList<>();
-        for (int i = 0; i < alleWuerfelLogik.size(); i++) {
-            werte.add(alleWuerfelLogik.get(i).getAugen());
-        }
-        moeglicheZuege.setWuerfelWerte(werte);
-    }
-	
-    public MoeglicheZuege getMoeglicheZuege() {
-        return moeglicheZuege;
-    }
-    
-    public List<Integer> getAktuelleWuerfelwerte() {
-        List<Integer> werte = new ArrayList<>();
-        for (WuerfelLogik wuerfel : alleWuerfelLogik) {
-            werte.add(wuerfel.getAugen());
-        }
-        return werte;
-    }
-	
-	public void setBehalten(int index, boolean behalten) {
-		if(index >= 0 && index < alleWuerfelLogik.size()) {
-		alleWuerfelLogik.get(index).setBehalten(behalten);
+	  public void neueRunde() {
+	        wurfAnzahl = 0;
+	        for (WuerfelLogik wuerfel : alleWuerfelLogik) {
+	            wuerfel.setBehalten(false);
+	            wuerfel.wuerfeln();
+	        }
+	        for (WuerfelGUI gui : alleWuerfelGUI) {
+	            gui.fresherButton();
+	        }
+	        if (punkteTabelle != null) {
+	        	punkteTabelle.zeigeMoeglichePunkte(new HashMap<>());
+	        }
+	    }
+	  
+	  
+	  public List<WuerfelGUI> getAlleWuerfelGUI() {
+			return alleWuerfelGUI;
 		}
-	}	
-		
-	public void neueRunde() {
-		wurfAnzahl = 0;
-        for (WuerfelLogik wuerfel : alleWuerfelLogik) {
-            wuerfel.setBehalten(false);
-            wuerfel.wuerfeln();
-        }
-        for (WuerfelGUI gui : alleWuerfelGUI) {
-            gui.fresherButton();
-        }
-	}
-		
-	public List<WuerfelGUI> getAlleWuerfelGUI() {
-		return alleWuerfelGUI;
-	}
-	
-	public void setAlleWuerfelGUI(List<WuerfelGUI> alleWuerfelGUI) {
-		this.alleWuerfelGUI = alleWuerfelGUI;
-	}
-	
-	public List<WuerfelLogik> getAlleWuerfelLogik() {
-		return alleWuerfelLogik;
-	}
-	
-	public void setAlleWuerfelLogik(List<WuerfelLogik> alleWuerfelLogik) {
-		this.alleWuerfelLogik = alleWuerfelLogik;
-	}
 
-	public WuerfelflaecheGUI getFlaeche() {
-		return flaeche;
-	}
 
-	public void setFlaeche(WuerfelflaecheGUI flaeche) {
-		this.flaeche = flaeche;
-	}
-	public Container getContainer() {
-		return container;
-	}
-	
-	public int getWurfAnzahl() {
-		return wurfAnzahl;
-	}
 
-	public void setWurfAnzahl(int wurfAnzahl) {
-		this.wurfAnzahl = wurfAnzahl;
-	}
+		public void setAlleWuerfelGUI(List<WuerfelGUI> alleWuerfelGUI) {
+			this.alleWuerfelGUI = alleWuerfelGUI;
+		}
 
-	public int getMaxWuerfe() {
-		return maxWuerfe;
-	}
 
-	public void setMaxWuerfe(int maxWuerfe) {
-		this.maxWuerfe = maxWuerfe;
-	}
-	
-	
+
+		public List<WuerfelLogik> getAlleWuerfelLogik() {
+			return alleWuerfelLogik;
+		}
+
+
+
+		public void setAlleWuerfelLogik(List<WuerfelLogik> alleWuerfelLogik) {
+			this.alleWuerfelLogik = alleWuerfelLogik;
+		}
+		 
+	    public int getWurfAnzahl() {
+	        return wurfAnzahl;
+	    }
+	    
+	    public int getMaxWuerfe() {
+	        return maxWuerfe;
+	    }
+	    public MoeglicheZuege getMoeglicheZuege() {
+	        return moeglicheZuege;
+	    }
 }
+    
+  
+
+                        
+     
+   
+  
