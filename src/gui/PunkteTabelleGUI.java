@@ -13,6 +13,7 @@ import javax.swing.table.AbstractTableModel;
 import javax.swing.table.DefaultTableCellRenderer;
 
 import model.Kategorie;
+import model.StartmenueLogik;
 
 public class PunkteTabelleGUI implements GUIProzente {
 	private JPanel tabelle;
@@ -22,12 +23,14 @@ public class PunkteTabelleGUI implements GUIProzente {
 	private final double prozentFlaecheBreite = 0.375;	
 	private final double prozentFlaecheHoehe = 0.7857;
 	private ZugTableModel tableModel;
+	private final int spielerAnzahl;
 	
 
-	public PunkteTabelleGUI() {
+	public PunkteTabelleGUI(StartmenueLogik menueDaten) {
+		this.spielerAnzahl = menueDaten.getSpieleranzahl();
 		tabelle = new JPanel(new BorderLayout());
 		
-		tableModel = new ZugTableModel();
+		tableModel = new ZugTableModel(menueDaten);
 		table = new JTable(tableModel);
 		table.setRowHeight(40); // habs von 35 auf 40 angepasst idk if this is too high tho?
 		
@@ -111,10 +114,11 @@ public class PunkteTabelleGUI implements GUIProzente {
 	static class ZugTableModel extends AbstractTableModel{
 		private String[] columnNames;
 		private Object[][] data;
-		private final int spielerAnzahl = 2; //muss später übergeben werden!!!!Wichtig!!!ToDo
+		private final int spielerAnzahl; //muss später übergeben werden!!!!Wichtig!!!ToDo
 		private Map<Kategorie, Integer> moeglichePunkte = new HashMap<>();
 		
-		public ZugTableModel() {
+		public ZugTableModel(StartmenueLogik menueDaten) {
+			this.spielerAnzahl = menueDaten.getSpieleranzahl();
 			columnNames = new String[2 + spielerAnzahl];
 			columnNames[0] = "Kategorie";
 			columnNames[1] = "Kombinationen";

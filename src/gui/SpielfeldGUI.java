@@ -13,6 +13,7 @@ import javax.swing.JLabel;
 
 import control.WuerfelControl;
 import model.Kategorie;
+import model.StartmenueLogik;
 
 public class SpielfeldGUI {
 	
@@ -28,16 +29,15 @@ public class SpielfeldGUI {
 
 	
 
-	public SpielfeldGUI (Container Eimer) {
+	public SpielfeldGUI (Container Eimer, StartmenueLogik menueDaten) {
 		Eimer.removeAll();
 		Eimer.setLayout(null);
-		
 		
 		
 		wuerfelflaeche = new WuerfelflaecheGUI();
 		rearrangiere(Eimer, wuerfelflaeche);
 		
-		punktetabelle = new PunkteTabelleGUI();
+		punktetabelle = new PunkteTabelleGUI(menueDaten);
 		rearrangiere(Eimer, punktetabelle);
 		
 		spielbank = new SpielbankGUI();
