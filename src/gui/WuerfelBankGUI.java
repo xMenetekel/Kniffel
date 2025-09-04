@@ -7,9 +7,9 @@ import javax.swing.JPanel;
 public class WuerfelBankGUI implements GUIProzente {
 	private JPanel WuerfelBankGUI;
 	private JLabel bild;
-	private final double prozentFlaecheX = 0.09375;
+	private final double prozentFlaecheX = 0.09375; 	// 75 bei 800
 	private final double prozentFlaecheHoehe =0.085714; //nicht nutzen zum resizen
-	private final double prozentFlaecheY = 0.592857;
+	private final double prozentFlaecheY = 0.592857;	 //414 bei 700
 	private final double prozentFlaecheBreite = 0.35;	 //auch nicht nutzen zum resizen
 	
 	public WuerfelBankGUI() {

@@ -60,7 +60,7 @@ public class WuerfelGUI {
 	 * @param zielY der y wert wo es hingezeichnet werden soll
 	 */
 	
-	public void zeichneLinie(JButton wuerfel, int zielX, int zielY) { //methode irgendwann nochmal ausseinanderziehen da zu uncleancodig TODO
+	public void zeichneLinie(JButton wuerfel, int zielX, int zielY, boolean wuerfeln) { //methode irgendwann nochmal ausseinanderziehen da zu uncleancodig TODO
 		this.setxPos(zielX);
 		this.setyPos(zielY); //WICHTIG DAS NICHT ENTFERNEN ANSONSTEN KOLLISIONENNNNNNN
 		double m;
@@ -70,8 +70,8 @@ public class WuerfelGUI {
 		
 		Timer bildTimer = new Timer(25, time -> {
 			
-			ImageIcon bildi = new ImageIcon("Other/" + (rnjesus.nextInt(5)+1) + ":50.png" );
-			wuerfel.setIcon(bildi);
+			if (wuerfeln) {	ImageIcon bildi = new ImageIcon("Other/" + (rnjesus.nextInt(5)+1) + ":50.png" ); //hier sehen sie spaghetti code. ich weiß nicht wie ich die beiden trennen soll und ich will nicht immer ki befragen :((
+			wuerfel.setIcon(bildi); } 
 		});
 		
 		
@@ -91,7 +91,7 @@ public class WuerfelGUI {
 				this.setProzentYAufFeld(this.getyPos() * 1.0 / this.getEimer().getHeight());
 			
 				if(xJetzt == zielX && yNeu == zielY) { ((Timer)e.getSource()).stop();
-				bildTimer.stop();
+				if (wuerfeln) {bildTimer.stop(); }
 				ImageIcon bildi = new ImageIcon("Other/" + this.model.getAugen() + ":50.png" );
 				wuerfel.setIcon(bildi);
 				
@@ -106,7 +106,7 @@ public class WuerfelGUI {
 				this.setProzentYAufFeld(this.getyPos() * 1.0 / this.getEimer().getHeight());
 				
 				if(xNeu == zielX && yJetzt == zielY) { ((Timer)e.getSource()).stop();
-				bildTimer.stop();
+				 if (wuerfeln ) { bildTimer.stop(); }
 				ImageIcon bildi = new ImageIcon("Other/" + this.model.getAugen() + ":50.png" );
 				wuerfel.setIcon(bildi);
 				}

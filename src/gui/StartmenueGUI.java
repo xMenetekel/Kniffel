@@ -20,7 +20,7 @@ public class StartmenueGUI {
 		this.startmenueGesamt.setSize(800, 700);
 		
 		this.Eimer = startmenueGesamt.getContentPane();		
-		this.Eimer.setLayout(null); //Hab erstmal den Layout Manager ausgemacht um es manuell anzuordnen, können wir später aber noch ändern : famous last words
+		this.Eimer.setLayout(null); //Hab erstmal den Layout Manager ausgemacht um es manuell anzuordnen, können wir später aber noch ändern : famous last words, i am so sorry
 		
 		this.starteSpiel = new JButton("Starte Spiel");
 		this.einstellungen = new JButton("Einstellungen");

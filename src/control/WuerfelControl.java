@@ -125,10 +125,11 @@ public class WuerfelControl  {
 	private void runter(WuerfelGUI gui) {
 		int x = (int)(container.getWidth() * bankGUI.getProzentFlaecheX());
 		int y = (int)(container.getHeight() * bankGUI.getProzentFlaecheY());
-		
-		x = (x + 5)* zaehleBankFuelle();
+		System.out.println(x + " " + y + " " + container.getWidth() + " " + bankGUI.getProzentFlaecheX() + " " + container.getHeight() + " " + bankGUI.getProzentFlaecheY());
+		x = ((gui.getButton().getWidth() + 5) * zaehleBankFuelle()) + x;
 		y = y + 5;
-		gui.zeichneLinie(gui.getButton(), x, y);
+		System.out.println(x + " " + y);
+		gui.zeichneLinie(gui.getButton(), x, y, false);
 		
 		
 		
@@ -138,7 +139,7 @@ public class WuerfelControl  {
 		int x = getValidesX(flaeche);
 		int y = getValidesY(flaeche);
 		int xy[] = korrigierteKollision(gui, x, y);
-		gui.zeichneLinie(gui.getButton(), xy[0], xy[1]);
+		gui.zeichneLinie(gui.getButton(), xy[0], xy[1], false);
 		
 		
 	}
@@ -162,7 +163,7 @@ public class WuerfelControl  {
 												x = getValidesX(flaeche);
 												y = getValidesY(flaeche);
 												int[] xy = korrigierteKollision(w, x, y);
-											  w.zeichneLinie(w.getButton(), xy[0], xy[1]);											  										  
+											  w.zeichneLinie(w.getButton(), xy[0], xy[1], true);											  										  
 											  }	});	
 			
 		

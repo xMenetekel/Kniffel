@@ -18,9 +18,9 @@ public class PunkteTabelleGUI implements GUIProzente {
 	private JPanel tabelle;
 	private JTable table;
 	private final double prozentFlaecheX = 0.55;
-	private final double prozentFlaecheHoehe = 0.7857;
-	private final double prozentFlaecheY = 0.0714;
+	private final double prozentFlaecheY = 0.0714;	
 	private final double prozentFlaecheBreite = 0.375;	
+	private final double prozentFlaecheHoehe = 0.7857;
 	private ZugTableModel tableModel;
 	
 

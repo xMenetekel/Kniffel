@@ -20,9 +20,9 @@ public class SpielfeldGUI {
 	private PunkteTabelleGUI punktetabelle;
 	private WuerfelBankGUI wuerfelbankGUI;
 	private SpielbankGUI spielbank;
-	private JButton wuerfeln;
+	private WuerfelnButtonGUI wuerfeln;
 	private JLabel hintergrund;
-	private JButton punkteEintragen;
+	private PunkteEintragenButtonGUI punkteEintragen;
 	// Konstruktor
 	// Fläche und sichbarkeit müssen noch gemacht werden
 	// Fläche mit ...setSize() und sichtbarkeit mit ...setVisible(true)
@@ -31,30 +31,39 @@ public class SpielfeldGUI {
 		
 		Eimer.setLayout(null);
 		
-		punktetabelle = new PunkteTabelleGUI();
+		
+		
 		wuerfelflaeche = new WuerfelflaecheGUI();
+		rearrangiere(Eimer, wuerfelflaeche);
+		
 		punktetabelle = new PunkteTabelleGUI();
+		rearrangiere(Eimer, punktetabelle);
+		
+		spielbank = new SpielbankGUI();
+		rearrangiere(Eimer, spielbank);
+		
 		wuerfelbankGUI = new WuerfelBankGUI();
 		wuerfel = new WuerfelControl(Eimer, wuerfelflaeche, wuerfelbankGUI, punktetabelle);	
-		spielbank = new SpielbankGUI();
-		wuerfeln = new JButton ("Würfeln");
-		punkteEintragen = new JButton("Punkte eintragen");
+		rearrangiereWuerfel(Eimer, wuerfel, wuerfelbankGUI);
+		
+		wuerfeln = new WuerfelnButtonGUI();
+		rearrangiere(Eimer, wuerfeln);
+		
+		punkteEintragen = new PunkteEintragenButtonGUI();
+		rearrangiere(Eimer, punkteEintragen);
 		
 		hintergrund = new JLabel();
 		
-		wuerfelflaeche.getPanel().setBounds(50, 200, 350, 200);
-		punktetabelle.getPanel().setBounds(440, 50, 300, 550);
-		spielbank.getPanel().setBounds(50, 500, 350, 100);
-		wuerfelbankGUI.getPanel().setBounds(75,415,280,60);
-		wuerfeln.setBounds(160, 477, 120, 20);
-		punkteEintragen.setBounds(290, 475, 150, 20);
-		wuerfeln.addActionListener(klick -> {wuerfel.wuerfeln(); 
+		
+		
+	
+		wuerfeln.getButton().addActionListener(klick -> {wuerfel.wuerfeln(); 
 											if (wuerfel.getWurfAnzahl() == wuerfel.getMaxWuerfe()) {
 									            aktualisierePunkteTabelle();
 									        }
 									    });		
 									    
-		punkteEintragen.addActionListener(klick -> {
+		punkteEintragen.getButton().addActionListener(klick -> {
 		        eintragePunkteFuerAktuellenSpieler();
 		});
 		ImageIcon bildi = new ImageIcon("Other/hintergrund.jpg" );
@@ -86,10 +95,10 @@ public class SpielfeldGUI {
 	    }
 		
 		Eimer.add(wuerfelflaeche.getPanel());
-		Eimer.add(punkteEintragen);
+		Eimer.add(punkteEintragen.getPanel());
 		Eimer.add(punktetabelle.getPanel());
 		Eimer.add(spielbank.getPanel());
-		Eimer.add(wuerfeln);
+		Eimer.add(wuerfeln.getPanel());
 		Eimer.add(wuerfelbankGUI.getPanel());
 		Eimer.add(hintergrund);
 		
