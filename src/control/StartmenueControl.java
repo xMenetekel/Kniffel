@@ -49,7 +49,7 @@ public class StartmenueControl {
 				menueDaten.setSpieleranzahl(anzahl); //speichern 
 				abfrage.dispose(); //schließen
 				
-				new SpielfeldGUI(menueGUI.getEimer(),menueDaten);
+				new SpielfeldGUI(menueGUI.getEimer(), menueDaten);
 			});
 			abfrage.add(druecker);
 		}
