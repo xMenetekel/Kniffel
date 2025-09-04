@@ -12,6 +12,7 @@ import javax.swing.JFrame;
 import javax.swing.JLabel;
 
 import control.WuerfelControl;
+import model.Kategorie;
 
 public class SpielfeldGUI {
 	
@@ -23,24 +24,24 @@ public class SpielfeldGUI {
 	private JButton wuerfeln;
 	private JLabel hintergrund;
 	private JButton punkteEintragen;
-	// Konstruktor
-	// Fläche und sichbarkeit müssen noch gemacht werden
-	// Fläche mit ...setSize() und sichtbarkeit mit ...setVisible(true)
+	private Kategorie ausgewaehlteKategorie = null;
+
+	
 	public SpielfeldGUI (Container Eimer) {
-		Eimer.removeAll();		
-		
+		Eimer.removeAll();
 		Eimer.setLayout(null);
 		
 		punktetabelle = new PunkteTabelleGUI();
 		wuerfelflaeche = new WuerfelflaecheGUI();
 		punktetabelle = new PunkteTabelleGUI();
 		wuerfelbankGUI = new WuerfelBankGUI();
-		wuerfel = new WuerfelControl(Eimer, wuerfelflaeche, wuerfelbankGUI, punktetabelle);	
+		//wuerfel = new WuerfelControl(Eimer, wuerfelflaeche, wuerfelbankGUI, punktetabelle);	
 		spielbank = new SpielbankGUI();
 		wuerfeln = new JButton ("Würfeln");
 		punkteEintragen = new JButton("Punkte eintragen");
-		
 		hintergrund = new JLabel();
+		
+		wuerfel = new WuerfelControl(Eimer,wuerfelflaeche, wuerfelbankGUI, punktetabelle);
 		
 		wuerfelflaeche.getPanel().setBounds(50, 200, 350, 200);
 		punktetabelle.getPanel().setBounds(440, 50, 300, 550);
@@ -52,7 +53,8 @@ public class SpielfeldGUI {
 											if (wuerfel.getWurfAnzahl() == wuerfel.getMaxWuerfe()) {
 									            aktualisierePunkteTabelle();
 									        }
-									    });		
+									    });	
+		
 									    
 		punkteEintragen.addActionListener(klick -> {
 		        eintragePunkteFuerAktuellenSpieler();
@@ -74,9 +76,30 @@ public class SpielfeldGUI {
 				rearrangiere(Eimer, spielbank);
 				
 			}
-
-			
 		});
+		
+	
+			
+		
+		
+		/*	
+		table.addMouseListener(new java.awt.event.MouseEvent evt){
+			int row = table.rowAtPoint(evt.getPoint());
+			int col = table.columnAtPoint(evt.getPoint());
+			
+			if(col >=2) {
+				Kategorie kategorie = Kategorie.fromTabellenIndex(row);
+				if (kategorie != null && tableModel.hatMoeglichePunkteFuerKateforie(kategorie)) {
+					ausgewaehlteKategorie = kategorie;
+					System.out.println("Kategorie ausgewählt:" + kategorie);
+					table.setRowSelectionInterval(row,row);
+					table.setColumnSelectionInterval(col,col)
+				}
+			}
+				
+		});
+		*/
+		 
 		
 			
 
@@ -100,13 +123,27 @@ public class SpielfeldGUI {
 	}
 	
 	
-    private void aktualisierePunkteTabelle() {
-        System.out.println("Tabelle sollte aktualisiert werden");	// Damit die Tabelle aktualisiert werden kann
-    }
+	private void aktualisierePunkteTabelle() {
+	    if (wuerfel.getWurfAnzahl() == wuerfel.getMaxWuerfe()) {
+	        System.out.println("Aktualisiere Tabelle mit möglichen Punkten");
+	        
+	    }
+	}
     
-    private void eintragePunkteFuerAktuellenSpieler() {	//damit Punkte eingetragen werden köennen
-        System.out.println("Punkte eintragen für aktuellen Spieler");
-    }
+	private void eintragePunkteFuerAktuellenSpieler() {
+			if (ausgewaehlteKategorie != null) {
+				int punkte = wuerfel.getMoeglicheZuege().berechnePunkte(ausgewaehlteKategorie);
+
+	    punktetabelle.tragePunkteEin(ausgewaehlteKategorie, punkte, 0);
+
+	    wuerfel.neueRunde();
+	    ausgewaehlteKategorie = null;
+			}else {
+				System.out.println("Keine Kategorie ausgewählt!");
+			}
+	    
+	    System.out.println("Punkte eingetragen: " + ausgewaehlteKategorie + " = ???" );
+	}
     
 	protected void rearrangiereSpielbank(Component e, SpielbankGUI sb) {
 		int breite = e.getWidth();
@@ -150,5 +187,7 @@ public class SpielfeldGUI {
 	public void aktualisieren() {
 		
 	}
+	
+	
 
 }
