@@ -1,21 +1,20 @@
 package gui;
 
-import java.awt.Color;
+
 import java.awt.Component;
 import java.awt.Container;
 import java.awt.event.ComponentAdapter;
 import java.awt.event.ComponentEvent;
 
 import javax.swing.ImageIcon;
-import javax.swing.JButton;
-import javax.swing.JFrame;
+
 import javax.swing.JLabel;
 
 import control.WuerfelControl;
 import model.Kategorie;
 import model.StartmenueLogik;
 
-public class SpielfeldGUI {
+public class SpielfeldGUI extends AbstractGUI{
 	
 	private WuerfelflaecheGUI wuerfelflaeche;
 	private WuerfelControl wuerfel;
@@ -30,6 +29,7 @@ public class SpielfeldGUI {
 	
 
 	public SpielfeldGUI (Container Eimer, StartmenueLogik menueDaten) {
+		super(1, 1, 1, 1);
 		Eimer.removeAll();
 		Eimer.setLayout(null);
 		
@@ -76,10 +76,11 @@ public class SpielfeldGUI {
 		Eimer.addComponentListener(new ComponentAdapter() { //der ganze spaß hier ist dafür da das beim neu ziehen alles prozentual angepasst wird
 			@Override
 			public void componentResized(ComponentEvent e) {
-				rearrangiere(Eimer, wuerfelflaeche);
+				//rearrangiere(Eimer, wuerfelflaeche);
 				rearrangiereWuerfel(Eimer, wuerfel, wuerfelbankGUI);
 				rearrangiere(Eimer, punktetabelle);
 				rearrangiere(Eimer, spielbank);
+				wuerfelflaeche.setzeneueGroesse((int)(Eimer.getWidth() * wuerfelflaeche.getProzentFlaecheBreite()),(int)(Eimer.getHeight()*wuerfelflaeche.getProzentFlaecheHoehe()));
 				
 			}
 		});
@@ -151,12 +152,7 @@ public class SpielfeldGUI {
 	    System.out.println("Punkte eingetragen: " + ausgewaehlteKategorie + " = ???" );
 	}
     
-	protected void rearrangiereSpielbank(Component e, SpielbankGUI sb) {
-		int breite = e.getWidth();
-		int hoehe = e.getHeight();
-		
-		sb.getPanel().setBounds((int)Math.floor(breite*0.0625), (int)Math.floor(hoehe*0.71428), (int)Math.floor(breite*0.4375),(int)Math.floor(hoehe*0.142857));
-	}
+	
 	
 	/**
 	 * junge ich hab das selber ohne KI geschrieben ich werde nie wieder so einen höhenflug erleben wie grade

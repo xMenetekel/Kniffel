@@ -37,7 +37,7 @@ public class WuerfelControl  {
 		this.bankGUI = bankGUI;
 		for(int i = 0; i < 5; i++) {		//das erstellt 5 würfel und fügt in jeder iteration den wuerfel den entsprechenden arrays hinzu
 			WuerfelLogik model = new WuerfelLogik(6);
-			WuerfelGUI view = new WuerfelGUI(model, i*55+80, 420, Eimer);
+			WuerfelGUI view = new WuerfelGUI(model, i*55+((int)(0.1 * Eimer.getWidth())), (int)(0.592857 * Eimer.getHeight()+5), Eimer);
 			model.setGui(view);
 			view.getButton().addActionListener(klick -> { boolean neuerZustand = !model.istBehalten();										
 														model.setBehalten(neuerZustand);

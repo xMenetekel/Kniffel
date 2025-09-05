@@ -6,49 +6,32 @@ import java.awt.event.ComponentEvent;
 import javax.swing.JButton;
 import javax.swing.JPanel;
 
-public class PunkteEintragenButtonGUI implements GUIProzente{
-	private JPanel sammelpanel;
+public class PunkteEintragenButtonGUI extends AbstractGUI{
+
 	private JButton punkteEintragen;
 
 
-	private final double prozentFlaecheX = 0.3625;
-	private final double prozentFlaecheY = 0.716440422;	
-	private final double prozentFlaecheBreite = 0.1875;	
-	private final double prozentFlaecheHoehe = 0.030165913;
+	private static final double X = 0.145;
+	private static final double Y = 0.678;	
+	private static final double B = 0.1875;	
+	private static final double H = 0.030165913;
 	
 	
 	public PunkteEintragenButtonGUI(){
+		super(X, Y, B, H);
 		this.punkteEintragen = new JButton("Punkte eintragen");
-		this.sammelpanel = new JPanel();
-		sammelpanel.setLayout(null);
-		sammelpanel.addComponentListener(new ComponentAdapter() {
+		this.panel = new JPanel();
+		panel.setLayout(null);
+		panel.addComponentListener(new ComponentAdapter() {
 			@Override
 			public void componentResized(ComponentEvent e) {
-				punkteEintragen.setSize(sammelpanel.getSize());
+				punkteEintragen.setSize(panel.getSize());
 			}
 		});
-		sammelpanel.add(punkteEintragen);
+		panel.add(punkteEintragen);
 		
 	}
-	public double getProzentFlaecheX() {
-		return this.prozentFlaecheX;
-	}
 	
-	public double getProzentFlaecheHoehe() {
-		return this.prozentFlaecheHoehe;
-	}
-	
-	public double getProzentFlaecheY() {
-		return this.prozentFlaecheY;
-	}
-	
-	public double getProzentFlaecheBreite() {
-		return this.prozentFlaecheBreite;
-	}
-	
-	public JPanel getPanel() {
-		return this.sammelpanel;
-	}
 	public JButton getButton() {
 		return punkteEintragen;
 	}

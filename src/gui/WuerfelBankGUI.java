@@ -4,49 +4,31 @@ import javax.swing.ImageIcon;
 import javax.swing.JLabel;
 import javax.swing.JPanel;
 
-public class WuerfelBankGUI implements GUIProzente {
-	private JPanel WuerfelBankGUI;
+public class WuerfelBankGUI extends AbstractGUI {
+
 	private JLabel bild;
-	private final double prozentFlaecheX = 0.09375; 	// 75 bei 800
-	private final double prozentFlaecheHoehe =0.085714; //nicht nutzen zum resizen
-	private final double prozentFlaecheY = 0.592857;	 //414 bei 700
-	private final double prozentFlaecheBreite = 0.35;	 //auch nicht nutzen zum resizen
+	private static final double X = 0.09375; 	// 75 bei 800
+	private static final double Y = 0.592857;	 //414 bei 700
+	private static final double H = 0.085714; //nicht nutzen zum resizen
+	private static final double B = 0.35;	 //auch nicht nutzen zum resizen
 	
 	public WuerfelBankGUI() {
+		super(X, Y, B, H);
 		ImageIcon bildi = new ImageIcon("Other/wuerfelbank.jpg" );
 		bild = new JLabel();
 		bild.setIcon(bildi);
 		bild.setVisible(true);
 		bild.setBounds(0, 0, 280,60);		
-		WuerfelBankGUI = new JPanel();
-		WuerfelBankGUI.add(bild);
-		WuerfelBankGUI.setVisible(true);
-		WuerfelBankGUI.setLayout(null);
+		panel = new JPanel();
+		panel.add(bild);
+		panel.setVisible(true);
+		panel.setLayout(null);
 	}
 
 	
-	public double getProzentFlaecheX() {
-		return this.prozentFlaecheX;
-	}
+	
 
 	
-	public double getProzentFlaecheHoehe() {
-		return this.prozentFlaecheHoehe;
-	}
-
-	public double getProzentFlaecheY() {
-		return this.prozentFlaecheY;
-	}
-
-	
-	public double getProzentFlaecheBreite() {		
-		return this.prozentFlaecheBreite;
-	}
-
-	
-	public JPanel getPanel() {
-		return this.WuerfelBankGUI;
-	}
 	
 	
 	

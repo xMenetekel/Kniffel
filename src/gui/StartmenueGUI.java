@@ -6,20 +6,23 @@ import java.awt.event.ComponentEvent;
 
 import javax.swing.JButton;
 import javax.swing.JFrame;
+import javax.swing.JPanel;
 
-public class StartmenueGUI {
+public class StartmenueGUI extends AbstractGUI{
 		private JFrame startmenueGesamt;
 		private JButton starteSpiel;
 		private JButton einstellungen;
 		private JButton exit;
-		private Container Eimer;
+		private JPanel Eimer;
 			
 	
 	public StartmenueGUI() {
+		super(1,1,1,1);
 		this.startmenueGesamt = new JFrame("Startmenue");
-		this.startmenueGesamt.setSize(800, 700);
+		this.startmenueGesamt.setSize(1000, 825);
+		this.Eimer = new JPanel();
 		
-		this.Eimer = startmenueGesamt.getContentPane();		
+		this.Eimer = (JPanel) startmenueGesamt.getContentPane();		
 		this.Eimer.setLayout(null); //Hab erstmal den Layout Manager ausgemacht um es manuell anzuordnen, können wir später aber noch ändern : famous last words, i am so sorry
 		
 		this.starteSpiel = new JButton("Starte Spiel");
@@ -127,8 +130,6 @@ public class StartmenueGUI {
 	}
 
 
-	public void setEimer(Container eimer) {
-		Eimer = eimer;
-	}
+	
 	
 }

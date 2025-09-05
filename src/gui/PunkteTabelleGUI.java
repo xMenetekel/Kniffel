@@ -1,6 +1,7 @@
 package gui;
 
 import java.awt.BorderLayout;
+import java.awt.Color;
 import java.awt.Component;
 import java.util.HashMap;
 import java.util.Map;
@@ -15,25 +16,27 @@ import javax.swing.table.DefaultTableCellRenderer;
 import model.Kategorie;
 import model.StartmenueLogik;
 
-public class PunkteTabelleGUI implements GUIProzente {
-	private JPanel tabelle;
+public class PunkteTabelleGUI extends AbstractGUI {
+	
 	private JTable table;
-	private final double prozentFlaecheX = 0.55;
-	private final double prozentFlaecheY = 0.0714;	
-	private final double prozentFlaecheBreite = 0.375;	
-	private final double prozentFlaecheHoehe = 0.7857;
+	private static final double X = 0.5;
+	private static final double Y = 0.0;	
+	private static final double B = 0.5;	
+	private static final double H = 1.0;
 	private ZugTableModel tableModel;
 	private final int spielerAnzahl;
 	
 
 	public PunkteTabelleGUI(StartmenueLogik menueDaten) {
+		super(X, Y, B, H);
 		this.spielerAnzahl = menueDaten.getSpieleranzahl();
-		tabelle = new JPanel(new BorderLayout());
+		panel = new JPanel(new BorderLayout());
 		
 		tableModel = new ZugTableModel(menueDaten);
 		table = new JTable(tableModel);
 		table.setRowHeight(40); // habs von 35 auf 40 angepasst idk if this is too high tho?
-		
+		Color mischmasch = new Color(200,224,170);
+		table.setBackground(mischmasch);
         table.addMouseListener(new java.awt.event.MouseAdapter() {
             @Override
             public void mouseClicked(java.awt.event.MouseEvent evt) {
@@ -57,7 +60,7 @@ public class PunkteTabelleGUI implements GUIProzente {
 		table.getColumnModel().getColumn(0).setCellRenderer(new SymbolCellRenderer());	//Brauchen CellRenderer um in der ersten spalte sowohl Bilder als auch Text verwenden zu können
 		
 		JScrollPane scroll = new JScrollPane(table);
-		tabelle.add(scroll, BorderLayout.CENTER);
+		panel.add(scroll, BorderLayout.CENTER);
 				
 		}
 	
@@ -73,9 +76,7 @@ public class PunkteTabelleGUI implements GUIProzente {
         tableModel.entferneMoeglicheKategorie(kategorie);
     }
 	
-	public JPanel getPanel() {
-		return this.tabelle;
-		}
+	
 	
 	static class SymbolCellRenderer extends DefaultTableCellRenderer {
 	    @Override
@@ -247,20 +248,6 @@ public class PunkteTabelleGUI implements GUIProzente {
 		
 
 	}
-	public double getProzentFlaecheX() {
-		return prozentFlaecheX;
-	}
-
-	public double getProzentFlaecheHoehe() {
-		return prozentFlaecheHoehe;
-	}
-
-	public double getProzentFlaecheY() {
-		return prozentFlaecheY;
-	}
-
-	public double getProzentFlaecheBreite() {
-		return prozentFlaecheBreite;
-	}
+	
 
 }

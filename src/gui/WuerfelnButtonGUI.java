@@ -9,49 +9,32 @@ import javax.swing.JTable;
 
 
 
-public class WuerfelnButtonGUI implements GUIProzente{
-	private JPanel sammelpanel;
+public class WuerfelnButtonGUI extends AbstractGUI{
+	
 	private JButton wuerfeln;
 
-
-	private final double prozentFlaecheX = 0.2;
-	private final double prozentFlaecheY = 0.719457014;	
-	private final double prozentFlaecheBreite = 0.15;	
-	private final double prozentFlaecheHoehe = 0.030165913;
-	
+	private static final double X = 0.156;
+	private static final double Y = 0.55;	
+	private static final double B = 0.15;	
+	private static final double H = 0.030165913;	
 	
 	public WuerfelnButtonGUI(){
+		super(X, Y, B, H);
 		this.wuerfeln = new JButton("Wuerfeln");
-		this.sammelpanel = new JPanel();
-		sammelpanel.addComponentListener(new ComponentAdapter() {
+		
+		this.panel = new JPanel();
+		panel.addComponentListener(new ComponentAdapter() {
 			@Override
 			public void componentResized(ComponentEvent e) {
-				wuerfeln.setSize(sammelpanel.getSize());
+				wuerfeln.setSize(panel.getSize());
 			}
 		});
-		sammelpanel.setLayout(null);
-		sammelpanel.add(wuerfeln);
+		panel.setLayout(null);
+		panel.add(wuerfeln);
 		
 	}
-	public double getProzentFlaecheX() {
-		return this.prozentFlaecheX;
-	}
 	
-	public double getProzentFlaecheHoehe() {
-		return this.prozentFlaecheHoehe;
-	}
-	
-	public double getProzentFlaecheY() {
-		return this.prozentFlaecheY;
-	}
-	
-	public double getProzentFlaecheBreite() {
-		return this.prozentFlaecheBreite;
-	}
-	
-	public JPanel getPanel() {
-		return this.sammelpanel;
-	}
+
 	public JButton getButton() {
 		return wuerfeln;
 	}
