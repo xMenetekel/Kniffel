@@ -5,6 +5,7 @@ import java.awt.Component;
 import java.awt.Container;
 import java.awt.event.ComponentAdapter;
 import java.awt.event.ComponentEvent;
+import java.util.Map;
 
 import javax.swing.ImageIcon;
 import javax.swing.JButton;
@@ -26,6 +27,16 @@ public class SpielfeldGUI {
 	private JLabel hintergrund;
 	private PunkteEintragenButtonGUI punkteEintragen;	
 	private Kategorie ausgewaehlteKategorie = null;
+	private void aktualisierePunkteTabelle() {
+		try {
+			Map<Kategorie,Integer> moeglichePunkte = wuerfel.getMoeglicheZuege().berechneAlleMoeglichenPunkte();
+			punktetabelle.zeigeMoeglichePunkte(moeglichePunkte);
+			System.out.println("Wurf"+wuerfel.getWurfAnzahl()+"/"+wuerfel.getMaxWuerfe()+"Moegliche Punkte:"+moeglichePunkte);
+		}catch(Exception e) {
+			System.out.println("Fehler beim Aktualisieren der Punkte: " + e.getMessage());
+		}
+	}
+
 
 	
 
@@ -60,7 +71,7 @@ public class SpielfeldGUI {
 														if (wuerfel.getWurfAnzahl() == wuerfel.getMaxWuerfe()) {
 												            aktualisierePunkteTabelle();
         }});
-
+		
 			
 								
 		punkteEintragen.getButton().addActionListener(klick -> {eintragePunkteFuerAktuellenSpieler();});
@@ -84,7 +95,27 @@ public class SpielfeldGUI {
 			}
 		});
 		
-	
+		javax.swing.JTable table = punktetabelle.getTable();
+			if(table != null) {
+				table.addMouseListener(new java.awt.event.MouseAdapter() {
+					@Override
+					public void mouseClicked(java.awt.event.MouseEvent evt) {
+						int row = table.rowAtPoint(evt.getPoint());
+						int col = table.columnAtPoint(evt.getPoint());
+						
+						if(col >= 2) {
+							Kategorie kategorie = Kategorie.fromTabellenIndex(row);
+							if(kategorie != null) {
+								ausgewaehlteKategorie = kategorie;
+								System.out.println("Kategorie ausgewählt: " + kategorie);
+								table.setRowSelectionInterval(row,row);
+								table.setColumnSelectionInterval(col,col);
+							}
+						}
+					}
+				});
+			}
+		
 			
 		
 		
@@ -127,28 +158,21 @@ public class SpielfeldGUI {
 		
 		
 	}
-	
-	
-	private void aktualisierePunkteTabelle() {
-	    if (wuerfel.getWurfAnzahl() == wuerfel.getMaxWuerfe()) {
-	        System.out.println("Aktualisiere Tabelle mit möglichen Punkten");
-	        
-	    }
-	}
-    
 	private void eintragePunkteFuerAktuellenSpieler() {
-			if (ausgewaehlteKategorie != null) {
+		if(ausgewaehlteKategorie != null) {
+			try {
 				int punkte = wuerfel.getMoeglicheZuege().berechnePunkte(ausgewaehlteKategorie);
-
-	    punktetabelle.tragePunkteEin(ausgewaehlteKategorie, punkte, 0);
-
-	    wuerfel.neueRunde();
-	    ausgewaehlteKategorie = null;
-			}else {
-				System.out.println("Keine Kategorie ausgewählt!");
+				punktetabelle.tragePunkteEin(ausgewaehlteKategorie, punkte, 0);
+				System.out.println("Punkte eingetragen: " + ausgewaehlteKategorie);
+				wuerfel.getMoeglicheZuege().entferneKategorie(ausgewaehlteKategorie);
+				ausgewaehlteKategorie = null;
+			} catch (Exception e) {
+				System.out.println ("Fehler beim Eintragen der Punkte" + e.getMessage());
+				e.printStackTrace();
 			}
-	    
-	    System.out.println("Punkte eingetragen: " + ausgewaehlteKategorie + " = ???" );
+		}else {
+			System.out.println("Keine Kategorie ausgewählt! Bitte zuerst eine Kategorie in der Tabelle anclicken.");
+		}
 	}
     
 	protected void rearrangiereSpielbank(Component e, SpielbankGUI sb) {

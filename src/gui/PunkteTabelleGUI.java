@@ -26,6 +26,10 @@ public class PunkteTabelleGUI implements GUIProzente {
 	private final int spielerAnzahl;
 	
 
+	public JTable getTable() {
+		return this.table;
+	}
+	
 	public PunkteTabelleGUI(StartmenueLogik menueDaten) {
 		this.spielerAnzahl = menueDaten.getSpieleranzahl();
 		tabelle = new JPanel(new BorderLayout());
@@ -240,6 +244,7 @@ public class PunkteTabelleGUI implements GUIProzente {
 			data[row][column] = value;
 			fireTableCellUpdated(row, column);
 		}
+		
 		
 		
 		
