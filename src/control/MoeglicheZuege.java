@@ -14,6 +14,7 @@ import model.Kategorie;
 public class MoeglicheZuege {
 
 	private List<Integer>letzteWuerfelWerte = new ArrayList<>();
+	private Map<Kategorie,Integer>aktiveMoeglichePunkte = new HashMap<>();
 	
 	public void setWuerfelWerte(List<Integer> wuerfel) {
 		letzteWuerfelWerte.clear();
@@ -21,6 +22,17 @@ public class MoeglicheZuege {
 			letzteWuerfelWerte.add(wuerfel.get(i));
 		}
 		Collections.sort(letzteWuerfelWerte);
+		
+		Map<Kategorie, Integer>neuePunkte = berechneAlleMoeglichenPunkte();
+		for(Map.Entry<Kategorie,Integer> entry : neuePunkte.entrySet()) {
+			if(!aktiveMoeglichePunkte.containsKey(entry.getKey())) {
+				aktiveMoeglichePunkte.put(entry.getKey(), entry.getValue());
+			}
+		}
+	}
+	
+	public Map<Kategorie,Integer> getAktiveMoeglichePunkte(){
+		return new HashMap<>(aktiveMoeglichePunkte);
 	}
 	
 	  public int berechnePunkte(Kategorie kategorie) {
@@ -44,6 +56,10 @@ public class MoeglicheZuege {
 	        }
 	    }
 	    
+	  	public void entferneKategorie(Kategorie kategorie) {
+	  		aktiveMoeglichePunkte.remove(kategorie);
+
+	  	}
 	
 	    public List<Kategorie> filterMoeglichkeiten() {
 	        List<Kategorie> moegliche = new ArrayList<>();
@@ -133,6 +149,7 @@ public class MoeglicheZuege {
 	                int punkte = berechnePunkte(kat);
 	                if (punkte > 0) {
 	                    allePunkte.put(kat, punkte);
+	                    System.out.println(" "+ kat + ":" + punkte + "punkte");
 	                }
 	            }
 	        }

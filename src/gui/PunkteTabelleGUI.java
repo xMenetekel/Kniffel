@@ -27,6 +27,10 @@ public class PunkteTabelleGUI extends AbstractGUI {
 	private final int spielerAnzahl;
 	
 
+	public JTable getTable() {
+		return this.table;
+	}
+	
 	public PunkteTabelleGUI(StartmenueLogik menueDaten) {
 		super(X, Y, B, H);
 		this.spielerAnzahl = menueDaten.getSpieleranzahl();
@@ -241,6 +245,7 @@ public class PunkteTabelleGUI extends AbstractGUI {
 			data[row][column] = value;
 			fireTableCellUpdated(row, column);
 		}
+		
 		
 		
 		

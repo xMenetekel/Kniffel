@@ -166,16 +166,13 @@ public class WuerfelControl  {
 		
 		wurfAnzahl++;
 		
-		if(wurfAnzahl == maxWuerfe) {
-			speichereWuerfelWerte();
-			
-			aktualisierePunkteTabelle();	//Damit die Punktetabelle aktualisiert wird
-		}
+		speichereWuerfelWerte();
+		aktualisierePunkteTabelle();
 		
 	}
 	
 	private void aktualisierePunkteTabelle() {
-        Map<Kategorie, Integer> moeglichePunkte = moeglicheZuege.berechneAlleMoeglichenPunkte();
+        Map<Kategorie, Integer> moeglichePunkte = moeglicheZuege.getAktiveMoeglichePunkte();
         System.out.println("Mögliche Punkte: " + moeglichePunkte); // DEBUG
         if (punkteTabelle != null) {
             punkteTabelle.zeigeMoeglichePunkte(moeglichePunkte);
@@ -201,6 +198,8 @@ public class WuerfelControl  {
 	        if (punkteTabelle != null) {
 	        	punkteTabelle.zeigeMoeglichePunkte(new HashMap<>());
 	        }
+	        
+	        System.out.println("Neue Runde Gestartet");
 	    }
 	  
 	  
