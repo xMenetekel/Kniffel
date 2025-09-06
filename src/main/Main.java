@@ -5,8 +5,8 @@ import java.util.ArrayList;
 import java.util.List;
 import java.util.Scanner;
 
-import control.StartmenueControl;
-import control.WuerfelControl;
+import control.StartmenuePresenter;
+import control.WuerfelPresenter;
 import model.WuerfelFactory;
 import model.WuerfelLogik;
 
@@ -17,7 +17,7 @@ public class Main {
 		System.out.println("Test es funktionert! UwU");
 		
 
-		new StartmenueControl();
+		new StartmenuePresenter();
 		
 	}
 }

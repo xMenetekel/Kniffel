@@ -12,13 +12,13 @@ import javax.swing.JOptionPane;
 
 import gui.*;
 
-public class StartmenueControl {
+public class StartmenuePresenter {
 	
 	private StartmenueGUI menueGUI;
 	private StartmenueLogik menueDaten;
 
 
-	public StartmenueControl() {
+	public StartmenuePresenter() {
 		this.menueGUI = new StartmenueGUI();
 		this.menueDaten = new StartmenueLogik();
 		starteStartmenue();
@@ -29,7 +29,9 @@ public class StartmenueControl {
 		menueGUI.getStarteSpiel().addActionListener(klick ->{
 			zeigeSpielerAuswahl();
 		});
+		
 	}
+	
 	
 	private void zeigeSpielerAuswahl() {
 		//Hauptfenster Blockieren und eingabe User
@@ -52,7 +54,8 @@ public class StartmenueControl {
 				
 				benenneSpieler(anzahl); //Namen hinzufügen
 				
-				new SpielfeldGUI(menueGUI.getEimer(), menueDaten);
+				new SpielfeldPresenter(menueGUI.getEimer(), menueDaten);
+				//new SpielfeldGUI(menueGUI.getEimer(), menueDaten);
 			});
 			abfrage.add(druecker);
 		}

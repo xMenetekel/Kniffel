@@ -14,7 +14,7 @@ import gui.PunkteTabelleGUI;
 import model.Kategorie;
 import model.WuerfelLogik;
 
-public class WuerfelControl  {
+public class WuerfelPresenter  {
 
 	private List<WuerfelGUI> alleWuerfelGUI = new ArrayList<>();
 	private List<WuerfelLogik> alleWuerfelLogik = new ArrayList<>();
@@ -28,7 +28,7 @@ public class WuerfelControl  {
 	int wurfAnzahl = 0;
 	int maxWuerfe = 3;
 	
-	public WuerfelControl(Container Eimer, WuerfelflaecheGUI flaeche, WuerfelBankGUI bankGUI, PunkteTabelleGUI punkteTabelle){
+	public WuerfelPresenter(Container Eimer, WuerfelflaecheGUI flaeche, WuerfelBankGUI bankGUI, PunkteTabelleGUI punkteTabelle){
 		
 		this.container = Eimer;
 		this.punkteTabelle = punkteTabelle;

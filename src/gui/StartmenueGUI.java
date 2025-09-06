@@ -29,10 +29,7 @@ public class StartmenueGUI extends AbstractGUI{
 		this.einstellungen = new JButton("Einstellungen");
 		this.exit = new JButton("Schließen");
 		
-		
-		
-		this.exit.addActionListener(klick -> {System.exit(0);});
-		this.startmenueGesamt.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
+		this.startmenueGesamt.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);		
 		
 		this.Eimer.addComponentListener(new ComponentAdapter() { //der ganze spaß hier ist dafür da das beim neu ziehen alles prozentual angepasst wird
 			@Override

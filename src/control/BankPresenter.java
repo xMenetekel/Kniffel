@@ -1,6 +1,6 @@
 package control;
 
-public class BankControl {
+public class BankPresenter {
 
 	public void bankRotieren() {
 		

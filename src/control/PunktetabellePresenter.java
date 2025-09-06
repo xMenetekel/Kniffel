@@ -2,7 +2,7 @@ package control;
 
 import java.util.List;
 
-public abstract class PunktetabelleControl {
+public abstract class PunktetabellePresenter {
 
 	public abstract List<String> getMoeglicheZuege();
 	

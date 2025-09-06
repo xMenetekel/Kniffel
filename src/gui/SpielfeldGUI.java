@@ -5,19 +5,21 @@ import java.awt.Component;
 import java.awt.Container;
 import java.awt.event.ComponentAdapter;
 import java.awt.event.ComponentEvent;
+import java.awt.event.MouseAdapter;
+import java.awt.event.MouseEvent;
 import java.util.Map;
 
 import javax.swing.ImageIcon;
+import javax.swing.JTable;
 
-
-import control.WuerfelControl;
+import control.WuerfelPresenter;
 import model.Kategorie;
 import model.StartmenueLogik;
 
 public class SpielfeldGUI extends AbstractGUI{
 	
 	private WuerfelflaecheGUI wuerfelflaeche;
-	private WuerfelControl wuerfel;
+	private WuerfelPresenter wuerfel;
 	private PunkteTabelleGUI punktetabelle;
 	private WuerfelBankGUI wuerfelbankGUI;
 	private SpielbankGUI spielbank;
@@ -25,17 +27,7 @@ public class SpielfeldGUI extends AbstractGUI{
 	
 	private PunkteEintragenButtonGUI punkteEintragen;	
 	private Kategorie ausgewaehlteKategorie = null;
-	private void aktualisierePunkteTabelle() {
-		try {
-			Map<Kategorie,Integer> moeglichePunkte = wuerfel.getMoeglicheZuege().berechneAlleMoeglichenPunkte();
-			punktetabelle.zeigeMoeglichePunkte(moeglichePunkte);
-			System.out.println("Wurf"+wuerfel.getWurfAnzahl()+"/"+wuerfel.getMaxWuerfe()+"Moegliche Punkte:"+moeglichePunkte);
-		}catch(Exception e) {
-			System.out.println("Fehler beim Aktualisieren der Punkte: " + e.getMessage());
-		}
-	}
-
-
+	
 	
 
 	public SpielfeldGUI (Container Eimer, StartmenueLogik menueDaten) {
@@ -55,7 +47,7 @@ public class SpielfeldGUI extends AbstractGUI{
 		
 		wuerfelbankGUI = new WuerfelBankGUI();
 
-		wuerfel = new WuerfelControl(Eimer, wuerfelflaeche, wuerfelbankGUI, punktetabelle);	
+		wuerfel = new WuerfelPresenter(Eimer, wuerfelflaeche, wuerfelbankGUI, punktetabelle);	
 		rearrangiereWuerfel(Eimer, wuerfel, wuerfelbankGUI);
 		
 		wuerfeln = new WuerfelnButtonGUI();
@@ -95,11 +87,11 @@ public class SpielfeldGUI extends AbstractGUI{
 			}
 		});
 		
-		javax.swing.JTable table = punktetabelle.getTable();
+		JTable table = punktetabelle.getTable();
 			if(table != null) {
-				table.addMouseListener(new java.awt.event.MouseAdapter() {
+				table.addMouseListener(new MouseAdapter() {
 					@Override
-					public void mouseClicked(java.awt.event.MouseEvent evt) {
+					public void mouseClicked(MouseEvent evt) {
 						int row = table.rowAtPoint(evt.getPoint());
 						int col = table.columnAtPoint(evt.getPoint());
 						
@@ -174,6 +166,16 @@ public class SpielfeldGUI extends AbstractGUI{
 			System.out.println("Keine Kategorie ausgewählt! Bitte zuerst eine Kategorie in der Tabelle anclicken.");
 		}
 	}
+	
+	private void aktualisierePunkteTabelle() {
+		try {
+			Map<Kategorie,Integer> moeglichePunkte = wuerfel.getMoeglicheZuege().berechneAlleMoeglichenPunkte();
+			punktetabelle.zeigeMoeglichePunkte(moeglichePunkte);
+			System.out.println("Wurf"+wuerfel.getWurfAnzahl()+"/"+wuerfel.getMaxWuerfe()+"Moegliche Punkte:"+moeglichePunkte);
+		}catch(Exception e) {
+			System.out.println("Fehler beim Aktualisieren der Punkte: " + e.getMessage());
+		}
+	}
     
 	
 	
@@ -183,7 +185,7 @@ public class SpielfeldGUI extends AbstractGUI{
 	 * @param e
 	 * @param w
 	 */
-	protected void rearrangiereWuerfel(Component e, WuerfelControl w, WuerfelBankGUI bank) {
+	protected void rearrangiereWuerfel(Component e, WuerfelPresenter w, WuerfelBankGUI bank) {
 		int breite = e.getWidth();
 		int hoehe = e.getHeight();
 		
