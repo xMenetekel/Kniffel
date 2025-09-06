@@ -13,6 +13,7 @@ import gui.WuerfelBankGUI;
 import gui.PunkteTabelleGUI;
 import model.Kategorie;
 import model.WuerfelLogik;
+import model.SpielLogik;
 
 public class WuerfelPresenter  {
 
@@ -24,14 +25,17 @@ public class WuerfelPresenter  {
 	private PunkteTabelleGUI punkteTabelle;
 	private WuerfelflaecheGUI flaeche;
 	private WuerfelBankGUI bankGUI; //das muss so safe woanders hin aber ich will grade einfach nur das es geht
+	private SpielLogik spielLogik;
+
 	
 	int wurfAnzahl = 0;
 	int maxWuerfe = 3;
 	
-	public WuerfelPresenter(Container Eimer, WuerfelflaecheGUI flaeche, WuerfelBankGUI bankGUI, PunkteTabelleGUI punkteTabelle){
+	public WuerfelPresenter(Container Eimer, WuerfelflaecheGUI flaeche, WuerfelBankGUI bankGUI, PunkteTabelleGUI punkteTabelle,SpielLogik spielLogik){
 		
 		this.container = Eimer;
 		this.punkteTabelle = punkteTabelle;
+		this.spielLogik = spielLogik;
 		
 		this.flaeche = flaeche;
 		this.bankGUI = bankGUI;
@@ -166,6 +170,7 @@ public class WuerfelPresenter  {
 		
 		wurfAnzahl++;
 		
+		spielLogik.erhoeheWurfAnzahl();
 		speichereWuerfelWerte();
 		aktualisierePunkteTabelle();
 		
@@ -187,7 +192,8 @@ public class WuerfelPresenter  {
 	        System.out.println("Würfelwerte gespeichert: " + werte); // DEBUG
 	    }
 	  public void neueRunde() {
-	        wurfAnzahl = 0;
+		  	wurfAnzahl = 0;
+	        spielLogik.setWuerfeAnzahl(0);
 	        for (WuerfelLogik wuerfel : alleWuerfelLogik) {
 	            wuerfel.setBehalten(false);
 	            wuerfel.wuerfeln();
