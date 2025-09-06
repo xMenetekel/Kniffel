@@ -1,11 +1,16 @@
 package gui;
 
+import java.awt.Image;
+
+import javax.swing.ImageIcon;
 import javax.swing.JLabel;
 import javax.swing.JPanel;
 
-public abstract class AbstractGUI implements GUIProzente{
+public abstract class AbstractGUI{
 	JPanel panel;
 	JLabel bild;
+	ImageIcon bildIcon;
+	
 	private final double prozentFlaecheX;
 	private final double prozentFlaecheHoehe;
 	private final double prozentFlaecheY;
@@ -16,7 +21,24 @@ public abstract class AbstractGUI implements GUIProzente{
 		this.prozentFlaecheY = y;
 		this.prozentFlaecheBreite = breite;
 		this.prozentFlaecheHoehe = hoehe;
+		this.panel = new JPanel();
+		this.bild = new JLabel();
+		bild.setLayout(null);
+		panel.setLayout(null);
+		panel.setVisible(true);
+		bild.setVisible(true);
+		panel.setOpaque(false);
 		
+	}
+	private void skaliereBild(int breite, int hoehe) {
+		Image bildii = bildIcon.getImage();
+		Image skaliertesBild = bildii.getScaledInstance(breite, hoehe, Image.SCALE_SMOOTH);
+		bild.setIcon(new ImageIcon(skaliertesBild));
+	}
+	public void setzeneueGroesse(int breite, int hoehe) {
+		skaliereBild(breite, hoehe);
+		panel.setSize(breite, hoehe);
+		bild.setBounds(0,0, breite, hoehe);
 	}
 
 	public double getProzentFlaecheX() {
@@ -37,6 +59,15 @@ public abstract class AbstractGUI implements GUIProzente{
 	
 	public JPanel getPanel() {
 		return this.panel;
+		
 	}
+	public JLabel getBild() {
+		return bild;
+	}
+
+	public void setBild(JLabel bild) {
+		this.bild = bild;
+	}
+
 }
 

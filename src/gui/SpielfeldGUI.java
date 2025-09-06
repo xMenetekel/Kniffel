@@ -9,7 +9,6 @@ import java.util.Map;
 
 import javax.swing.ImageIcon;
 
-import javax.swing.JLabel;
 
 import control.WuerfelControl;
 import model.Kategorie;
@@ -23,7 +22,7 @@ public class SpielfeldGUI extends AbstractGUI{
 	private WuerfelBankGUI wuerfelbankGUI;
 	private SpielbankGUI spielbank;
 	private WuerfelnButtonGUI wuerfeln;
-	private JLabel hintergrund;
+	
 	private PunkteEintragenButtonGUI punkteEintragen;	
 	private Kategorie ausgewaehlteKategorie = null;
 	private void aktualisierePunkteTabelle() {
@@ -65,7 +64,7 @@ public class SpielfeldGUI extends AbstractGUI{
 		punkteEintragen = new PunkteEintragenButtonGUI();
 		rearrangiere(Eimer, punkteEintragen);
 		
-		hintergrund = new JLabel();		
+				
 	
 		wuerfeln.getButton().addActionListener(klick -> {wuerfel.wuerfeln(); 
 														if (wuerfel.getWurfAnzahl() == wuerfel.getMaxWuerfe()) {
@@ -76,10 +75,10 @@ public class SpielfeldGUI extends AbstractGUI{
 								
 		punkteEintragen.getButton().addActionListener(klick -> {eintragePunkteFuerAktuellenSpieler();});
 		
-		ImageIcon bildi = new ImageIcon("Other/hintergrund.jpg" );
-		hintergrund.setIcon(bildi);
-		hintergrund.setBounds(0,0,800,700);
-		hintergrund.setVisible(true);
+		bildIcon = new ImageIcon("Other/hintergrund.jpg" );
+		bild.setIcon(bildIcon);
+		setzeneueGroesse(Eimer.getHeight(),Eimer.getWidth());
+		
 		
 
 		
@@ -152,7 +151,7 @@ public class SpielfeldGUI extends AbstractGUI{
 		Eimer.add(spielbank.getPanel());
 		Eimer.add(wuerfeln.getPanel());
 		Eimer.add(wuerfelbankGUI.getPanel());
-		Eimer.add(hintergrund);
+		Eimer.add(bild);
 		
 		Eimer.revalidate();
 		Eimer.repaint();
@@ -199,7 +198,7 @@ public class SpielfeldGUI extends AbstractGUI{
 			
 	}
 	
-	public void rearrangiere(Component e, GUIProzente gui) {
+	public void rearrangiere(Component e, AbstractGUI gui) {
 		int breite = e.getWidth();
 		int hoehe = e.getHeight();
 		

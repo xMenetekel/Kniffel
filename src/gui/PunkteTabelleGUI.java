@@ -17,7 +17,7 @@ import model.Kategorie;
 import model.StartmenueLogik;
 
 public class PunkteTabelleGUI extends AbstractGUI {
-	
+	 
 	private JTable table;
 	private static final double X = 0.5;
 	private static final double Y = 0.0;	

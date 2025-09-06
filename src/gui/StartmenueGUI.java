@@ -20,7 +20,7 @@ public class StartmenueGUI extends AbstractGUI{
 		super(1,1,1,1);
 		this.startmenueGesamt = new JFrame("Startmenue");
 		this.startmenueGesamt.setSize(1000, 825);
-		this.Eimer = new JPanel();
+		
 		
 		this.Eimer = (JPanel) startmenueGesamt.getContentPane();		
 		this.Eimer.setLayout(null); //Hab erstmal den Layout Manager ausgemacht um es manuell anzuordnen, können wir später aber noch ändern : famous last words, i am so sorry

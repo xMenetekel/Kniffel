@@ -10,7 +10,6 @@ public class PunkteEintragenButtonGUI extends AbstractGUI{
 
 	private JButton punkteEintragen;
 
-
 	private static final double X = 0.145;
 	private static final double Y = 0.678;	
 	private static final double B = 0.1875;	
@@ -20,8 +19,6 @@ public class PunkteEintragenButtonGUI extends AbstractGUI{
 	public PunkteEintragenButtonGUI(){
 		super(X, Y, B, H);
 		this.punkteEintragen = new JButton("Punkte eintragen");
-		this.panel = new JPanel();
-		panel.setLayout(null);
 		panel.addComponentListener(new ComponentAdapter() {
 			@Override
 			public void componentResized(ComponentEvent e) {

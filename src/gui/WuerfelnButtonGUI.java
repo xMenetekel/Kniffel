@@ -22,14 +22,14 @@ public class WuerfelnButtonGUI extends AbstractGUI{
 		super(X, Y, B, H);
 		this.wuerfeln = new JButton("Wuerfeln");
 		
-		this.panel = new JPanel();
+		
 		panel.addComponentListener(new ComponentAdapter() {
 			@Override
 			public void componentResized(ComponentEvent e) {
 				wuerfeln.setSize(panel.getSize());
 			}
 		});
-		panel.setLayout(null);
+		
 		panel.add(wuerfeln);
 		
 	}
