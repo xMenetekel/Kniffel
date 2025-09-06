@@ -8,6 +8,7 @@ import java.awt.GridLayout;
 import javax.swing.BorderFactory;
 import javax.swing.JButton;
 import javax.swing.JDialog;
+import javax.swing.JOptionPane;
 
 import gui.*;
 
@@ -49,6 +50,8 @@ public class StartmenueControl {
 				menueDaten.setSpieleranzahl(anzahl); //speichern 
 				abfrage.dispose(); //schließen
 				
+				benenneSpieler(anzahl); //Namen hinzufügen
+				
 				new SpielfeldGUI(menueGUI.getEimer(), menueDaten);
 			});
 			abfrage.add(druecker);
@@ -56,6 +59,19 @@ public class StartmenueControl {
 		abfrage.pack(); // größe anpassen es könnte so einfach sein
 		abfrage.setLocationRelativeTo(menueGUI.getStartmenueGesamt()); //schön zentrieren
 		abfrage.setVisible(true); 
+	}
+	
+	private void benenneSpieler(int spieleranzahl) {
+		for(int i = 0; i < spieleranzahl; i++) {
+			String name = JOptionPane.showInputDialog(
+					menueGUI.getStartmenueGesamt(),
+					"Name fuer Spieler " + (i+1) + ":",
+					"Spieler benennen",
+					JOptionPane.PLAIN_MESSAGE);
+			if(name != null) {
+				menueDaten.setSpielerName(i, name);
+			}
+		}
 	}
 	
 	public void setMenueGUI(StartmenueGUI menueGUI) {

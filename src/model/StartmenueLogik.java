@@ -1,6 +1,8 @@
 package model;
 
 import java.awt.Color;
+import java.util.ArrayList;
+import java.util.List;
 
 public class StartmenueLogik {
 	
@@ -8,7 +10,7 @@ public class StartmenueLogik {
 	private boolean einstellungenOffen = false;
 	
 	private int spieleranzahl;
-	private String spielernamen = "Spieler";
+	private List<SpielerLogik> spielerListe = new ArrayList<>();
 	
 	private Color hintergrundfarbe = Color.blue;
 	
@@ -19,16 +21,30 @@ public class StartmenueLogik {
 
 	public void setSpieleranzahl(int spieleranzahl) {
 		this.spieleranzahl = spieleranzahl;
+		aktualisiereSpielerListe();
 	}
-
-	public String getSpielernamen() {
-		return spielernamen;
+	
+	private void aktualisiereSpielerListe() {
+		spielerListe.clear();
+		for(int i = 0; i < spieleranzahl; i++) {
+			SpielerLogik spieler = SpielerFactory.createSpieler("ErsterSpieler");
+			spieler.setName("Spieler" + (i + 1));
+			spielerListe.add(spieler);
+		}
 	}
-
-	public void setSpielernamen(String spielernamen) {
-		this.spielernamen = spielernamen;
+	
+	public SpielerLogik getSpieler(int index) {
+		return spielerListe.get(index);
 	}
-
+	
+	public void setSpielerName(int index, String name) {
+		spielerListe.get(index).setName(name);
+	}
+	
+	public List<SpielerLogik> getSpielerListe(){
+		return spielerListe;
+	}
+	
 	public boolean isSpielGestartet() {
 		return spielGestartet;
 	}

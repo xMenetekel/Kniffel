@@ -127,8 +127,10 @@ public class PunkteTabelleGUI extends AbstractGUI {
 			columnNames = new String[2 + spielerAnzahl];
 			columnNames[0] = "Kategorie";
 			columnNames[1] = "Kombinationen";
+			
 			for(int i = 0; i < spielerAnzahl; i++) {
-				columnNames[2 + i] = "Spieler " + (i + 1);
+				String spielerName = menueDaten.getSpieler(i).getName();
+				columnNames[2 + i] = spielerName;
 			}	
         
 		
