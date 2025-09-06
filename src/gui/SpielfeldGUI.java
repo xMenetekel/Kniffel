@@ -13,9 +13,9 @@ import java.util.Map;
 import javax.swing.ImageIcon;
 import javax.swing.JTable;
 
-import control.WuerfelPresenter;
 import model.Kategorie;
 import model.StartmenueLogik;
+import presenter.WuerfelPresenter;
 
 public class SpielfeldGUI extends AbstractGUI{
 	
@@ -23,7 +23,7 @@ public class SpielfeldGUI extends AbstractGUI{
 	private WuerfelPresenter wuerfel;
 	private PunkteTabelleGUI punktetabelle;
 	private WuerfelBankGUI wuerfelbankGUI;
-	private SpielbankGUI spielbank;
+	private SpielerbankGUI spielbank;
 	private WuerfelnButtonGUI wuerfeln;
 	
 	private PunkteEintragenButtonGUI punkteEintragen;	
@@ -43,7 +43,7 @@ public class SpielfeldGUI extends AbstractGUI{
 		punktetabelle = new PunkteTabelleGUI(menueDaten);
 		rearrangiere(Eimer, punktetabelle);
 		
-		spielbank = new SpielbankGUI();
+		spielbank = new SpielerbankGUI();
 		rearrangiere(Eimer, spielbank);
 		
 		wuerfelbankGUI = new WuerfelBankGUI();

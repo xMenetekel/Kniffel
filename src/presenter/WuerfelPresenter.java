@@ -1,4 +1,4 @@
-package control;
+package presenter;
 
 import java.awt.Container;
 import java.util.ArrayList;

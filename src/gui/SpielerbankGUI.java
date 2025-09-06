@@ -4,7 +4,7 @@ import javax.swing.ImageIcon;
 import javax.swing.JLabel;
 import javax.swing.JPanel;
 
-public class SpielbankGUI extends AbstractGUI{	
+public class SpielerbankGUI extends AbstractGUI{	
 	
 	private static final double X = 0.0625;
 	private static final double H =0.142857;
@@ -12,7 +12,7 @@ public class SpielbankGUI extends AbstractGUI{
 	private static final double B = 0.4375;	
 	
 
-	public SpielbankGUI() {
+	public SpielerbankGUI() {
 		super(X, Y, B, H);
 		ImageIcon bildi = new ImageIcon("Other/spielerbank.jpg" );		
 		bild.setIcon(bildi);		

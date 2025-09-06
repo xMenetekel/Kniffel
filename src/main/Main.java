@@ -5,10 +5,10 @@ import java.util.ArrayList;
 import java.util.List;
 import java.util.Scanner;
 
-import control.StartmenuePresenter;
-import control.WuerfelPresenter;
 import model.WuerfelFactory;
 import model.WuerfelLogik;
+import presenter.StartmenuePresenter;
+import presenter.WuerfelPresenter;
 
 
 public class Main {

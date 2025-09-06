@@ -1,6 +1,6 @@
 package model;
 
-import control.WuerfelPresenter;
+import presenter.WuerfelPresenter;
 
 public class WuerfelFactory {
 
