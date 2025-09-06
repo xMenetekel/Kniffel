@@ -15,6 +15,7 @@ public class MoeglicheZuege {
 
 	private List<Integer>letzteWuerfelWerte = new ArrayList<>();
 	private Map<Kategorie,Integer>aktiveMoeglichePunkte = new HashMap<>();
+	private Map<Kategorie,Integer>einzelWerte = new HashMap<>();
 	
 	public void setWuerfelWerte(List<Integer> wuerfel) {
 		letzteWuerfelWerte.clear();
@@ -22,12 +23,47 @@ public class MoeglicheZuege {
 			letzteWuerfelWerte.add(wuerfel.get(i));
 		}
 		Collections.sort(letzteWuerfelWerte);
+		berechneEinzelWerte();
+		berechneKombinationen();
 		
-		Map<Kategorie, Integer>neuePunkte = berechneAlleMoeglichenPunkte();
-		for(Map.Entry<Kategorie,Integer> entry : neuePunkte.entrySet()) {
-			if(!aktiveMoeglichePunkte.containsKey(entry.getKey())) {
-				aktiveMoeglichePunkte.put(entry.getKey(), entry.getValue());
+	}
+
+	private void berechneEinzelWerte() {
+		einzelWerte.clear();
+		for (int augenzahl = 1; augenzahl <= 6; augenzahl++) {
+			int punkte = berechneEinzelwert(augenzahl);
+			if(punkte>0) {
+				Kategorie kategorie = getKategorieFuerAugenzahl(augenzahl);
+				einzelWerte.put(kategorie,punkte);
 			}
+		}
+	}
+	
+	private void berechneKombinationen() {
+		aktiveMoeglichePunkte.clear();
+		aktiveMoeglichePunkte.putAll(einzelWerte);
+		Kategorie[] kombinationen = {
+				Kategorie.DREIER_PASCH,Kategorie.VIERER_PASCH,
+				Kategorie.FULL_HOUSE,Kategorie.KLEINE_STRASSE,
+				Kategorie.GROSSE_STRASSE,Kategorie.KNIFFEL, Kategorie.CHANCE
+		};
+		for(Kategorie kategorie : kombinationen) {
+			int punkte = berechnePunkte(kategorie);
+			if(punkte >0) {
+				aktiveMoeglichePunkte.put(kategorie, punkte);
+			}
+		}
+	}
+	
+	private Kategorie getKategorieFuerAugenzahl(int augenzahl) {
+		switch(augenzahl) {
+		case 1: return Kategorie.EINSER;
+		case 2: return Kategorie.ZWEIER;
+		case 3: return Kategorie.DREIER;
+		case 4: return Kategorie.VIERER;
+		case 5: return Kategorie.FUENFER;
+		case 6: return Kategorie.SECHSER;
+		default: return null;
 		}
 	}
 	
@@ -145,7 +181,15 @@ public class MoeglicheZuege {
 	        
 	        for (int i = 0; i < alleKategorien.length; i++) {
 	            Kategorie kat = alleKategorien[i];
-	            if (kat.getAugenZahl() != -1) {
+	            if (kat.getAugenZahl() != -1 
+	            		|| kat == Kategorie.DREIER_PASCH 
+	            		|| kat == Kategorie.VIERER_PASCH 
+	            		|| kat == Kategorie.FULL_HOUSE
+	            		|| kat == Kategorie.KLEINE_STRASSE
+	            		|| kat == Kategorie.GROSSE_STRASSE
+	            		|| kat == Kategorie.KNIFFEL
+	            		|| kat == Kategorie.CHANCE)
+	            		{
 	                int punkte = berechnePunkte(kat);
 	                if (punkte > 0) {
 	                    allePunkte.put(kat, punkte);

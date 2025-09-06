@@ -194,7 +194,12 @@ public class WuerfelPresenter  {
 	        }
 	        for (WuerfelGUI gui : alleWuerfelGUI) {
 	            gui.fresherButton();
+	            int x = getValidesX(flaeche);
+	            int y = getValidesY(flaeche);
+	            int[] xy = korrigierteKollision(gui,x,y);
+	            gui.zeichneLinie(gui.getButton(), xy[0], xy[1], false);
 	        }
+	        moeglicheZuege.getAktiveMoeglichePunkte().clear();
 	        if (punkteTabelle != null) {
 	        	punkteTabelle.zeigeMoeglichePunkte(new HashMap<>());
 	        }

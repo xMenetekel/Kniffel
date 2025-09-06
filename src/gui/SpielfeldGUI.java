@@ -7,6 +7,7 @@ import java.awt.event.ComponentAdapter;
 import java.awt.event.ComponentEvent;
 import java.awt.event.MouseAdapter;
 import java.awt.event.MouseEvent;
+import java.util.HashMap;
 import java.util.Map;
 
 import javax.swing.ImageIcon;
@@ -157,6 +158,8 @@ public class SpielfeldGUI extends AbstractGUI{
 				punktetabelle.tragePunkteEin(ausgewaehlteKategorie, punkte, 0);
 				System.out.println("Punkte eingetragen: " + ausgewaehlteKategorie);
 				wuerfel.getMoeglicheZuege().entferneKategorie(ausgewaehlteKategorie);
+				punktetabelle.zeigeMoeglichePunkte(wuerfel.getMoeglicheZuege().getAktiveMoeglichePunkte());
+				wuerfel.neueRunde();
 				ausgewaehlteKategorie = null;
 			} catch (Exception e) {
 				System.out.println ("Fehler beim Eintragen der Punkte" + e.getMessage());

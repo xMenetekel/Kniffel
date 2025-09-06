@@ -3,6 +3,8 @@ package gui;
 import java.awt.BorderLayout;
 import java.awt.Color;
 import java.awt.Component;
+import java.awt.event.MouseAdapter;
+import java.awt.event.MouseEvent;
 import java.util.HashMap;
 import java.util.Map;
 
@@ -41,21 +43,19 @@ public class PunkteTabelleGUI extends AbstractGUI {
 		table.setRowHeight(40); // habs von 35 auf 40 angepasst idk if this is too high tho?
 		Color mischmasch = new Color(200,224,170);
 		table.setBackground(mischmasch);
-        table.addMouseListener(new java.awt.event.MouseAdapter() {
+        table.addMouseListener(new MouseAdapter() {
             @Override
-            public void mouseClicked(java.awt.event.MouseEvent evt) {
+            public void mouseClicked(MouseEvent evt) {
                 int row = table.rowAtPoint(evt.getPoint());
                 int col = table.columnAtPoint(evt.getPoint());
                 
                 if (col >= 2) { // Nur Punkte-Spalten
                     Kategorie kategorie = Kategorie.fromTabellenIndex(row);
                     if (kategorie != null && tableModel.hatMoeglichePunkteFuerKategorie(kategorie)) {
-                        System.out.println("Spieler hat Kategorie gewählt: " + kategorie);
+                        System.out.println("Kategorie gewählt: " + kategorie);
                         int punkte = tableModel.getMoeglichePunkteFuerKategorie(kategorie);
                         System.out.println("Punkte: " + punkte);
                         
-                        // Hier kannst du die Logik für das Behalten der Punkte implementieren
-                        // z.B.: tragePunkteEin(kategorie, punkte, 0); // Für Spieler 1
                     }
                 }
             }
