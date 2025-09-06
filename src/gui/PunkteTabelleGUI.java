@@ -17,6 +17,7 @@ import javax.swing.table.DefaultTableCellRenderer;
 
 import model.Kategorie;
 import model.StartmenueLogik;
+import model.SpielLogik;
 
 public class PunkteTabelleGUI extends AbstractGUI {
 	 
@@ -27,22 +28,26 @@ public class PunkteTabelleGUI extends AbstractGUI {
 	private static final double H = 1.0;
 	private ZugTableModel tableModel;
 	private final int spielerAnzahl;
+	private SpielLogik spielLogik;
 	
 
 	public JTable getTable() {
 		return this.table;
 	}
 	
-	public PunkteTabelleGUI(StartmenueLogik menueDaten) {
+	public PunkteTabelleGUI(StartmenueLogik menueDaten,SpielLogik spielLogik) {
 		super(X, Y, B, H);
 		this.spielerAnzahl = menueDaten.getSpieleranzahl();
 		panel = new JPanel(new BorderLayout());
 		
-		tableModel = new ZugTableModel(menueDaten);
+		tableModel = new ZugTableModel(menueDaten, spielLogik);
 		table = new JTable(tableModel);
 		table.setRowHeight(40); // habs von 35 auf 40 angepasst idk if this is too high tho?
 		Color mischmasch = new Color(200,224,170);
 		table.setBackground(mischmasch);
+		
+		table.setDefaultRenderer(Object.class, new HighlightingCellRenderer(spielLogik));
+		
         table.addMouseListener(new MouseAdapter() {
             @Override
             public void mouseClicked(MouseEvent evt) {
@@ -59,6 +64,7 @@ public class PunkteTabelleGUI extends AbstractGUI {
                     }
                 }
             }
+            
         });
 		
 		table.getColumnModel().getColumn(0).setCellRenderer(new SymbolCellRenderer());	//Brauchen CellRenderer um in der ersten spalte sowohl Bilder als auch Text verwenden zu können
@@ -67,6 +73,8 @@ public class PunkteTabelleGUI extends AbstractGUI {
 		panel.add(scroll, BorderLayout.CENTER);
 				
 		}
+	
+
 	
 	public void zeigeMoeglichePunkte(Map<Kategorie, Integer> moeglichePunkte) {
 	    if (tableModel != null) {
@@ -80,7 +88,27 @@ public class PunkteTabelleGUI extends AbstractGUI {
         tableModel.entferneMoeglicheKategorie(kategorie);
     }
 	
-	
+	static class HighlightingCellRenderer extends DefaultTableCellRenderer {
+		private SpielLogik spielLogik;
+		
+		public HighlightingCellRenderer(SpielLogik spielLogik) {
+			this.spielLogik = spielLogik;
+		}
+		@Override
+		public Component getTableCellRendererComponent(JTable table, Object value, boolean isSelected, boolean hasFocus, int row, int column) {
+			Component c = super.getTableCellRendererComponent(table, value, isSelected, hasFocus, row, column);
+			if (column == 2 + spielLogik.getAktiverSpielerIndex()) {
+				c.setBackground(new Color(220,240,255));
+			} else {
+				c.setBackground(table.getBackground());
+			}
+			if (column == 0) {
+				SymbolCellRenderer symbolRenderer = new SymbolCellRenderer();
+				return symbolRenderer.getTableCellRendererComponent(table,value,isSelected,hasFocus,row,column);
+			}
+			return c;
+		}
+	}
 	
 	static class SymbolCellRenderer extends DefaultTableCellRenderer {
 	    @Override
@@ -121,8 +149,10 @@ public class PunkteTabelleGUI extends AbstractGUI {
 		private Object[][] data;
 		private final int spielerAnzahl; //muss später übergeben werden!!!!Wichtig!!!ToDo
 		private Map<Kategorie, Integer> moeglichePunkte = new HashMap<>();
+		private SpielLogik spielLogik;
 		
-		public ZugTableModel(StartmenueLogik menueDaten) {
+		public ZugTableModel(StartmenueLogik menueDaten, SpielLogik spielLogik) {
+			this.spielLogik = spielLogik;
 			this.spielerAnzahl = menueDaten.getSpieleranzahl();
 			columnNames = new String[2 + spielerAnzahl];
 			columnNames[0] = "Kategorie";
@@ -215,7 +245,7 @@ public class PunkteTabelleGUI extends AbstractGUI {
         @Override
         public Object getValueAt(int row, int column) {
             // Zeige mögliche Punkte in grau oder speziell formatieren
-            if (column >= 2 && !moeglichePunkte.isEmpty()) {
+            if (column == 2 + spielLogik.getAktiverSpielerIndex() && !moeglichePunkte.isEmpty()) {
                 Kategorie kategorie = Kategorie.fromTabellenIndex(row);
                 if (kategorie != null && moeglichePunkte.containsKey(kategorie)) {
                     return moeglichePunkte.get(kategorie);
@@ -255,6 +285,11 @@ public class PunkteTabelleGUI extends AbstractGUI {
 		
 
 	}
-	
+    public void aktualisiereFuerNeuenSpieler() {
+    	zeigeMoeglichePunkte(new HashMap<>());
+    	if (table != null) {
+    		table.repaint();
+    	}
+    }
 
 }

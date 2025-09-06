@@ -54,8 +54,12 @@ public class StartmenuePresenter {
 				
 				benenneSpieler(anzahl); //Namen hinzufügen
 				
-				new SpielfeldPresenter(menueGUI.getEimer(), menueDaten);
+				SpielLogik spielLogik = new SpielLogik();
+				spielLogik.setSpieler(menueDaten.getSpielerListe()); //Initialisierung Spiellogik mit Spielern
+				
+				new SpielfeldPresenter(menueGUI.getEimer(), menueDaten, spielLogik);
 				//new SpielfeldGUI(menueGUI.getEimer(), menueDaten);
+				menueGUI.getStartmenueGesamt().setVisible(true);
 			});
 			abfrage.add(druecker);
 		}
