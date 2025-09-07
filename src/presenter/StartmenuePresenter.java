@@ -2,6 +2,7 @@ package presenter;
 
 import model.*;
 
+import java.awt.Container;
 import java.awt.Dimension;
 import java.awt.GridLayout;
 
@@ -16,7 +17,6 @@ public class StartmenuePresenter {
 	
 	private StartmenueGUI menueGUI;
 	private StartmenueLogik menueDaten;
-
 
 	public StartmenuePresenter() {
 		this.menueGUI = new StartmenueGUI();
@@ -58,7 +58,7 @@ public class StartmenuePresenter {
 				SpielLogik spielLogik = new SpielLogik();
 				spielLogik.setSpieler(menueDaten.getSpielerListe()); //Initialisierung Spiellogik mit Spielern
 				
-				new SpielfeldPresenter(menueGUI.getEimer(), menueDaten, spielLogik);
+				new SpielfeldPresenter(menueGUI.getEimer(), spielLogik, menueDaten);
 				
 				menueGUI.getStartmenueGesamt().setVisible(true);
 			});

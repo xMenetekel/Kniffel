@@ -30,9 +30,10 @@ public class PunkteTabelleGUI extends AbstractGUI {
 	private ZugTableModel tableModel;
 	private final int spielerAnzahl;
 	private SpielLogik spielLogik;
+	private KategorieSelectListener selectListener;
 	
+	private Map<String, Integer> finalePunkte = new HashMap<>();
 	
-
 	public JTable getTable() {
 		return this.table;
 	}
@@ -41,10 +42,9 @@ public class PunkteTabelleGUI extends AbstractGUI {
 		super(X, Y, B, H);
 		this.spielerAnzahl = menueDaten.getSpieleranzahl();
 		panel = new JPanel(new BorderLayout());
-		this.spielLogik = spielLogik;
 		tableModel = new ZugTableModel(menueDaten);
 		table = new JTable(tableModel);
-		table.setRowHeight(40); // habs von 35 auf 40 angepasst idk if this is too high tho?
+		table.setRowHeight(40);
 		Color mischmasch = new Color(200,224,170);
 		table.setBackground(mischmasch);
 		
@@ -59,10 +59,8 @@ public class PunkteTabelleGUI extends AbstractGUI {
                 if (col >= 2) { // Nur Punkte-Spalten
                     Kategorie kategorie = Kategorie.fromTabellenIndex(row);
                     if (kategorie != null && tableModel.hatMoeglichePunkteFuerKategorie(kategorie)) {
-                        System.out.println("Kategorie gewählt: " + kategorie);
-                        int punkte = tableModel.getMoeglichePunkteFuerKategorie(kategorie);
-                        System.out.println("Punkte: " + punkte);
-                        
+                    	selectListener.onKategorieSelected(kategorie);
+                    	System.out.println("Kategorie ausgewählt: "+ kategorie);
                     }
                 }
             }
@@ -86,8 +84,23 @@ public class PunkteTabelleGUI extends AbstractGUI {
 
     
     public void tragePunkteEin(Kategorie kategorie, int punkte, int spielerIndex) {
-        tableModel.setValueAt(punkte, kategorie.getTabellenIndex(), 2 + spielerIndex);
-        tableModel.entferneMoeglicheKategorie(kategorie);
+    	System.out.println("Trage "+ punkte + "Punkte für" + kategorie + "bei Spieler"+ spielerIndex + "Ein");
+    	try {
+    		tableModel.setValueAt(punkte, kategorie.getTabellenIndex(), 2 + spielerIndex);
+            tableModel.entferneMoeglicheKategorie(kategorie);
+            table.repaint();
+            System.out.println("Punkte erfolgreich eingetragen");
+    	}catch(Exception e) {
+    		System.out.println("Fehler in tragePunkteEin"+ e.getMessage());
+    		e.printStackTrace();
+    	}
+    }
+    
+    public void clearMoeglichePunkte() {
+    	if(tableModel != null) {
+    		tableModel.resetMoeglichePunkte();
+    		table.repaint();
+    	}
     }
     
     public void highlightSpalte(int spielerIndex) {
@@ -156,6 +169,14 @@ public class PunkteTabelleGUI extends AbstractGUI {
 	
 	public void setMoeglichkeiten() {
 		
+	}
+	
+	public interface KategorieSelectListener{
+		void onKategorieSelected(Kategorie kategorie);
+	}
+	
+	public void setKategorieSelectListener(KategorieSelectListener listener) {
+		this.selectListener = listener;
 	}
 	
 	static class ZugTableModel extends AbstractTableModel{
@@ -237,10 +258,8 @@ public class PunkteTabelleGUI extends AbstractGUI {
         	fireTableDataChanged();
         }
         
-        public void resetMoeglichePunkte() {
-        	moeglichePunkte.clear();
-        	fireTableDataChanged();
-        }
+
+
 		
 		
 		@Override
@@ -258,7 +277,11 @@ public class PunkteTabelleGUI extends AbstractGUI {
 			fireTableDataChanged();
 		}
 		
-		
+		public void resetMoeglichePunkte() {
+			moeglichePunkte.clear();
+			fireTableDataChanged();
+			System.out.println("MoeglichePunkte zurückgeetzt");
+		}
 		
         @Override
         public Object getValueAt(int row, int column) {

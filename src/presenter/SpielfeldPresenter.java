@@ -3,7 +3,10 @@ package presenter;
 import java.awt.Component;
 import java.awt.Container;
 import java.awt.Font;
+import java.util.ArrayList;
 import java.util.HashMap;
+import java.util.List;
+import java.util.Map;
 
 import javax.swing.JLabel;
 import javax.swing.JTable;
@@ -13,13 +16,13 @@ import gui.SpielfeldGUI;
 import gui.WuerfelBankGUI;
 import model.SpielfeldLogik;
 import model.StartmenueLogik;
+import model.WuerfelLogik;
 import model.Kategorie;
 import model.SpielLogik;
 
 public class SpielfeldPresenter {
 	 private SpielfeldGUI gui;
 	 private SpielfeldLogik logik;
-	 
 	 private WuerfelPresenter wuerfel;	
 	 private WuerfelbankPresenter bank;
 	 private PunktetabellePresenter tabelle;
@@ -27,28 +30,33 @@ public class SpielfeldPresenter {
 	 private WuerfelflaechePresenter flaeche;
 	 private WuerfelnButtonPresenter wuerfelnKlick;
 	 private PunkteEintragenButtonPresenter punkteKlick;
-	 
 	 private Kategorie ausgewaehlteKategorie = null; 
 	 private JLabel statusLabel;	
-	 
 	 private SpielLogik spielLogik; 
+	 private MoeglicheZuege moeglicheZuege = new MoeglicheZuege();
+	 private StartmenueLogik menueDaten;
 	 
-	 public SpielfeldPresenter(Container Eimer, StartmenueLogik menueDaten, SpielLogik spielLogik) {
+	 public SpielfeldPresenter(Container Eimer, SpielLogik spielLogik, StartmenueLogik menueDaten) {
 		 
 		 this.spielLogik = spielLogik; 
+		 this.menueDaten = menueDaten;
 		 
-		 gui = new SpielfeldGUI(Eimer, this);
+		 gui = new SpielfeldGUI(Eimer, this, menueDaten);
 		 logik = new SpielfeldLogik();
-		 
 		 flaeche = new WuerfelflaechePresenter();
 		 bank = new WuerfelbankPresenter();
 		 tabelle = new PunktetabellePresenter(menueDaten); 	
 		 wuerfel = new WuerfelPresenter(Eimer, spielLogik, flaeche.getGui(), bank.getGui(), tabelle);  			 	 
 		 spieler = new SpielerbankPresenter();
-		
 		 wuerfelnKlick = new WuerfelnButtonPresenter(wuerfel, tabelle);
 		 punkteKlick = new PunkteEintragenButtonPresenter(this);
 		 
+		 wuerfelnKlick.getGui().getButton().addActionListener(e->onWuerfelnClick());
+		 punkteKlick.getGui().getButton().addActionListener(e->onPunkteEintragenClick());
+		 
+		 if (tabelle.getGui() != null) {
+			 tabelle.getGui().setKategorieSelectListener(this::onKategorieAusgewaehlt);
+		 }
 		
 		 Eimer.add(flaeche.getGui().getPanel());
 		 Eimer.add(bank.getGui().getPanel());
@@ -61,7 +69,6 @@ public class SpielfeldPresenter {
 		 rearrangiereAlles(Eimer);
 		 highlightAktuelleSpalte();
 		
-		 
 		 statusLabel = new JLabel();
 			statusLabel.setBounds((int)(Eimer.getWidth() * 0.1), (int)(Eimer.getHeight() * 0.05), (int)(Eimer.getWidth() * 0.3),30);
 			//font entfernt, hat es auf meinem rechner nicht richtig aufgeschlüsselt, sorry anthony
@@ -72,12 +79,65 @@ public class SpielfeldPresenter {
 			}else {
 				statusLabel.setText("Spiel wird initialisiert...");
 			}
-			
-			Eimer.add(statusLabel);
-		 
-		 
-		 
+			Eimer.add(statusLabel); 
 	}
+	 
+	 public void onWuerfelnClick() {
+		 if(spielLogik.getWuerfeAnzahl() < 3) {
+			 System.out.println("==Würfeln==");
+			 wuerfel.wuerfeln();
+			 spielLogik.erhoeheWurfAnzahl();
+			 updateStatusLabel();
+			 
+			 List<Integer> wuerfelWerte = new ArrayList<>();
+			 for (WuerfelLogik wuerfelLogik : wuerfel.getAlleWuerfelLogik()) {
+				 wuerfelWerte.add(wuerfelLogik.getAugen());
+			 }
+			 System.out.println("Neue Würfelwerte: "+wuerfelWerte);
+			 
+			 moeglicheZuege.setWuerfelWerte(wuerfelWerte);
+			 Map<Kategorie,Integer> moeglichePunkte = moeglicheZuege.getAktiveMoeglichePunkte();
+			 tabelle.getGui().zeigeMoeglichePunkte(moeglichePunkte);
+			 System.out.println("Wuerfelwerte nach Wurf: "+ wuerfelWerte);
+		 }
+	 }
+	 
+	 public void onKategorieAusgewaehlt(Kategorie kategorie) {
+		 this.ausgewaehlteKategorie = kategorie;
+		 System.out.println("Kategorie Ausgewählt: "+kategorie);
+	 }
+	 
+	 public void onPunkteEintragenClick() {
+		 System.out.println("==PUNKTE EINTRAGEN==");
+		 System.out.println("AusgewählteKategorie: "+ausgewaehlteKategorie);
+		 System.out.println("Wuerfeanzahl: "+ spielLogik.getWuerfeAnzahl());
+		 System.out.println("Aktiver Spieler: "+spielLogik.getAktiverSpielerIndex());
+		 
+		 if(ausgewaehlteKategorie != null && spielLogik.getWuerfeAnzahl()>0) {
+			 try {
+			 List<Integer>wuerfelWerte = new ArrayList<>();
+			 for (WuerfelLogik wuerfelLogik : wuerfel.getAlleWuerfelLogik()) {
+				 wuerfelWerte.add(wuerfelLogik.getAugen());
+			 }
+			 int punkte = moeglicheZuege.berechnePunkte(ausgewaehlteKategorie, wuerfelWerte);
+			 System.out.println("Berechnete Punkte für "+ausgewaehlteKategorie + " : " + punkte	);
+			 tabelle.getGui().tragePunkteEin(ausgewaehlteKategorie, punkte, spielLogik.getAktiverSpielerIndex());
+			 spielLogik.naechsterSpieler();
+			 wuerfel.neueRunde();
+			 ausgewaehlteKategorie = null;
+			 updateStatusLabel();
+			 highlightAktuelleSpalte();
+			 tabelle.getGui().zeigeMoeglichePunkte(new HashMap<>());
+			 System.out.println("Punkte erfolgreich eingetragen!");
+			 
+			 }catch (Exception e) {
+				 System.out.println("Fehler beim Punkteeintragen: " + e.getMessage());
+				 e.printStackTrace();
+			 }
+		 }else {
+			 System.out.println("Kann keine Punkte eintragen -" + (ausgewaehlteKategorie == null ? "Keine Kategorie ausgewaehlt" : "noch nicht gewürfelt"));
+		 }
+	 }
 	 
 
 	 public void rearrangiereAlles(Component fenstar) {
@@ -89,6 +149,8 @@ public class SpielfeldPresenter {
 		 rearrangiere(fenstar, punkteKlick.getGui());
 		 rearrangiereWuerfel(fenstar, wuerfel, bank.getGui());
 	 }
+	 
+	 
 	 
 	 protected void rearrangiereWuerfel(Component e, WuerfelPresenter w, WuerfelBankGUI bank) {
 			int breite = e.getWidth();
@@ -131,67 +193,11 @@ public class SpielfeldPresenter {
 		}
 		
 		public void eintragePunkteFuerAktuellenSpieler() {
-			if(ausgewaehlteKategorie != null) {
-				try {
-					int punkte = wuerfel.getMoeglicheZuege().berechnePunkte(ausgewaehlteKategorie);
-					int aktiverSpielerIndex = spielLogik.getAktiverSpielerIndex();
-					tabelle.getGui().tragePunkteEin(ausgewaehlteKategorie, punkte, aktiverSpielerIndex);
-					wuerfel.getMoeglicheZuege().entferneKategorie(ausgewaehlteKategorie);
-					tabelle.getGui().zeigeMoeglichePunkte(new HashMap<>());
-					ausgewaehlteKategorie = null;
-					JTable table = tabelle.getGui().getTable();
-					if(table != null) {
-						table.clearSelection();
-					}
-					spielLogik.naechsterSpieler();
-					highlightAktuelleSpalte();
-					tabelle.getGui().zeigeMoeglichePunkte(new HashMap<>());
-					if(tabelle.getGui().getTable() != null) {
-						tabelle.getGui().getTable().repaint();
-					}
-					tabelle.wasPassiertWennWirEineNeueRundeAusloesen(wuerfel.getAlleWuerfelLogik());
-					
-					updateStatusLabel();
-					System.out.println("Spieler " + (spielLogik.getAktiverSpielerIndex() + 1)+ "ist jetzt an der Reihe. Runde: " + spielLogik.getRunde());
-					
-				}catch(Exception e) {
-					System.out.println("Fehler beim Eintragen der Punkte" + e.getMessage());
-					e.printStackTrace();
-				}
-			} else {
-				System.out.println("Keine Kategorie ausgewählt!");
-			}
+			onPunkteEintragenClick();
 		}
 		
-
-	 
 		
-		
-		
-		
-		
-		
-		
-		
-		
-		
-		
-		
-		
-		
-		
-		
-		
-		
-		
-		
-		
-		
-		
-		
-	 
-	 
-	 
+	
 	 
 	//Getting and Setting  
 	 
