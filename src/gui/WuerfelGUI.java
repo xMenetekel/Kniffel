@@ -78,8 +78,9 @@ public class WuerfelGUI {
 			wuerfel.setIcon(bildi); } 
 		});
 		
-		
-		bildTimer.start();
+		if(wuerfeln) {
+			bildTimer.start();
+		}
 		
 		Timer zeichnenTimer = new Timer(4, e -> {
 			int xJetzt = wuerfel.getX();

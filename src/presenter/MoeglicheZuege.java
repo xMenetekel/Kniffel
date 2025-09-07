@@ -67,6 +67,11 @@ public class MoeglicheZuege {
 		}
 	}
 	
+	public int berechnePunkte(Kategorie kategorie, List<Integer>wuerfelWerte) {
+		setWuerfelWerte(wuerfelWerte);
+		return berechnePunkte(kategorie);
+	}
+	
 	public Map<Kategorie,Integer> getAktiveMoeglichePunkte(){
 		return new HashMap<>(aktiveMoeglichePunkte);
 	}

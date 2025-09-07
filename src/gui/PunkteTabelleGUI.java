@@ -31,25 +31,27 @@ public class PunkteTabelleGUI extends AbstractGUI {
 	private ZugTableModel tableModel;
 	private final int spielerAnzahl;
 	private SpielLogik spielLogik;
+	private KategorieSelectListener selectListener;
 	
+	private Map<String, Integer> finalePunkte = new HashMap<>();
 	
-
 	public JTable getTable() {
 		return this.table;
 	}
 	
+
 	public PunkteTabelleGUI(Container Eimer, StartmenueLogik menueDaten,SpielLogik spielLogik) {
 		super(X, Y, B, H, Eimer);
+
 		this.spielerAnzahl = menueDaten.getSpieleranzahl();
 		panel = new JPanel(new BorderLayout());
-		this.spielLogik = spielLogik;
-		tableModel = new ZugTableModel(menueDaten, spielLogik);
+		tableModel = new ZugTableModel(menueDaten);
 		table = new JTable(tableModel);
-		table.setRowHeight(40); // habs von 35 auf 40 angepasst idk if this is too high tho?
+		table.setRowHeight(40);
 		Color mischmasch = new Color(200,224,170);
 		table.setBackground(mischmasch);
 		
-		table.setDefaultRenderer(Object.class, new HighlightingCellRenderer(spielLogik));
+		table.setDefaultRenderer(Object.class, new HighlightingCellRenderer());
 		
         table.addMouseListener(new MouseAdapter() {
             @Override
@@ -60,10 +62,8 @@ public class PunkteTabelleGUI extends AbstractGUI {
                 if (col >= 2) { // Nur Punkte-Spalten
                     Kategorie kategorie = Kategorie.fromTabellenIndex(row);
                     if (kategorie != null && tableModel.hatMoeglichePunkteFuerKategorie(kategorie)) {
-                        System.out.println("Kategorie gewählt: " + kategorie);
-                        int punkte = tableModel.getMoeglichePunkteFuerKategorie(kategorie);
-                        System.out.println("Punkte: " + punkte);
-                        
+                    	selectListener.onKategorieSelected(kategorie);
+                    	System.out.println("Kategorie ausgewählt: "+ kategorie);
                     }
                 }
             }
@@ -89,31 +89,58 @@ public class PunkteTabelleGUI extends AbstractGUI {
 
     
     public void tragePunkteEin(Kategorie kategorie, int punkte, int spielerIndex) {
-        tableModel.setValueAt(punkte, kategorie.getTabellenIndex(), 2 + spielerIndex);
-        tableModel.entferneMoeglicheKategorie(kategorie);
+    	System.out.println("Trage "+ punkte + "Punkte für" + kategorie + "bei Spieler"+ spielerIndex + "Ein");
+    	try {
+    		tableModel.setValueAt(punkte, kategorie.getTabellenIndex(), 2 + spielerIndex);
+            tableModel.entferneMoeglicheKategorie(kategorie);
+            table.repaint();
+            System.out.println("Punkte erfolgreich eingetragen");
+    	}catch(Exception e) {
+    		System.out.println("Fehler in tragePunkteEin"+ e.getMessage());
+    		e.printStackTrace();
+    	}
+    }
+    
+    public void clearMoeglichePunkte() {
+    	if(tableModel != null) {
+    		tableModel.resetMoeglichePunkte();
+    		table.repaint();
+    	}
+    }
+    
+    public void highlightSpalte(int spielerIndex) {
+    	if(tableModel != null) {
+    		tableModel.setHighlightedSpalte(2+spielerIndex);
+    	}
+    	if (table != null) {
+    		HighlightingCellRenderer renderer = (HighlightingCellRenderer)table.getDefaultRenderer(Object.class);
+    		if (renderer != null) {
+    			renderer.setHighlightedSpalte(2+spielerIndex);
+    		}
+    		table.repaint();
+    	}
+    	System.out.println("Tabelle für Spieler" + (spielerIndex +1)+"aktualisiert.");
     }
 	
 	static class HighlightingCellRenderer extends DefaultTableCellRenderer {
-		private SpielLogik spielLogik;
-		
-		public HighlightingCellRenderer(SpielLogik spielLogik) {
-			this.spielLogik = spielLogik;
+		private int highlightedSpalte = -1;
+		public void setHighlightedSpalte (int spalte) {
+			this.highlightedSpalte = spalte;
 		}
+		
 		@Override
 		public Component getTableCellRendererComponent(JTable table, Object value, boolean isSelected, boolean hasFocus, int row, int column) {
 			Component c = super.getTableCellRendererComponent(table, value, isSelected, hasFocus, row, column);
-			if (column == 2 + spielLogik.getAktiverSpielerIndex()) {
+			if (column == highlightedSpalte) {
 				c.setBackground(new Color(220,240,255));
 			} else {
 				c.setBackground(table.getBackground());
 			}
-			if (column == 0) {
-				SymbolCellRenderer symbolRenderer = new SymbolCellRenderer();
-				return symbolRenderer.getTableCellRendererComponent(table,value,isSelected,hasFocus,row,column);
-			}
+	
 			return c;
 		}
 	}
+	
 	
 	static class SymbolCellRenderer extends DefaultTableCellRenderer {
 	    @Override
@@ -149,15 +176,22 @@ public class PunkteTabelleGUI extends AbstractGUI {
 		
 	}
 	
+	public interface KategorieSelectListener{
+		void onKategorieSelected(Kategorie kategorie);
+	}
+	
+	public void setKategorieSelectListener(KategorieSelectListener listener) {
+		this.selectListener = listener;
+	}
+	
 	static class ZugTableModel extends AbstractTableModel{
 		private String[] columnNames;
 		private Object[][] data;
 		private final int spielerAnzahl; //muss später übergeben werden!!!!Wichtig!!!ToDo
 		private Map<Kategorie, Integer> moeglichePunkte = new HashMap<>();
-		private SpielLogik spielLogik;
+		private int highlightedSpalte = -1;
 		
-		public ZugTableModel(StartmenueLogik menueDaten, SpielLogik spielLogik) {
-			this.spielLogik = spielLogik;
+		public ZugTableModel(StartmenueLogik menueDaten) {
 			this.spielerAnzahl = menueDaten.getSpieleranzahl();
 			columnNames = new String[2 + spielerAnzahl];
 			columnNames[0] = "Kategorie";
@@ -229,10 +263,8 @@ public class PunkteTabelleGUI extends AbstractGUI {
         	fireTableDataChanged();
         }
         
-        public void resetMoeglichePunkte() {
-        	moeglichePunkte.clear();
-        	fireTableDataChanged();
-        }
+
+
 		
 		
 		@Override
@@ -245,12 +277,21 @@ public class PunkteTabelleGUI extends AbstractGUI {
 			return columnNames.length;
 		}
 		
+		public void setHighlightedSpalte(int spalte) {
+			this.highlightedSpalte = spalte	;
+			fireTableDataChanged();
+		}
 		
+		public void resetMoeglichePunkte() {
+			moeglichePunkte.clear();
+			fireTableDataChanged();
+			System.out.println("MoeglichePunkte zurückgeetzt");
+		}
 		
         @Override
         public Object getValueAt(int row, int column) {
-            // Zeige mögliche Punkte in grau oder speziell formatieren
-            if (column == 2 + spielLogik.getAktiverSpielerIndex() && !moeglichePunkte.isEmpty()) {
+            
+            if (column == highlightedSpalte && !moeglichePunkte.isEmpty()) {
                 Kategorie kategorie = Kategorie.fromTabellenIndex(row);
                 if (kategorie != null && moeglichePunkte.containsKey(kategorie)) {
                     return moeglichePunkte.get(kategorie);
@@ -265,7 +306,6 @@ public class PunkteTabelleGUI extends AbstractGUI {
 		}
 		
 		@Override
-		// Datentype der Spalten 
 		public Class<?> getColumnClass(int column){
 			if(column == 0) return Object.class; // Bilder( und Text
 			if(column >= 2) return Integer.class; // Spieler

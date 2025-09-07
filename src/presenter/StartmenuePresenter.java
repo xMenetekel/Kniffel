@@ -21,6 +21,7 @@ public class StartmenuePresenter {
 	private JFrame hauptfenster;
 
 
+
 	public StartmenuePresenter(JFrame hauptfenster, Container Eimer) {
 		this.hauptfenster = hauptfenster;
 		this.menueGUI = new StartmenueGUI(Eimer);
@@ -62,7 +63,7 @@ public class StartmenuePresenter {
 				SpielLogik spielLogik = new SpielLogik();
 				spielLogik.setSpieler(menueDaten.getSpielerListe()); //Initialisierung Spiellogik mit Spielern
 				
-				new SpielfeldPresenter(menueGUI.getEimer(), menueDaten, spielLogik);
+				new SpielfeldPresenter(menueGUI.getEimer(), spielLogik, menueDaten);
 				
 				menueGUI.getEimer().setVisible(true);
 			});
