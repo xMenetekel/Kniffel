@@ -15,18 +15,14 @@ public class WuerfelnButtonPresenter {
 	public WuerfelnButtonPresenter(Container Eimer, WuerfelPresenter wuerfel, PunktetabellePresenter tabelle) {
 		logik = new WuerfelnButtonLogik();
 		gui = new WuerfelnButtonGUI(Eimer);
-		gui.getButton().addActionListener(klick -> { WuerfelnButtonGeklickt(); }); 
+		
+		
+		
 		this.wuerfel = wuerfel;
 		this.tabelle = tabelle;
 	}
 	
-	public void WuerfelnButtonGeklickt() {
 	
-		wuerfel.wuerfeln(); 
-		if (wuerfel.getWurfAnzahl() == wuerfel.getMaxWuerfe()) {
-            tabelle.aktualisierePunkteTabelle();
-		}
-	}
 
 	
 	

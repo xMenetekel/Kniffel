@@ -91,6 +91,9 @@ public class SpielfeldPresenter {
 	}
 	 
 	 public void onWuerfelnClick() {
+		 if (wuerfel.getWurfAnzahl() == wuerfel.getMaxWuerfe()) {
+	            tabelle.aktualisierePunkteTabelle();   //das müsste eigentlich nach jedem würfeln immer passieren, maybe consider removing the if?
+		 }
 		 if(spielLogik.getWuerfeAnzahl() < 3) {
 			 System.out.println("==Würfeln==");
 			 wuerfel.wuerfeln();
