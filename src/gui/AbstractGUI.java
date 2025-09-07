@@ -1,5 +1,6 @@
 package gui;
 
+import java.awt.Container;
 import java.awt.Image;
 
 import javax.swing.ImageIcon;
@@ -10,13 +11,16 @@ public abstract class AbstractGUI{
 	JPanel panel;
 	JLabel bild;
 	ImageIcon bildIcon;
+
+	Container Eimer;
 	
 	private final double prozentFlaecheX;
 	private final double prozentFlaecheHoehe;
 	private final double prozentFlaecheY;
 	private final double prozentFlaecheBreite;	
 	
-	protected AbstractGUI(double x, double y, double breite, double hoehe) {
+	protected AbstractGUI(double x, double y, double breite, double hoehe, Container Eimer) {
+		this.Eimer = Eimer;
 		this.prozentFlaecheX = x;
 		this.prozentFlaecheY = y;
 		this.prozentFlaecheBreite = breite;
@@ -27,7 +31,8 @@ public abstract class AbstractGUI{
 		panel.setLayout(null);
 		panel.setVisible(true);
 		bild.setVisible(true);
-		panel.setOpaque(false);
+		
+		//panel.setOpaque(false);
 		
 	}
 	private void skaliereBild(int breite, int hoehe) {
@@ -36,10 +41,15 @@ public abstract class AbstractGUI{
 		bild.setIcon(new ImageIcon(skaliertesBild));
 	}
 	public void setzeneueGroesse(int breite, int hoehe) {
-		skaliereBild(breite, hoehe);
 		panel.setSize(breite, hoehe);
 		bild.setBounds(0,0, breite, hoehe);
+		skaliereBild(breite, hoehe);	
+		
 	}
+	
+	
+	
+	//GSeetttteerr (Getter und Setter aber die Worte wurden gefaroshuffled)
 
 	public double getProzentFlaecheX() {
 		return this.prozentFlaecheX;
@@ -68,6 +78,22 @@ public abstract class AbstractGUI{
 	public void setBild(JLabel bild) {
 		this.bild = bild;
 	}
+	public ImageIcon getBildIcon() {
+		return bildIcon;
+	}
+	public void setBildIcon(ImageIcon bildIcon) {
+		this.bildIcon = bildIcon;
+	}
+	public Container getEimer() {
+		return Eimer;
+	}
+	public void setEimer(Container eimer) {
+		Eimer = eimer;
+	}
+	public void setPanel(JPanel panel) {
+		this.panel = panel;
+	}
+
 
 }
 

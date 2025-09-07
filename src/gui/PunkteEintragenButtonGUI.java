@@ -1,5 +1,6 @@
 package gui;
 
+import java.awt.Container;
 import java.awt.event.ComponentAdapter;
 import java.awt.event.ComponentEvent;
 
@@ -16,8 +17,8 @@ public class PunkteEintragenButtonGUI extends AbstractGUI{
 	private static final double H = 0.030165913;
 	
 	
-	public PunkteEintragenButtonGUI(){
-		super(X, Y, B, H);
+	public PunkteEintragenButtonGUI(Container Eimer){
+		super(X, Y, B, H, Eimer);
 		this.punkteEintragen = new JButton("Punkte eintragen");
 		panel.addComponentListener(new ComponentAdapter() {
 			@Override

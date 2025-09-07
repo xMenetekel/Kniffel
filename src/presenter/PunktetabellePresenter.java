@@ -2,6 +2,7 @@ package presenter;
 
 
 
+import java.awt.Container;
 import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
@@ -27,8 +28,8 @@ public class PunktetabellePresenter implements DummeChatGPTLoesungIchHasseAlles{
 	int maxWuerfe = 3;
 
 	
-	public PunktetabellePresenter(StartmenueLogik menueDaten,SpielLogik spielLogik) {
-		gui = new PunkteTabelleGUI(menueDaten,spielLogik);
+	public PunktetabellePresenter(Container Eimer, StartmenueLogik menueDaten,SpielLogik spielLogik) {
+		gui = new PunkteTabelleGUI(Eimer, menueDaten,spielLogik);
 		logik = new PunktetabelleLogik();
 		this.moeglicheZuege = new MoeglicheZuege();
 		

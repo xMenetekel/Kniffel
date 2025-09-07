@@ -34,7 +34,7 @@ public class SpielfeldGUI extends AbstractGUI{
 	*/
 	
 	public SpielfeldGUI(Container Eimer, SpielfeldPresenter presenter) {
-		super(1,1,1,1);
+		super(1,1,1,1, Eimer);
 		
 		Eimer.removeAll();
 		Eimer.setLayout(null);

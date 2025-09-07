@@ -30,6 +30,8 @@ public class WuerfelPresenter  {
 	private WuerfelBankGUI bank; //ich hasse das so sehr 
 	private DummeChatGPTLoesungIchHasseAlles keinBockMehr;
 	
+	final int WUERFEL_GROESSE = 50;	
+	
 	int wurfAnzahl = 0;
 	int maxWuerfe = 3;
 	
@@ -69,8 +71,8 @@ public class WuerfelPresenter  {
 	public int getValidesX(WuerfelflaecheGUI flaeche) {
 		int validesX;
 		int xVon = (int) (flaeche.getProzentFlaecheX() * this.container.getWidth());
-		int xBis = (int) ((flaeche.getProzentFlaecheBreite() + flaeche.getProzentFlaecheX()) * this.container.getWidth());
-		validesX = new Random().nextInt(xBis-xVon)+xVon-50;		
+		int xBis = (int) ((flaeche.getProzentFlaecheBreite() * this.container.getWidth()) + xVon);
+		validesX = new Random().nextInt(xBis-xVon-WUERFEL_GROESSE)+xVon;		
 		
 		
 		return validesX;
@@ -78,8 +80,8 @@ public class WuerfelPresenter  {
 	public int getValidesY(WuerfelflaecheGUI flaeche) {
 		int validesY;
 		int YVon = (int) (flaeche.getProzentFlaecheY() * this.container.getHeight());
-		int YBis = (int) ((flaeche.getProzentFlaecheHoehe() + flaeche.getProzentFlaecheY()) * this.container.getHeight());
-		validesY = new Random().nextInt(YBis-YVon)+YVon;		
+		int YBis = (int) ((flaeche.getProzentFlaecheHoehe() * this.container.getHeight()) + YVon);
+		validesY = new Random().nextInt(YBis-YVon-WUERFEL_GROESSE)+YVon;		
 		
 		
 		return validesY;

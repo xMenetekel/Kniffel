@@ -1,5 +1,6 @@
 package gui;
 
+import java.awt.Container;
 import java.awt.Image;
 
 import javax.swing.ImageIcon;
@@ -15,11 +16,12 @@ public class WuerfelflaecheGUI extends AbstractGUI {
 	private static final double H = 0.301659125;
 	
 
-	public WuerfelflaecheGUI() {
-		super(X, Y, B, H);
+	public WuerfelflaecheGUI(Container Eimer) {
+		super(X, Y, B, H, Eimer);
 		bildIcon = new ImageIcon("Other/wuerfelflaeche.jpg");			
-		setzeneueGroesse(350,200);						
-		panel.add(bild);				
+		setzeneueGroesse((int)(B * Eimer.getWidth()), (int)(H * Eimer.getHeight()));						
+		panel.add(bild);	
+		
 		
 	}
 

@@ -3,6 +3,7 @@ package gui;
 import java.awt.BorderLayout;
 import java.awt.Color;
 import java.awt.Component;
+import java.awt.Container;
 import java.awt.event.MouseAdapter;
 import java.awt.event.MouseEvent;
 import java.util.HashMap;
@@ -37,8 +38,8 @@ public class PunkteTabelleGUI extends AbstractGUI {
 		return this.table;
 	}
 	
-	public PunkteTabelleGUI(StartmenueLogik menueDaten,SpielLogik spielLogik) {
-		super(X, Y, B, H);
+	public PunkteTabelleGUI(Container Eimer, StartmenueLogik menueDaten,SpielLogik spielLogik) {
+		super(X, Y, B, H, Eimer);
 		this.spielerAnzahl = menueDaten.getSpieleranzahl();
 		panel = new JPanel(new BorderLayout());
 		this.spielLogik = spielLogik;
@@ -73,6 +74,8 @@ public class PunkteTabelleGUI extends AbstractGUI {
 		
 		JScrollPane scroll = new JScrollPane(table);
 		panel.add(scroll, BorderLayout.CENTER);
+		
+		this.Eimer.add(panel);
 				
 		}
 	

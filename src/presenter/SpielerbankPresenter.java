@@ -1,5 +1,7 @@
 package presenter;
 
+import java.awt.Container;
+
 import gui.SpielerbankGUI;
 import model.SpielerLogik;
 
@@ -8,9 +10,9 @@ public class SpielerbankPresenter {
 	private SpielerbankGUI gui;
 	private SpielerLogik logik;
 	
-	public SpielerbankPresenter() {
+	public SpielerbankPresenter(Container Eimer) {
 		
-		gui = new SpielerbankGUI();
+		gui = new SpielerbankGUI(Eimer);
 		logik = new SpielerLogik();
 		
 	}

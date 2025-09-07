@@ -9,27 +9,22 @@ import javax.swing.JFrame;
 import javax.swing.JPanel;
 
 public class StartmenueGUI extends AbstractGUI{
-		private JFrame startmenueGesamt;
+		
 		private JButton starteSpiel;
 		private JButton einstellungen;
 		private JButton exit;
-		private JPanel Eimer;
+		
 			
 	
-	public StartmenueGUI() {
-		super(1,1,1,1);
-		this.startmenueGesamt = new JFrame("Startmenue");
-		this.startmenueGesamt.setSize(1000, 825);
-		
-		
-		this.Eimer = (JPanel) startmenueGesamt.getContentPane();		
+	public StartmenueGUI(Container Eimer) {
+		super(1,1,1,1, Eimer);
 		this.Eimer.setLayout(null); //Hab erstmal den Layout Manager ausgemacht um es manuell anzuordnen, können wir später aber noch ändern : famous last words, i am so sorry
 		
 		this.starteSpiel = new JButton("Starte Spiel");
 		this.einstellungen = new JButton("Einstellungen");
 		this.exit = new JButton("Schließen");
 		
-		this.startmenueGesamt.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);		
+			
 		
 		this.Eimer.addComponentListener(new ComponentAdapter() { //der ganze spaß hier ist dafür da das beim neu ziehen alles prozentual angepasst wird
 			@Override
@@ -42,7 +37,7 @@ public class StartmenueGUI extends AbstractGUI{
 		this.Eimer.add(exit);
 		this.Eimer.add(einstellungen); //junge ich hab keine ahnung warum man alles dem content pane zufügen muss und dann aber das gesamte menü visible sein muss, make it make sense
 		
-		this.startmenueGesamt.setVisible(true);
+		
 		
 	}
 	private void rearrangiereFelder(Container eimer, JButton starteSpiel, JButton einstellungen, JButton exit) {
@@ -112,15 +107,7 @@ public class StartmenueGUI extends AbstractGUI{
 	public void exit() {
 		
 	}
-	public JFrame getStartmenueGesamt() {
-		return startmenueGesamt;
-	}
-
-
-	public void setStartmenueGesamt(JFrame startmenueGesamt) {
-		this.startmenueGesamt = startmenueGesamt;
-	}
-
+	
 
 	public Container getEimer() {
 		return Eimer;

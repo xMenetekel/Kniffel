@@ -40,14 +40,14 @@ public class SpielfeldPresenter {
 		 gui = new SpielfeldGUI(Eimer, this);
 		 logik = new SpielfeldLogik();
 		 
-		 flaeche = new WuerfelflaechePresenter();
-		 bank = new WuerfelbankPresenter();
-		 tabelle = new PunktetabellePresenter(menueDaten, spielLogik); 	
+		 flaeche = new WuerfelflaechePresenter(Eimer);
+		 bank = new WuerfelbankPresenter(Eimer);
+		 tabelle = new PunktetabellePresenter(Eimer, menueDaten, spielLogik); 	
 		 wuerfel = new WuerfelPresenter(Eimer, spielLogik, flaeche.getGui(), bank.getGui(), tabelle);  			 	 
-		 spieler = new SpielerbankPresenter();
+		 spieler = new SpielerbankPresenter(Eimer);
 		
-		 wuerfelnKlick = new WuerfelnButtonPresenter(wuerfel, tabelle);
-		 punkteKlick = new PunkteEintragenButtonPresenter(this);
+		 wuerfelnKlick = new WuerfelnButtonPresenter(Eimer, wuerfel, tabelle);
+		 punkteKlick = new PunkteEintragenButtonPresenter(Eimer, this);
 		 
 		
 		 Eimer.add(flaeche.getGui().getPanel());

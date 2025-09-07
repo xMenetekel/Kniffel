@@ -1,5 +1,7 @@
 package presenter;
 
+import java.awt.Container;
+
 import gui.PunkteEintragenButtonGUI;
 import model.PunkteEintragenButtonLogik;
 
@@ -8,8 +10,8 @@ public class PunkteEintragenButtonPresenter {
 	private PunkteEintragenButtonLogik logik;
 	private SpielfeldPresenter ichBraucheNurDieseEineMethodeEsIstHalbDreiNachtsIchWillInsBett;
 	
-	public PunkteEintragenButtonPresenter(SpielfeldPresenter arsch) {
-		gui = new PunkteEintragenButtonGUI();
+	public PunkteEintragenButtonPresenter(Container Eimer, SpielfeldPresenter arsch) {
+		gui = new PunkteEintragenButtonGUI(Eimer);
 		logik = new PunkteEintragenButtonLogik();
 		gui.getButton().addActionListener(klick -> {punkteEintragenButtonGeklickt();});
 		this.ichBraucheNurDieseEineMethodeEsIstHalbDreiNachtsIchWillInsBett = arsch;

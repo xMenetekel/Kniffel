@@ -1,5 +1,6 @@
 package gui;
 
+import java.awt.Container;
 import java.awt.event.ComponentAdapter;
 import java.awt.event.ComponentEvent;
 
@@ -18,8 +19,8 @@ public class WuerfelnButtonGUI extends AbstractGUI{
 	private static final double B = 0.15;	
 	private static final double H = 0.030165913;	
 	
-	public WuerfelnButtonGUI(){
-		super(X, Y, B, H);
+	public WuerfelnButtonGUI(Container Eimer){
+		super(X, Y, B, H, Eimer);
 		this.wuerfeln = new JButton("Wuerfeln");
 		
 		

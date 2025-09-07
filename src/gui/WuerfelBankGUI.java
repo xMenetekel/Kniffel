@@ -1,5 +1,7 @@
 package gui;
 
+import java.awt.Container;
+
 import javax.swing.ImageIcon;
 import javax.swing.JLabel;
 import javax.swing.JPanel;
@@ -12,8 +14,8 @@ public class WuerfelBankGUI extends AbstractGUI {
 	private static final double H = 0.085714; //nicht nutzen zum resizen
 	private static final double B = 0.35;	 //auch nicht nutzen zum resizen
 	
-	public WuerfelBankGUI() {
-		super(X, Y, B, H);
+	public WuerfelBankGUI(Container Eimer) {
+		super(X, Y, B, H, Eimer);
 		ImageIcon bildi = new ImageIcon("Other/wuerfelbank.jpg" );
 		
 		bild.setIcon(bildi);

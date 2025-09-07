@@ -1,5 +1,7 @@
 package presenter;
 
+import java.awt.Container;
+
 import gui.WuerfelflaecheGUI;
 import model.WuerfelflaecheLogik;
 
@@ -7,8 +9,8 @@ public class WuerfelflaechePresenter {
 	private WuerfelflaecheGUI gui;
 	private WuerfelflaecheLogik logik; //womöglich irrelevant lets see
 	
-	public WuerfelflaechePresenter() {
-		gui = new WuerfelflaecheGUI();
+	public WuerfelflaechePresenter(Container Eimer) {
+		gui = new WuerfelflaecheGUI(Eimer);
 		logik = new WuerfelflaecheLogik();
 	}
 

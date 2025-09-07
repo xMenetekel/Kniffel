@@ -2,12 +2,14 @@ package presenter;
 
 import model.*;
 
+import java.awt.Container;
 import java.awt.Dimension;
 import java.awt.GridLayout;
 
 import javax.swing.BorderFactory;
 import javax.swing.JButton;
 import javax.swing.JDialog;
+import javax.swing.JFrame;
 import javax.swing.JOptionPane;
 
 import gui.*;
@@ -16,10 +18,12 @@ public class StartmenuePresenter {
 	
 	private StartmenueGUI menueGUI;
 	private StartmenueLogik menueDaten;
+	private JFrame hauptfenster;
 
 
-	public StartmenuePresenter() {
-		this.menueGUI = new StartmenueGUI();
+	public StartmenuePresenter(JFrame hauptfenster, Container Eimer) {
+		this.hauptfenster = hauptfenster;
+		this.menueGUI = new StartmenueGUI(Eimer);
 		this.menueDaten = new StartmenueLogik();
 		starteStartmenue();
 	}
@@ -36,7 +40,7 @@ public class StartmenuePresenter {
 	
 	private void zeigeSpielerAuswahl() {
 		//Hauptfenster Blockieren und eingabe User
-		JDialog abfrage = new JDialog(menueGUI.getStartmenueGesamt(), "Anzahl Spieler",true);
+		JDialog abfrage = new JDialog(hauptfenster, "Anzahl Spieler",true);
 		abfrage.setLayout(new GridLayout(2,2,15,15)); //Abstand zwischenButtons
 		abfrage.getRootPane().setBorder(BorderFactory.createEmptyBorder(25, 25, 25, 25));
 		//Banstand von Button zu Fenster oben, links, unten, rechts
@@ -60,19 +64,19 @@ public class StartmenuePresenter {
 				
 				new SpielfeldPresenter(menueGUI.getEimer(), menueDaten, spielLogik);
 				
-				menueGUI.getStartmenueGesamt().setVisible(true);
+				menueGUI.getEimer().setVisible(true);
 			});
 			abfrage.add(druecker);
 		}
 		abfrage.pack(); // größe anpassen es könnte so einfach sein
-		abfrage.setLocationRelativeTo(menueGUI.getStartmenueGesamt()); //schön zentrieren
+		abfrage.setLocationRelativeTo(menueGUI.getEimer()); //schön zentrieren
 		abfrage.setVisible(true); 
 	}
 	
 	private void benenneSpieler(int spieleranzahl) {
 		for(int i = 0; i < spieleranzahl; i++) {
 			String name = JOptionPane.showInputDialog(
-					menueGUI.getStartmenueGesamt(),
+					menueGUI.getEimer(),
 					"Name fuer Spieler " + (i+1) + ":",
 					"Spieler benennen",
 					JOptionPane.PLAIN_MESSAGE);
