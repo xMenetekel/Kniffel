@@ -30,13 +30,16 @@ public class StartmenueGUI extends AbstractGUI{
 			@Override
 			public void componentResized(ComponentEvent e) {
 				rearrangiereFelder(Eimer, starteSpiel, einstellungen, exit);
+				Eimer.revalidate();
+				Eimer.repaint();
 			}			
 		});
 		
 		this.Eimer.add(starteSpiel);
 		this.Eimer.add(exit);
 		this.Eimer.add(einstellungen); //junge ich hab keine ahnung warum man alles dem content pane zufügen muss und dann aber das gesamte menü visible sein muss, make it make sense
-		
+		Eimer.revalidate();
+		Eimer.repaint();
 		
 		
 	}

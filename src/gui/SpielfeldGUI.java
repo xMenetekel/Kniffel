@@ -54,7 +54,8 @@ public class SpielfeldGUI extends AbstractGUI{
 		panel.add(bild);
 		setzeneueGroesse(Eimer.getHeight(),Eimer.getWidth());
 		
-	
+		Eimer.revalidate();
+		Eimer.repaint();
 		
 		Eimer.addComponentListener(new ComponentAdapter() { //der ganze spaß hier ist dafür da das beim neu ziehen alles prozentual angepasst wird
 			@Override

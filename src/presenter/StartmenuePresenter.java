@@ -27,6 +27,8 @@ public class StartmenuePresenter {
 		this.menueGUI = new StartmenueGUI(Eimer);
 		this.menueDaten = new StartmenueLogik();
 		starteStartmenue();
+		Eimer.revalidate();
+		Eimer.repaint();
 	}
 	
 	private void starteStartmenue() {
