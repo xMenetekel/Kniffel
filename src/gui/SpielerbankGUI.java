@@ -9,9 +9,9 @@ import javax.swing.JPanel;
 public class SpielerbankGUI extends AbstractGUI{	
 	
 	private static final double X = 0.0625;
-	private static final double H = 0.142857;
-	private static final double Y = 0.71428;
-	private static final double B = 0.4375;	
+	private static final double Y = 0.77;
+	private static final double B = 0.37;	
+	private static final double H = 0.142857;	
 	
 
 	public SpielerbankGUI(Container Eimer) {
