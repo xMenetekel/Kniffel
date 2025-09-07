@@ -42,7 +42,7 @@ public class SpielfeldPresenter {
 		 
 		 flaeche = new WuerfelflaechePresenter();
 		 bank = new WuerfelbankPresenter();
-		 tabelle = new PunktetabellePresenter(menueDaten, spielLogik); 	
+		 tabelle = new PunktetabellePresenter(menueDaten); 	
 		 wuerfel = new WuerfelPresenter(Eimer, spielLogik, flaeche.getGui(), bank.getGui(), tabelle);  			 	 
 		 spieler = new SpielerbankPresenter();
 		
@@ -59,6 +59,7 @@ public class SpielfeldPresenter {
 		 Eimer.add(gui.getPanel());
 		 
 		 rearrangiereAlles(Eimer);
+		 highlightAktuelleSpalte();
 		
 		 
 		 statusLabel = new JLabel();
@@ -77,6 +78,7 @@ public class SpielfeldPresenter {
 		 
 		 
 	}
+	 
 
 	 public void rearrangiereAlles(Component fenstar) {
 		 rearrangiere(fenstar, flaeche.getGui());
@@ -114,7 +116,11 @@ public class SpielfeldPresenter {
 			
 		}
 		
-	 
+		private void highlightAktuelleSpalte() {
+			if(tabelle != null && tabelle.getGui() != null) {
+				tabelle.getGui().highlightSpalte(spielLogik.getAktiverSpielerIndex());
+			}
+		}
 	 
 
 		private void updateStatusLabel() {
@@ -138,6 +144,7 @@ public class SpielfeldPresenter {
 						table.clearSelection();
 					}
 					spielLogik.naechsterSpieler();
+					highlightAktuelleSpalte();
 					tabelle.getGui().zeigeMoeglichePunkte(new HashMap<>());
 					if(tabelle.getGui().getTable() != null) {
 						tabelle.getGui().getTable().repaint();

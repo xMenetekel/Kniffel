@@ -19,7 +19,6 @@ public class PunktetabellePresenter implements DummeChatGPTLoesungIchHasseAlles{
 	private PunkteTabelleGUI gui;
 	private PunktetabelleLogik logik;
 	private MoeglicheZuege moeglicheZuege;
-	SpielLogik spielLogik;
 	 private Kategorie ausgewaehlteKategorie = null; 
 	
 
@@ -27,12 +26,11 @@ public class PunktetabellePresenter implements DummeChatGPTLoesungIchHasseAlles{
 	int maxWuerfe = 3;
 
 	
-	public PunktetabellePresenter(StartmenueLogik menueDaten,SpielLogik spielLogik) {
-		gui = new PunkteTabelleGUI(menueDaten,spielLogik);
+	public PunktetabellePresenter(StartmenueLogik menueDaten) {
+		gui = new PunkteTabelleGUI(menueDaten);
 		logik = new PunktetabelleLogik();
 		this.moeglicheZuege = new MoeglicheZuege();
 		
-		this.spielLogik = spielLogik;
 	}
 
 	
@@ -105,7 +103,6 @@ public class PunktetabellePresenter implements DummeChatGPTLoesungIchHasseAlles{
 	@Override
 	public void wasPassiertWennWirEineNeueRundeAusloesen(List<WuerfelLogik> alleWuerfelLogik) {
 		wurfAnzahl = 0; //warum muss das doppelt gesetzt werden? -anne
-        spielLogik.setWuerfeAnzahl(0); 
         for (WuerfelLogik wuerfel : alleWuerfelLogik) {
             wuerfel.setBehalten(false);
             wuerfel.wuerfeln();
