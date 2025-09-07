@@ -22,39 +22,48 @@ public class WuerfelPresenter  {
 	
 	private Container container;
 	private MoeglicheZuege moeglicheZuege = new MoeglicheZuege();
-	private PunkteTabelleGUI punkteTabelle;
+	
+	
+	private SpielLogik spielLogik;	
+	
 	private WuerfelflaecheGUI flaeche;
-	private WuerfelBankGUI bankGUI; //das muss so safe woanders hin aber ich will grade einfach nur das es geht
-	private SpielLogik spielLogik;
-
+	private WuerfelBankGUI bank; //ich hasse das so sehr 
+	private DummeChatGPTLoesungIchHasseAlles keinBockMehr;
 	
 	int wurfAnzahl = 0;
 	int maxWuerfe = 3;
 	
-	public WuerfelPresenter(Container Eimer, WuerfelflaecheGUI flaeche, WuerfelBankGUI bankGUI, PunkteTabelleGUI punkteTabelle,SpielLogik spielLogik){
-		
+	//, PunkteTabelleGUI punkteTabelle,SpielLogik spielLogik
+	
+	public WuerfelPresenter(Container Eimer, SpielLogik spielLogik, WuerfelflaecheGUI flaeche, WuerfelBankGUI bank, DummeChatGPTLoesungIchHasseAlles keinBockMehr){
 		this.container = Eimer;
-		this.punkteTabelle = punkteTabelle;
+		this.flaeche = flaeche;
+		this.bank = bank;
+		this.keinBockMehr = keinBockMehr;
 		this.spielLogik = spielLogik;
 		
-		this.flaeche = flaeche;
-		this.bankGUI = bankGUI;
 		for(int i = 0; i < 5; i++) {		//das erstellt 5 würfel und fügt in jeder iteration den wuerfel den entsprechenden arrays hinzu
 			WuerfelLogik model = new WuerfelLogik(6);
-			WuerfelGUI view = new WuerfelGUI(model, i*55+((int)(0.1 * Eimer.getWidth())), (int)(0.592857 * Eimer.getHeight()+5), Eimer);
+			WuerfelGUI view = new WuerfelGUI(this, model, i*55+((int)(0.1 * Eimer.getWidth())), (int)(0.592857 * Eimer.getHeight()+5), Eimer);
+			
 			model.setGui(view);
-			view.getButton().addActionListener(klick -> { boolean neuerZustand = !model.istBehalten();										
-														model.setBehalten(neuerZustand);
-														hochRunterhochRunter(model);
-														} );
+			
 			alleWuerfelGUI.add(view);
 			alleWuerfelLogik.add(model);		
 			container.add(view.getButton());
 		}
+		
 		container.revalidate();
 		container.repaint();	
 	}
 	
+	
+	public void wuerfelAngeklickt(WuerfelGUI gui) {
+		WuerfelLogik zustandDerLogik = gui.getLogik();
+		boolean neuerZustand = !zustandDerLogik.istBehalten();										
+		zustandDerLogik.setBehalten(neuerZustand);
+		hochRunterhochRunter(zustandDerLogik);
+	}
 	
 	
 	public int getValidesX(WuerfelflaecheGUI flaeche) {
@@ -124,8 +133,8 @@ public class WuerfelPresenter  {
 	}
 	
 	private void runter(WuerfelGUI gui) {
-		int x = (int)(container.getWidth() * bankGUI.getProzentFlaecheX());
-		int y = (int)(container.getHeight() * bankGUI.getProzentFlaecheY());
+		int x = (int)(container.getWidth() * bank.getProzentFlaecheX());
+		int y = (int)(container.getHeight() * bank.getProzentFlaecheY());
 		
 		x = ((gui.getButton().getWidth() + 5) * zaehleBankFuelle()-1) + x;
 		y = y + 5;
@@ -154,7 +163,7 @@ public class WuerfelPresenter  {
 	}
 	
 	
-	//Methoden 
+
 	public void wuerfeln() {
 		
 		if(wurfAnzahl >= maxWuerfe) { return; } 				
@@ -171,49 +180,38 @@ public class WuerfelPresenter  {
 		wurfAnzahl++;
 		
 		spielLogik.erhoeheWurfAnzahl();
-		speichereWuerfelWerte();
-		aktualisierePunkteTabelle();
+		List<Integer> wuerfelWerte = new ArrayList<>();
+		for(WuerfelLogik wuerfel : alleWuerfelLogik) {
+			wuerfelWerte.add(wuerfel.getAugen());
+		}
+		keinBockMehr.wasPassiertWennWirEinenWuerfelWerfen(wuerfelWerte);
 		
 	}
 	
-	private void aktualisierePunkteTabelle() {
-        Map<Kategorie, Integer> moeglichePunkte = moeglicheZuege.getAktiveMoeglichePunkte();
-        System.out.println("Mögliche Punkte: " + moeglichePunkte); // DEBUG
-        if (punkteTabelle != null) {
-            punkteTabelle.zeigeMoeglichePunkte(moeglichePunkte);
+	public void neueRunde() {
+	  	wurfAnzahl = 0;
+        spielLogik.setWuerfeAnzahl(0);
+        for (WuerfelLogik wuerfel : alleWuerfelLogik) {
+            wuerfel.setBehalten(false);
+            wuerfel.wuerfeln();
         }
+        for (WuerfelGUI gui : alleWuerfelGUI) {
+            gui.fresherButton();
+            int x = getValidesX(flaeche);
+            int y = getValidesY(flaeche);
+            int[] xy = korrigierteKollision(gui,x,y);
+            gui.zeichneLinie(gui.getButton(), xy[0], xy[1], false);
+        }
+        moeglicheZuege.getAktiveMoeglichePunkte().clear();
+        if (keinBockMehr != null) {
+        	keinBockMehr.zeigeMoeglichePunkte(new HashMap<>());
+        }
+        
+        System.out.println("Neue Runde Gestartet");
     }
-	  private void speichereWuerfelWerte() {
-	        List<Integer> werte = new ArrayList<>();
-	        for (int i = 0; i < alleWuerfelLogik.size(); i++) {
-	            werte.add(alleWuerfelLogik.get(i).getAugen());
-	        }
-	        moeglicheZuege.setWuerfelWerte(werte);
-	        System.out.println("Würfelwerte gespeichert: " + werte); // DEBUG
-	    }
-	  public void neueRunde() {
-		  	wurfAnzahl = 0;
-	        spielLogik.setWuerfeAnzahl(0);
-	        for (WuerfelLogik wuerfel : alleWuerfelLogik) {
-	            wuerfel.setBehalten(false);
-	            wuerfel.wuerfeln();
-	        }
-	        for (WuerfelGUI gui : alleWuerfelGUI) {
-	            gui.fresherButton();
-	            int x = getValidesX(flaeche);
-	            int y = getValidesY(flaeche);
-	            int[] xy = korrigierteKollision(gui,x,y);
-	            gui.zeichneLinie(gui.getButton(), xy[0], xy[1], false);
-	        }
-	        moeglicheZuege.getAktiveMoeglichePunkte().clear();
-	        if (punkteTabelle != null) {
-	        	punkteTabelle.zeigeMoeglichePunkte(new HashMap<>());
-	        }
-	        
-	        System.out.println("Neue Runde Gestartet");
-	    }
-	  
-	  
+
+	
+	
 	  public List<WuerfelGUI> getAlleWuerfelGUI() {
 			return alleWuerfelGUI;
 		}

@@ -36,6 +36,7 @@ public class WuerfelLogik {
 		
 	}
 	
+	
 
 	
 	public int getAugen() {

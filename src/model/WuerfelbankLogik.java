@@ -14,8 +14,8 @@ public class WuerfelbankLogik {
 	private List<double[]> wuerfelyProz = new ArrayList<>();
 
 	
-	public WuerfelbankLogik(List<WuerfelGUI> Wuerfelbank) {
-		this.setWuerfelbank(Wuerfelbank);
+	public WuerfelbankLogik() {
+	//	this.setWuerfelbank(Wuerfelbank);
 		
 	}
 	

@@ -1,6 +1,7 @@
 package gui;
 
 import model.*;
+import presenter.WuerfelPresenter;
 
 import java.awt.Container;
 import java.util.Random;
@@ -14,13 +15,15 @@ public class WuerfelGUI {
 	int yPos;
 	int startX;
 	int startY;
-	double prozentXAufFeld;
-	double prozentYAufFeld;
+	public double prozentXAufFeld;
+	public double prozentYAufFeld;
 	Container Eimer;
 	private Random rnjesus;
+	private WuerfelPresenter presenter; 
 	
 
-	public WuerfelGUI(WuerfelLogik model, int startX, int startY, Container Eimer){
+	public WuerfelGUI(WuerfelPresenter presenter, WuerfelLogik model, int startX, int startY, Container Eimer){
+		this.setPresenter(presenter);
 		this.model = model;
 		this.wuerfel = new JButton();
 		this.startX = startX;
@@ -32,6 +35,7 @@ public class WuerfelGUI {
 		fresherButton();
 		this.prozentXAufFeld = startX * 1.0 / Eimer.getWidth();
 		this.prozentYAufFeld = startY * 1.0 / Eimer.getHeight();
+		wuerfel.addActionListener(klick -> presenter.wuerfelAngeklickt(this));
 		
 		
 	}
@@ -171,6 +175,14 @@ public class WuerfelGUI {
 	
 	public void setEimer(Container eimer) {
 		Eimer = eimer;
+	}
+
+	public WuerfelPresenter getPresenter() {
+		return presenter;
+	}
+
+	public void setPresenter(WuerfelPresenter presenter) {
+		this.presenter = presenter;
 	}
 	
 }

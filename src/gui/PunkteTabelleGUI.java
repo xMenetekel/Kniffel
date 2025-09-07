@@ -9,6 +9,7 @@ import java.util.HashMap;
 import java.util.Map;
 
 import javax.swing.ImageIcon;
+import javax.swing.JLabel;
 import javax.swing.JPanel;
 import javax.swing.JScrollPane;
 import javax.swing.JTable;
@@ -30,6 +31,7 @@ public class PunkteTabelleGUI extends AbstractGUI {
 	private final int spielerAnzahl;
 	private SpielLogik spielLogik;
 	
+	
 
 	public JTable getTable() {
 		return this.table;
@@ -39,7 +41,7 @@ public class PunkteTabelleGUI extends AbstractGUI {
 		super(X, Y, B, H);
 		this.spielerAnzahl = menueDaten.getSpieleranzahl();
 		panel = new JPanel(new BorderLayout());
-		
+		this.spielLogik = spielLogik;
 		tableModel = new ZugTableModel(menueDaten, spielLogik);
 		table = new JTable(tableModel);
 		table.setRowHeight(40); // habs von 35 auf 40 angepasst idk if this is too high tho?

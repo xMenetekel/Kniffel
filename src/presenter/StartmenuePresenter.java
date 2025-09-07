@@ -26,8 +26,9 @@ public class StartmenuePresenter {
 	
 	private void starteStartmenue() {
 		menueGUI.getExit().addActionListener(klick -> {System.exit(0);});
+		menueGUI.getEinstellungen().addActionListener(klick -> {}); //TODO muss noch implementiert werden
 		menueGUI.getStarteSpiel().addActionListener(klick ->{
-			zeigeSpielerAuswahl();
+			zeigeSpielerAuswahl(); //hier wird SpielfeldPresenter() aufgerufen
 		});
 		
 	}
@@ -58,7 +59,7 @@ public class StartmenuePresenter {
 				spielLogik.setSpieler(menueDaten.getSpielerListe()); //Initialisierung Spiellogik mit Spielern
 				
 				new SpielfeldPresenter(menueGUI.getEimer(), menueDaten, spielLogik);
-				//new SpielfeldGUI(menueGUI.getEimer(), menueDaten);
+				
 				menueGUI.getStartmenueGesamt().setVisible(true);
 			});
 			abfrage.add(druecker);
