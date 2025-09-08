@@ -59,8 +59,10 @@ public class SpielfeldPresenter {
 
 
 		 
+
 		 wuerfelnKlick.getGui().getKnopf().addActionListener(e->onWuerfelnClick());
-		 punkteKlick.getGui().getKnopf().addActionListener(e->onPunkteEintragenClick());
+		 punkteKlick.getGui().getKnopf().addActionListener(e->eintragePunkteFuerAktuellenSpieler());
+
 		 
 		 if (tabelle.getGui() != null) {
 			 tabelle.getGui().setKategorieSelectListener(this::onKategorieAusgewaehlt);
@@ -91,11 +93,11 @@ public class SpielfeldPresenter {
 	}
 	 
 	 public void onWuerfelnClick() {
-		 if (wuerfel.getWurfAnzahl() == wuerfel.getMaxWuerfe()) {
+	{
 	            tabelle.aktualisierePunkteTabelle();   //das müsste eigentlich nach jedem würfeln immer passieren, maybe consider removing the if?
 		 }
-		 if(spielLogik.getWuerfeAnzahl() < 3) {
-			 System.out.println("==Würfeln==");
+		 if(spielLogik.getWuerfeAnzahl() < 3 && wuerfel.getWurfAnzahl() < wuerfel.getMaxWuerfe()) {
+			 
 			 wuerfel.wuerfeln();
 			 spielLogik.erhoeheWurfAnzahl();
 			 updateStatusLabel();
@@ -118,37 +120,6 @@ public class SpielfeldPresenter {
 		 System.out.println("Kategorie Ausgewählt: "+kategorie);
 	 }
 	 
-	 public void onPunkteEintragenClick() {
-		 System.out.println("==PUNKTE EINTRAGEN==");
-		 System.out.println("AusgewählteKategorie: "+ausgewaehlteKategorie);
-		 System.out.println("Wuerfeanzahl: "+ spielLogik.getWuerfeAnzahl());
-		 System.out.println("Aktiver Spieler: "+spielLogik.getAktiverSpielerIndex());
-		 
-		 if(ausgewaehlteKategorie != null && spielLogik.getWuerfeAnzahl()>0) {
-			 try {
-			 List<Integer>wuerfelWerte = new ArrayList<>();
-			 for (WuerfelLogik wuerfelLogik : wuerfel.getAlleWuerfelLogik()) {
-				 wuerfelWerte.add(wuerfelLogik.getAugen());
-			 }
-			 int punkte = moeglicheZuege.berechnePunkte(ausgewaehlteKategorie, wuerfelWerte);
-			 System.out.println("Berechnete Punkte für "+ausgewaehlteKategorie + " : " + punkte	);
-			 tabelle.getGui().tragePunkteEin(ausgewaehlteKategorie, punkte, spielLogik.getAktiverSpielerIndex());
-			 spielLogik.naechsterSpieler();
-			 wuerfel.neueRunde();
-			 ausgewaehlteKategorie = null;
-			 updateStatusLabel();
-			 highlightAktuelleSpalte();
-			 tabelle.getGui().zeigeMoeglichePunkte(new HashMap<>());
-			 System.out.println("Punkte erfolgreich eingetragen!");
-			 
-			 }catch (Exception e) {
-				 System.out.println("Fehler beim Punkteeintragen: " + e.getMessage());
-				 e.printStackTrace();
-			 }
-		 }else {
-			 System.out.println("Kann keine Punkte eintragen -" + (ausgewaehlteKategorie == null ? "Keine Kategorie ausgewaehlt" : "noch nicht gewürfelt"));
-		 }
-	 }
 	 
 
 	 public void rearrangiereAlles(Component fenstar) {
@@ -208,8 +179,40 @@ public class SpielfeldPresenter {
 		}
 		
 		public void eintragePunkteFuerAktuellenSpieler() {
-			onPunkteEintragenClick();
-		}
+			 System.out.println("==PUNKTE EINTRAGEN==");
+			 System.out.println("AusgewählteKategorie: "+ausgewaehlteKategorie);
+			 System.out.println("Wuerfeanzahl: "+ spielLogik.getWuerfeAnzahl());
+			 System.out.println("Aktiver Spieler: "+spielLogik.getAktiverSpielerIndex());
+			 
+			 if(ausgewaehlteKategorie != null && spielLogik.getWuerfeAnzahl()>0) {
+				 try {
+				 List<Integer>wuerfelWerte = new ArrayList<>();
+				 for (WuerfelLogik wuerfelLogik : wuerfel.getAlleWuerfelLogik()) {
+					 wuerfelWerte.add(wuerfelLogik.getAugen());
+				 }
+				 int punkte = moeglicheZuege.berechnePunkte(ausgewaehlteKategorie, wuerfelWerte);
+				 System.out.println("Berechnete Punkte für "+ausgewaehlteKategorie + " : " + punkte	);
+				 tabelle.getGui().tragePunkteEin(ausgewaehlteKategorie, punkte, spielLogik.getAktiverSpielerIndex());
+				 
+				 spielLogik.setWuerfeAnzahl(0);
+				 
+				 spielLogik.naechsterSpieler();
+				 wuerfel.neueRunde();
+				 ausgewaehlteKategorie = null;
+				 updateStatusLabel();
+				 highlightAktuelleSpalte();
+				 tabelle.getGui().zeigeMoeglichePunkte(new HashMap<>());
+				 System.out.println("Punkte erfolgreich eingetragen!");
+				 
+				 }catch (Exception e) {
+					 System.out.println("Fehler beim Punkteeintragen: " + e.getMessage());
+					 e.printStackTrace();
+				 }
+			 }else {
+				 System.out.println("Kann keine Punkte eintragen -" + (ausgewaehlteKategorie == null ? "Keine Kategorie ausgewaehlt" : "noch nicht gewürfelt"));
+			 }
+		 }
+		
 		
 		
 	

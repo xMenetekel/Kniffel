@@ -44,7 +44,9 @@ public class SpielLogik {
 	}
 	
 	public void naechsterSpieler() {
-		if(spieler.isEmpty())return;
+		if(spieler.isEmpty()) {
+			return;
+		}
 		aktiverSpielerIndex = (aktiverSpielerIndex +1) % spieler.size();
 		if(aktiverSpielerIndex == 0) {
 			runde++;
