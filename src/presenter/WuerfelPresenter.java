@@ -30,8 +30,6 @@ public class WuerfelPresenter  {
 	private WuerfelBankGUI bank; //ich hasse das so sehr 
 	private DummeChatGPTLoesungIchHasseAlles keinBockMehr;
 	
-	final int WUERFEL_GROESSE = 50;	
-	
 	int wurfAnzahl = 0;
 	int maxWuerfe = 3;
 	
@@ -71,8 +69,8 @@ public class WuerfelPresenter  {
 	public int getValidesX(WuerfelflaecheGUI flaeche) {
 		int validesX;
 		int xVon = (int) (flaeche.getProzentFlaecheX() * this.container.getWidth());
-		int xBis = (int) ((flaeche.getProzentFlaecheBreite() * this.container.getWidth()) + xVon);
-		validesX = new Random().nextInt(xBis-xVon-WUERFEL_GROESSE)+xVon;		
+		int xBis = (int) ((flaeche.getProzentFlaecheBreite() + flaeche.getProzentFlaecheX()) * this.container.getWidth());
+		validesX = new Random().nextInt(xBis-xVon)+xVon-50;		
 		
 		
 		return validesX;
@@ -80,8 +78,8 @@ public class WuerfelPresenter  {
 	public int getValidesY(WuerfelflaecheGUI flaeche) {
 		int validesY;
 		int YVon = (int) (flaeche.getProzentFlaecheY() * this.container.getHeight());
-		int YBis = (int) ((flaeche.getProzentFlaecheHoehe() * this.container.getHeight()) + YVon);
-		validesY = new Random().nextInt(YBis-YVon-WUERFEL_GROESSE)+YVon;		
+		int YBis = (int) ((flaeche.getProzentFlaecheHoehe() + flaeche.getProzentFlaecheY()) * this.container.getHeight());
+		validesY = new Random().nextInt(YBis-YVon)+YVon;		
 		
 		
 		return validesY;
@@ -181,7 +179,6 @@ public class WuerfelPresenter  {
 		
 		wurfAnzahl++;
 		
-		spielLogik.erhoeheWurfAnzahl();
 		List<Integer> wuerfelWerte = new ArrayList<>();
 		for(WuerfelLogik wuerfel : alleWuerfelLogik) {
 			wuerfelWerte.add(wuerfel.getAugen());
@@ -194,19 +191,13 @@ public class WuerfelPresenter  {
 	}
 	
 	public void neueRunde() {
-	  	wurfAnzahl = 0;
+		wurfAnzahl =0;
+	  	spielLogik.setWuerfeAnzahl(0); 
         for (WuerfelLogik wuerfel : alleWuerfelLogik) {
             wuerfel.setBehalten(false);
-            wuerfel.wuerfeln();
+            
         }
-        for (WuerfelGUI gui : alleWuerfelGUI) {
-          //  gui.fresherButton();
-            int x = getValidesX(flaeche);
-            int y = getValidesY(flaeche);
-            int[] xy = korrigierteKollision(gui,x,y);
-            gui.zeichneLinie(gui.getButton(), xy[0], xy[1], false);
-        }
-
+        
         System.out.println("Neue Runde Gestartet");
     }
 
