@@ -26,8 +26,8 @@ public class StartmenuePresenter {
 
 	public StartmenuePresenter(JFrame hauptfenster, Container Eimer) {
 		this.hauptfenster = hauptfenster;
-		this.menueGUI = new StartmenueGUI(Eimer);
 		this.menueDaten = new StartmenueLogik();
+		this.menueGUI = new StartmenueGUI(Eimer);		
 		starteStartmenue();
 		Eimer.revalidate();
 		Eimer.repaint();

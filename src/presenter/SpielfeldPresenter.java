@@ -66,7 +66,20 @@ public class SpielfeldPresenter {
 		 if (tabelle.getGui() != null) {
 			 tabelle.getGui().setKategorieSelectListener(this::onKategorieAusgewaehlt);
 		 }
-		
+		 
+		 statusLabel = new JLabel();
+			statusLabel.setBounds((int)(Eimer.getWidth() * 0.15), (int)(Eimer.getHeight() * 0.95), (int)(Eimer.getWidth() * 0.3),30);
+			statusLabel.setVisible(true);
+			statusLabel.setFont(new Font(Font.SANS_SERIF, Font.BOLD, 10));
+			updateStatusLabel();
+			
+			if (spielLogik != null) {
+				updateStatusLabel();
+			}else {
+				statusLabel.setText("Spiel wird initialisiert...");
+			}
+			
+		 Eimer.add(statusLabel); 		
 		 Eimer.add(flaeche.getGui().getPanel());
 		 Eimer.add(bank.getGui().getPanel());
 		 Eimer.add(tabelle.getGui().getPanel());
@@ -78,23 +91,13 @@ public class SpielfeldPresenter {
 		 rearrangiereAlles(Eimer);
 		 highlightAktuelleSpalte();
 		
-		 statusLabel = new JLabel();
-			statusLabel.setBounds((int)(Eimer.getWidth() * 0.1), (int)(Eimer.getHeight() * 0.05), (int)(Eimer.getWidth() * 0.3),30);
-			//font entfernt, hat es auf meinem rechner nicht richtig aufgeschlüsselt, sorry anthony
-			updateStatusLabel();
-			
-			if (spielLogik != null) {
-				updateStatusLabel();
-			}else {
-				statusLabel.setText("Spiel wird initialisiert...");
-			}
-			Eimer.add(statusLabel); 
+		
+			Eimer.revalidate();
+			Eimer.repaint();
 	}
 	 
 	 public void onWuerfelnClick() {
-	{
-	            tabelle.aktualisierePunkteTabelle();   //das müsste eigentlich nach jedem würfeln immer passieren, maybe consider removing the if?
-		 }
+	     tabelle.aktualisierePunkteTabelle();  		 
 		 if(spielLogik.getWuerfeAnzahl() < 3 && wuerfel.getWurfAnzahl() < wuerfel.getMaxWuerfe()) {
 			 
 			 wuerfel.wuerfeln();
