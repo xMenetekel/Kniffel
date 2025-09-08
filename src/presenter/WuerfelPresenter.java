@@ -14,6 +14,7 @@ import gui.PunkteTabelleGUI;
 import model.Kategorie;
 import model.WuerfelLogik;
 import model.SpielLogik;
+import model.StartmenueLogik;
 
 public class WuerfelPresenter  {
 
@@ -29,18 +30,23 @@ public class WuerfelPresenter  {
 	private WuerfelflaecheGUI flaeche;
 	private WuerfelBankGUI bank; //ich hasse das so sehr 
 	private DummeChatGPTLoesungIchHasseAlles keinBockMehr;
+	private StartmenueLogik menueDaten;
 	
 	int wurfAnzahl = 0;
 	int maxWuerfe = 3;
 	
 	//, PunkteTabelleGUI punkteTabelle,SpielLogik spielLogik
 	
-	public WuerfelPresenter(Container Eimer, SpielLogik spielLogik, WuerfelflaecheGUI flaeche, WuerfelBankGUI bank, DummeChatGPTLoesungIchHasseAlles keinBockMehr){
+	public WuerfelPresenter(Container Eimer, SpielLogik spielLogik, 
+							WuerfelflaecheGUI flaeche, WuerfelBankGUI bank, 
+							DummeChatGPTLoesungIchHasseAlles keinBockMehr,
+							StartmenueLogik menueDaten){
 		this.container = Eimer;
 		this.flaeche = flaeche;
 		this.bank = bank;
 		this.keinBockMehr = keinBockMehr;
 		this.spielLogik = spielLogik;
+		this.menueDaten = menueDaten;
 		
 		for(int i = 0; i < 5; i++) {		//das erstellt 5 würfel und fügt in jeder iteration den wuerfel den entsprechenden arrays hinzu
 			WuerfelLogik model = new WuerfelLogik(6);
@@ -165,16 +171,54 @@ public class WuerfelPresenter  {
 	
 
 	public void wuerfeln() {
+		int aktuellesMaxWuerfeln;
+		if(menueDaten.isDebugingModus()) {
+			aktuellesMaxWuerfeln = 999;
+		} else {
+			aktuellesMaxWuerfeln = 3;
+		}
 		
-		if(wurfAnzahl >= maxWuerfe) { return; } 				
-		getAlleWuerfelLogik().forEach(w -> {if (!w.istBehalten()) {w.wuerfeln(); } } );
-		getAlleWuerfelGUI().forEach(w -> {if (!w.getLogik().istBehalten()) {
-												int x, y;
-												x = getValidesX(flaeche);
-												y = getValidesY(flaeche);
-												int[] xy = korrigierteKollision(w, x, y);
-											  w.zeichneLinie(w.getButton(), xy[0], xy[1], true);											  										  
-											  }	});	
+		if(wurfAnzahl >= aktuellesMaxWuerfeln) { return; }
+		
+		if(menueDaten.isDebugingModus()) {
+			int debugWert = (wurfAnzahl % 6) +1;
+			
+			for(WuerfelLogik wuerfel : alleWuerfelLogik) {
+				if(!wuerfel.istBehalten()) {
+					wuerfel.setAugen(debugWert);
+					debugWert++;
+					if(debugWert > 6) debugWert = 1;
+				}
+			}
+		}
+		
+		//getAlleWuerfelLogik().forEach(w -> { if(menueDaten.isDebugingModus()) {
+			//int counter = 1;
+			//for(WuerfelLogik wuerfel : alleWuerfelLogik) {
+			//	if (!wuerfel.istBehalten()) {
+			//		wuerfel.setAugen(counter); 
+			//		counter++;
+			//		if(counter > 6) counter = 1;
+			//	}
+			//}
+		//}else {
+			//getAlleWuerfelLogik().forEach(wuerfel ->{
+			//	if(!w.istBehalten()) {
+				//	w.wuerfeln();
+				//}
+			//});	
+	//	}
+	//});
+		
+		getAlleWuerfelGUI().forEach(wuerfelGUI -> {
+			if (!wuerfelGUI.getLogik().istBehalten()) {
+				int x, y;
+				x = getValidesX(flaeche);
+				y = getValidesY(flaeche);
+				int[] xy = korrigierteKollision(wuerfelGUI, x, y);
+			  wuerfelGUI.zeichneLinie(wuerfelGUI.getButton(), xy[0], xy[1], true);											  										  
+			}	
+		});	
 			
 		
 		wurfAnzahl++;
@@ -184,8 +228,7 @@ public class WuerfelPresenter  {
 		for(WuerfelLogik wuerfel : alleWuerfelLogik) {
 			wuerfelWerte.add(wuerfel.getAugen());
 		}
-		keinBockMehr.wasPassiertWennWirEinenWuerfelWerfen(wuerfelWerte);
-		
+		keinBockMehr.wasPassiertWennWirEinenWuerfelWerfen(wuerfelWerte);	
 	}
 	
 	public void neueRunde() {

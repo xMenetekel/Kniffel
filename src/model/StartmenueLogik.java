@@ -8,6 +8,7 @@ public class StartmenueLogik {
 	
 	private boolean spielGestartet = false;
 	private boolean einstellungenOffen = false;
+	private boolean debugingModus = false;
 	
 	private int spieleranzahl;
 	private List<SpielerLogik> spielerListe = new ArrayList<>();
@@ -67,6 +68,14 @@ public class StartmenueLogik {
 
 	public void setHintergrundfarbe(Color hintergrundfarbe) {
 		this.hintergrundfarbe = hintergrundfarbe;
+	}
+	
+	public boolean isDebugingModus() {
+		return debugingModus;
+	}
+	
+	public void setDebugingModus(boolean debugMode) {
+		this.debugingModus = debugMode;
 	}
 	
 }

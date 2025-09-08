@@ -7,6 +7,7 @@ import java.awt.GridLayout;
 
 import javax.swing.BorderFactory;
 import javax.swing.JButton;
+import javax.swing.JCheckBox;
 import javax.swing.JDialog;
 import javax.swing.JOptionPane;
 
@@ -26,7 +27,22 @@ public class StartmenuePresenter {
 	
 	private void starteStartmenue() {
 		menueGUI.getExit().addActionListener(klick -> {System.exit(0);});
-		menueGUI.getEinstellungen().addActionListener(klick -> {}); //TODO muss noch implementiert werden
+		
+		menueGUI.getEinstellungen().addActionListener(klick -> {
+			JCheckBox debugBox = new JCheckBox("Debugging aktivieren");
+			debugBox.setSelected(menueDaten.isDebugingModus());
+			
+			int auswahl = JOptionPane.showConfirmDialog(menueGUI.getStartmenueGesamt(),
+					debugBox,
+					"Einstellungen",
+					JOptionPane.OK_CANCEL_OPTION,
+					JOptionPane.PLAIN_MESSAGE
+					);
+			if (auswahl == JOptionPane.OK_OPTION) {
+				menueDaten.setDebugingModus(debugBox.isSelected());
+			}
+			
+		});
 		menueGUI.getStarteSpiel().addActionListener(klick ->{
 			zeigeSpielerAuswahl(); //hier wird SpielfeldPresenter() aufgerufen
 		});
@@ -82,14 +98,6 @@ public class StartmenuePresenter {
 		}
 	}
 	
-	public void setMenueGUI(StartmenueGUI menueGUI) {
-		this.menueGUI = menueGUI;
-	}
-
-	public StartmenueLogik getMenueDaten() {
-		return menueDaten;
-	}
-
 	public void setMenueDaten(StartmenueLogik menueDaten) {
 		this.menueDaten = menueDaten;
 	}

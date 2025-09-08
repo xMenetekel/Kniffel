@@ -27,6 +27,7 @@ public class SpielfeldPresenter {
 	 private WuerfelflaechePresenter flaeche;
 	 private WuerfelnButtonPresenter wuerfelnKlick;
 	 private PunkteEintragenButtonPresenter punkteKlick;
+	 private StartmenueLogik menueDaten;
 	 
 	 private Kategorie ausgewaehlteKategorie = null; 
 	 private JLabel statusLabel;	
@@ -35,6 +36,7 @@ public class SpielfeldPresenter {
 	 
 	 public SpielfeldPresenter(Container Eimer, StartmenueLogik menueDaten, SpielLogik spielLogik) {
 		 
+		 this.menueDaten = menueDaten;
 		 this.spielLogik = spielLogik; 
 		 
 		 gui = new SpielfeldGUI(Eimer, this);
@@ -43,7 +45,7 @@ public class SpielfeldPresenter {
 		 flaeche = new WuerfelflaechePresenter();
 		 bank = new WuerfelbankPresenter();
 		 tabelle = new PunktetabellePresenter(menueDaten, spielLogik); 	
-		 wuerfel = new WuerfelPresenter(Eimer, spielLogik, flaeche.getGui(), bank.getGui(), tabelle);  			 	 
+		 wuerfel = new WuerfelPresenter(Eimer, spielLogik, flaeche.getGui(), bank.getGui(), tabelle, menueDaten);  			 	 
 		 spieler = new SpielerbankPresenter();
 		
 		 wuerfelnKlick = new WuerfelnButtonPresenter(wuerfel, tabelle);
