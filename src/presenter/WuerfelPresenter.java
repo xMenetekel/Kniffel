@@ -35,6 +35,8 @@ public class WuerfelPresenter  {
 	int wurfAnzahl = 0;
 	int maxWuerfe = 3;
 	
+	final int WUERFEL_GROESSE = 50;	
+	
 	//, PunkteTabelleGUI punkteTabelle,SpielLogik spielLogik
 	
 	public WuerfelPresenter(Container Eimer, SpielLogik spielLogik, 
@@ -75,8 +77,8 @@ public class WuerfelPresenter  {
 	public int getValidesX(WuerfelflaecheGUI flaeche) {
 		int validesX;
 		int xVon = (int) (flaeche.getProzentFlaecheX() * this.container.getWidth());
-		int xBis = (int) ((flaeche.getProzentFlaecheBreite() + flaeche.getProzentFlaecheX()) * this.container.getWidth());
-		validesX = new Random().nextInt(xBis-xVon)+xVon-50;		
+		int xBis = (int) ((flaeche.getProzentFlaecheBreite() * this.container.getWidth()) + xVon);
+		validesX = new Random().nextInt(xBis-xVon-WUERFEL_GROESSE)+xVon;		
 		
 		
 		return validesX;
@@ -84,12 +86,13 @@ public class WuerfelPresenter  {
 	public int getValidesY(WuerfelflaecheGUI flaeche) {
 		int validesY;
 		int YVon = (int) (flaeche.getProzentFlaecheY() * this.container.getHeight());
-		int YBis = (int) ((flaeche.getProzentFlaecheHoehe() + flaeche.getProzentFlaecheY()) * this.container.getHeight());
-		validesY = new Random().nextInt(YBis-YVon)+YVon;		
+		int YBis = (int) ((flaeche.getProzentFlaecheHoehe() * this.container.getHeight()) + YVon);
+		validesY = new Random().nextInt(YBis-YVon-WUERFEL_GROESSE)+YVon;		
 		
 		
 		return validesY;
 	}
+
 	/**
 	 * Der ganze Spaß korrigiert Kollisionen. Es muss die WuerfelGUI übergeben werden, da dort die fertigen x/y pos gespeichert werden. der JButton an sich hat durch
 	 * den Timer sehr unterschiedliche x/y Werte und dann wird die Kollisionsprüfung absoluter Mist. 
@@ -104,7 +107,7 @@ public class WuerfelPresenter  {
 	 * @return
 	 */
 		private int[] korrigierteKollision(WuerfelGUI aktuellerWuerfel, int zielX, int zielY) {
-			final int WUERFEL_GROESSE = 50;			
+				
 			boolean kollisionGefunden;
 			do {
 				kollisionGefunden = false;
