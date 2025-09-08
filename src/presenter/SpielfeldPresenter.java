@@ -3,16 +3,20 @@ package presenter;
 import java.awt.Component;
 import java.awt.Container;
 import java.awt.Font;
+import java.util.ArrayList;
 import java.util.HashMap;
+import java.util.List;
+import java.util.Map;
 
 import javax.swing.JLabel;
 import javax.swing.JTable;
 
-import gui.AbstractGUI;
+import gui.*;
 import gui.SpielfeldGUI;
 import gui.WuerfelBankGUI;
 import model.SpielfeldLogik;
 import model.StartmenueLogik;
+import model.WuerfelLogik;
 import model.Kategorie;
 import model.SpielLogik;
 
@@ -27,30 +31,41 @@ public class SpielfeldPresenter {
 	 private WuerfelflaechePresenter flaeche;
 	 private WuerfelnButtonPresenter wuerfelnKlick;
 	 private PunkteEintragenButtonPresenter punkteKlick;
-	 private StartmenueLogik menueDaten;
 	 
 	 private Kategorie ausgewaehlteKategorie = null; 
 	 private JLabel statusLabel;	
-	 
 	 private SpielLogik spielLogik; 
+	 private MoeglicheZuege moeglicheZuege = new MoeglicheZuege();
+	 private StartmenueLogik menueDaten;
 	 
-	 public SpielfeldPresenter(Container Eimer, StartmenueLogik menueDaten, SpielLogik spielLogik) {
+	
+
+	public SpielfeldPresenter(Container Eimer, SpielLogik spielLogik, StartmenueLogik menueDaten) {
 		 
 		 this.menueDaten = menueDaten;
 		 this.spielLogik = spielLogik; 
+		 this.menueDaten = menueDaten;
 		 
-		 gui = new SpielfeldGUI(Eimer, this);
+		 gui = new SpielfeldGUI(Eimer, this, menueDaten);
 		 logik = new SpielfeldLogik();
 		 
-		 flaeche = new WuerfelflaechePresenter();
-		 bank = new WuerfelbankPresenter();
-		 tabelle = new PunktetabellePresenter(menueDaten, spielLogik); 	
+		 flaeche = new WuerfelflaechePresenter(Eimer);
+		 bank = new WuerfelbankPresenter(Eimer);
+		 tabelle = new PunktetabellePresenter(Eimer, menueDaten, spielLogik); 	
 		 wuerfel = new WuerfelPresenter(Eimer, spielLogik, flaeche.getGui(), bank.getGui(), tabelle, menueDaten);  			 	 
-		 spieler = new SpielerbankPresenter();
+		 spieler = new SpielerbankPresenter(Eimer);
+
 		
-		 wuerfelnKlick = new WuerfelnButtonPresenter(wuerfel, tabelle);
-		 punkteKlick = new PunkteEintragenButtonPresenter(this);
+		 wuerfelnKlick = new WuerfelnButtonPresenter(Eimer, wuerfel, tabelle);
+		 punkteKlick = new PunkteEintragenButtonPresenter(Eimer, this);
+
+		 wuerfelnKlick.getGui().getKnopf().addActionListener(e->onWuerfelnClick());
+		 punkteKlick.getGui().getKnopf().addActionListener(e->eintragePunkteFuerAktuellenSpieler());
+
 		 
+		 if (tabelle.getGui() != null) {
+			 tabelle.getGui().setKategorieSelectListener(this::onKategorieAusgewaehlt);
+		 }
 		
 		 Eimer.add(flaeche.getGui().getPanel());
 		 Eimer.add(bank.getGui().getPanel());
@@ -61,8 +76,8 @@ public class SpielfeldPresenter {
 		 Eimer.add(gui.getPanel());
 		 
 		 rearrangiereAlles(Eimer);
+		 highlightAktuelleSpalte();
 		
-		 
 		 statusLabel = new JLabel();
 			statusLabel.setBounds((int)(Eimer.getWidth() * 0.1), (int)(Eimer.getHeight() * 0.05), (int)(Eimer.getWidth() * 0.3),30);
 			//font entfernt, hat es auf meinem rechner nicht richtig aufgeschlüsselt, sorry anthony
@@ -73,12 +88,38 @@ public class SpielfeldPresenter {
 			}else {
 				statusLabel.setText("Spiel wird initialisiert...");
 			}
-			
-			Eimer.add(statusLabel);
-		 
-		 
-		 
+			Eimer.add(statusLabel); 
 	}
+	 
+	 public void onWuerfelnClick() {
+	{
+	            tabelle.aktualisierePunkteTabelle();   //das müsste eigentlich nach jedem würfeln immer passieren, maybe consider removing the if?
+		 }
+		 if(spielLogik.getWuerfeAnzahl() < 3 && wuerfel.getWurfAnzahl() < wuerfel.getMaxWuerfe()) {
+			 
+			 wuerfel.wuerfeln();
+			 spielLogik.erhoeheWurfAnzahl();
+			 updateStatusLabel();
+			 
+			 List<Integer> wuerfelWerte = new ArrayList<>();
+			 for (WuerfelLogik wuerfelLogik : wuerfel.getAlleWuerfelLogik()) {
+				 wuerfelWerte.add(wuerfelLogik.getAugen());
+			 }
+			 System.out.println("Neue Würfelwerte: "+wuerfelWerte);
+			 
+			 moeglicheZuege.setWuerfelWerte(wuerfelWerte);
+			 Map<Kategorie,Integer> moeglichePunkte = moeglicheZuege.getAktiveMoeglichePunkte();
+			 tabelle.getGui().zeigeMoeglichePunkte(moeglichePunkte);
+			 System.out.println("Wuerfelwerte nach Wurf: "+ wuerfelWerte);
+		 }
+	 }
+	 
+	 public void onKategorieAusgewaehlt(Kategorie kategorie) {
+		 this.ausgewaehlteKategorie = kategorie;
+		 System.out.println("Kategorie Ausgewählt: "+kategorie);
+	 }
+	 
+	 
 
 	 public void rearrangiereAlles(Component fenstar) {
 		 rearrangiere(fenstar, flaeche.getGui());
@@ -88,7 +129,10 @@ public class SpielfeldPresenter {
 		 rearrangiere(fenstar, wuerfelnKlick.getGui());
 		 rearrangiere(fenstar, punkteKlick.getGui());
 		 rearrangiereWuerfel(fenstar, wuerfel, bank.getGui());
+		 
 	 }
+	 
+	 
 	 
 	 protected void rearrangiereWuerfel(Component e, WuerfelPresenter w, WuerfelBankGUI bank) {
 			int breite = e.getWidth();
@@ -114,9 +158,16 @@ public class SpielfeldPresenter {
 									(int)Math.floor(breite*gui.getProzentFlaecheBreite()),
 									(int)Math.floor(hoehe*gui.getProzentFlaecheHoehe()));
 			
+			if(!(gui instanceof PunkteTabelleGUI)){
+			gui.setzeneueGroesse((int)(breite * gui.getProzentFlaecheBreite()), (int)(hoehe * gui.getProzentFlaecheHoehe()));
+			}
 		}
 		
-	 
+		private void highlightAktuelleSpalte() {
+			if(tabelle != null && tabelle.getGui() != null) {
+				tabelle.getGui().highlightSpalte(spielLogik.getAktiverSpielerIndex());
+			}
+		}
 	 
 
 		private void updateStatusLabel() {
@@ -127,66 +178,43 @@ public class SpielfeldPresenter {
 		}
 		
 		public void eintragePunkteFuerAktuellenSpieler() {
-			if(ausgewaehlteKategorie != null) {
-				try {
-					int punkte = wuerfel.getMoeglicheZuege().berechnePunkte(ausgewaehlteKategorie);
-					int aktiverSpielerIndex = spielLogik.getAktiverSpielerIndex();
-					tabelle.getGui().tragePunkteEin(ausgewaehlteKategorie, punkte, aktiverSpielerIndex);
-					wuerfel.getMoeglicheZuege().entferneKategorie(ausgewaehlteKategorie);
-					tabelle.getGui().zeigeMoeglichePunkte(new HashMap<>());
-					ausgewaehlteKategorie = null;
-					JTable table = tabelle.getGui().getTable();
-					if(table != null) {
-						table.clearSelection();
-					}
-					spielLogik.naechsterSpieler();
-					tabelle.getGui().zeigeMoeglichePunkte(new HashMap<>());
-					if(tabelle.getGui().getTable() != null) {
-						tabelle.getGui().getTable().repaint();
-					}
-					tabelle.wasPassiertWennWirEineNeueRundeAusloesen(wuerfel.getAlleWuerfelLogik());
-					
-					updateStatusLabel();
-					System.out.println("Spieler " + (spielLogik.getAktiverSpielerIndex() + 1)+ "ist jetzt an der Reihe. Runde: " + spielLogik.getRunde());
-					
-				}catch(Exception e) {
-					System.out.println("Fehler beim Eintragen der Punkte" + e.getMessage());
-					e.printStackTrace();
-				}
-			} else {
-				System.out.println("Keine Kategorie ausgewählt!");
-			}
-		}
-		
-
-	 
-		
-		
+			 System.out.println("==PUNKTE EINTRAGEN==");
+			 System.out.println("AusgewählteKategorie: "+ausgewaehlteKategorie);
+			 System.out.println("Wuerfeanzahl: "+ spielLogik.getWuerfeAnzahl());
+			 System.out.println("Aktiver Spieler: "+spielLogik.getAktiverSpielerIndex());
+			 
+			 if(ausgewaehlteKategorie != null && spielLogik.getWuerfeAnzahl()>0) {
+				 try {
+				 List<Integer>wuerfelWerte = new ArrayList<>();
+				 for (WuerfelLogik wuerfelLogik : wuerfel.getAlleWuerfelLogik()) {
+					 wuerfelWerte.add(wuerfelLogik.getAugen());
+				 }
+				 int punkte = moeglicheZuege.berechnePunkte(ausgewaehlteKategorie, wuerfelWerte);
+				 System.out.println("Berechnete Punkte für "+ausgewaehlteKategorie + " : " + punkte	);
+				 tabelle.getGui().tragePunkteEin(ausgewaehlteKategorie, punkte, spielLogik.getAktiverSpielerIndex());
+				 
+				 spielLogik.setWuerfeAnzahl(0);
+				 
+				 spielLogik.naechsterSpieler();
+				 wuerfel.neueRunde();
+				 ausgewaehlteKategorie = null;
+				 updateStatusLabel();
+				 highlightAktuelleSpalte();
+				 tabelle.getGui().zeigeMoeglichePunkte(new HashMap<>());
+				 System.out.println("Punkte erfolgreich eingetragen!");
+				 
+				 }catch (Exception e) {
+					 System.out.println("Fehler beim Punkteeintragen: " + e.getMessage());
+					 e.printStackTrace();
+				 }
+			 }else {
+				 System.out.println("Kann keine Punkte eintragen -" + (ausgewaehlteKategorie == null ? "Keine Kategorie ausgewaehlt" : "noch nicht gewürfelt"));
+			 }
+		 }
 		
 		
 		
-		
-		
-		
-		
-		
-		
-		
-		
-		
-		
-		
-		
-		
-		
-		
-		
-		
-		
-		
-	 
-	 
-	 
+	
 	 
 	//Getting and Setting  
 	 
@@ -269,5 +297,12 @@ public class SpielfeldPresenter {
 	public SpielLogik getSpielLogik() {
 		 return spielLogik;
 	 }
+	public StartmenueLogik getMenueDaten() {
+			return menueDaten;
+		}
+	
+	public void setMenueDaten(StartmenueLogik menueDaten) {
+		this.menueDaten = menueDaten;
+	}
 
 }

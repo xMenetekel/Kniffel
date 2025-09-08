@@ -3,8 +3,12 @@ package gui;
 import java.awt.BorderLayout;
 import java.awt.Color;
 import java.awt.Component;
+import java.awt.Container;
 import java.awt.event.MouseAdapter;
 import java.awt.event.MouseEvent;
+import java.awt.event.KeyAdapter;
+import java.awt.event.KeyEvent;
+
 import java.util.HashMap;
 import java.util.Map;
 
@@ -30,41 +34,68 @@ public class PunkteTabelleGUI extends AbstractGUI {
 	private ZugTableModel tableModel;
 	private final int spielerAnzahl;
 	private SpielLogik spielLogik;
+	private KategorieSelectListener selectListener;
 	
+	private Map<String, Integer> finalePunkte = new HashMap<>();
 	
-
 	public JTable getTable() {
 		return this.table;
 	}
 	
-	public PunkteTabelleGUI(StartmenueLogik menueDaten,SpielLogik spielLogik) {
-		super(X, Y, B, H);
+
+	public PunkteTabelleGUI(Container Eimer, StartmenueLogik menueDaten,SpielLogik spielLogik) {
+		super(X, Y, B, H, Eimer);
+		
+		
+		
+
 		this.spielerAnzahl = menueDaten.getSpieleranzahl();
 		panel = new JPanel(new BorderLayout());
-		this.spielLogik = spielLogik;
-		tableModel = new ZugTableModel(menueDaten, spielLogik);
+		tableModel = new ZugTableModel(menueDaten);
 		table = new JTable(tableModel);
-		table.setRowHeight(40); // habs von 35 auf 40 angepasst idk if this is too high tho?
+		
+		macheTabelleNichtEditierbar();
+		table.setRowHeight(40);
 		Color mischmasch = new Color(200,224,170);
 		table.setBackground(mischmasch);
 		
-		table.setDefaultRenderer(Object.class, new HighlightingCellRenderer(spielLogik));
+		table.setDefaultRenderer(Object.class, new HighlightingCellRenderer());
+		
+		table.addKeyListener(new KeyAdapter(){
+			@Override
+			public void keyTyped(KeyEvent e) {
+				e.consume();
+			}
+			@Override
+			public void keyPressed(KeyEvent e) {
+				if (e.getKeyCode() == KeyEvent.VK_F2||
+					e.getKeyCode() == KeyEvent.VK_ENTER||
+					e.getKeyCode() == KeyEvent.VK_TAB||
+					e.getKeyCode() == KeyEvent.VK_SPACE) {
+					e.consume();
+				}
+					
+			}
+		});
 		
         table.addMouseListener(new MouseAdapter() {
             @Override
             public void mouseClicked(MouseEvent evt) {
-                int row = table.rowAtPoint(evt.getPoint());
-                int col = table.columnAtPoint(evt.getPoint());
-                
-                if (col >= 2) { // Nur Punkte-Spalten
+            	
+            	if (evt.getClickCount()==2) {
+                    int row = table.rowAtPoint(evt.getPoint());
+                    int col = table.columnAtPoint(evt.getPoint());
+  
+
+                if (col >= 2) { 
+                	
                     Kategorie kategorie = Kategorie.fromTabellenIndex(row);
                     if (kategorie != null && tableModel.hatMoeglichePunkteFuerKategorie(kategorie)) {
-                        System.out.println("Kategorie gewählt: " + kategorie);
-                        int punkte = tableModel.getMoeglichePunkteFuerKategorie(kategorie);
-                        System.out.println("Punkte: " + punkte);
-                        
+                    	selectListener.onKategorieSelected(kategorie);
+                    	System.out.println("Kategorie ausgewählt: "+ kategorie);
                     }
                 }
+            	}
             }
             
         });
@@ -73,44 +104,114 @@ public class PunkteTabelleGUI extends AbstractGUI {
 		
 		JScrollPane scroll = new JScrollPane(table);
 		panel.add(scroll, BorderLayout.CENTER);
+		
+		this.Eimer.add(panel);
+		
+		
 				
 		}
+	
+	
+	public void macheTabelleNichtEditierbar() {
+		if(table != null) {
+			table.setEnabled(true);
+			table.setFocusable(false);
+			table.setRowSelectionAllowed(false);
+			table.setColumnSelectionAllowed(false);
+			table.setCellSelectionEnabled(false);
+			
+			table.setDefaultEditor(Object.class, null);
+			table.setDefaultEditor(Object.class, null);
+			table.setDefaultEditor(String.class, null);
+			table.setDefaultEditor(Integer.class, null);
+			table.setDefaultEditor(Double.class, null);
+			table.setDefaultEditor(Boolean.class, null);
+
+			
+			if(tableModel != null) {
+				
+			}
+		}
+	}
 	
 
 	
 	public void zeigeMoeglichePunkte(Map<Kategorie, Integer> moeglichePunkte) {
 	    if (tableModel != null) {
 	        tableModel.setMoeglichePunkte(moeglichePunkte); 
+	        macheTabelleNichtEditierbar();
 	    }
 	}
 
     
     public void tragePunkteEin(Kategorie kategorie, int punkte, int spielerIndex) {
-        tableModel.setValueAt(punkte, kategorie.getTabellenIndex(), 2 + spielerIndex);
-        tableModel.entferneMoeglicheKategorie(kategorie);
+    	System.out.println("Trage "+ punkte + "Punkte für" + kategorie + "bei Spieler"+ spielerIndex + "Ein");
+    	try {
+    		int row= kategorie.getTabellenIndex();
+    		int column = 2+spielerIndex;
+    		tableModel.setValueAt(punkte, kategorie.getTabellenIndex(), 2 + spielerIndex);
+    		macheTabelleNichtEditierbar();
+            tableModel.entferneMoeglicheKategorie(kategorie);
+            table.repaint();
+            System.out.println("Punkte erfolgreich eingetragen");
+    	}catch(Exception e) {
+    		System.out.println("Fehler in tragePunkteEin"+ e.getMessage());
+    		e.printStackTrace();
+    	}
+    }
+    
+    public void clearMoeglichePunkte() {
+    	if(tableModel != null) {
+    		tableModel.resetMoeglichePunkte();
+    		macheTabelleNichtEditierbar();
+    		table.repaint();
+    	}
+    }
+    
+    public void highlightSpalte(int spielerIndex) {
+    	if(tableModel != null) {
+    		tableModel.setHighlightedSpalte(2+spielerIndex);
+    	}
+    	if (table != null) {
+    		HighlightingCellRenderer renderer = (HighlightingCellRenderer)table.getDefaultRenderer(Object.class);
+    		if (renderer != null) {
+    			renderer.setHighlightedSpalte(2+spielerIndex);
+    		}
+    		macheTabelleNichtEditierbar();
+    		table.repaint();
+    	}
+    	System.out.println("Tabelle für Spieler" + (spielerIndex +1)+"aktualisiert.");
     }
 	
 	static class HighlightingCellRenderer extends DefaultTableCellRenderer {
-		private SpielLogik spielLogik;
-		
-		public HighlightingCellRenderer(SpielLogik spielLogik) {
-			this.spielLogik = spielLogik;
+		private int highlightedSpalte = -1;
+		public void setHighlightedSpalte (int spalte) {
+			this.highlightedSpalte = spalte;
 		}
+		
 		@Override
 		public Component getTableCellRendererComponent(JTable table, Object value, boolean isSelected, boolean hasFocus, int row, int column) {
 			Component c = super.getTableCellRendererComponent(table, value, isSelected, hasFocus, row, column);
-			if (column == 2 + spielLogik.getAktiverSpielerIndex()) {
+			
+			
+			
+			if (column >= 2 && table.getModel().getValueAt(row,  column)!=null) {
+				c.setBackground(new Color(200,255,200));
+				c.setForeground(Color.BLACK);
+				setToolTipText("Fester Wert - Kann nicht geändert werden");
+			} else if(column == highlightedSpalte && value != null) {
 				c.setBackground(new Color(220,240,255));
-			} else {
+				setToolTipText("MöglichePunkte - doppelklick zum Auswählen");
+			}else {
 				c.setBackground(table.getBackground());
+				c.setForeground(table.getBackground());
+				setToolTipText(null);
 			}
-			if (column == 0) {
-				SymbolCellRenderer symbolRenderer = new SymbolCellRenderer();
-				return symbolRenderer.getTableCellRendererComponent(table,value,isSelected,hasFocus,row,column);
-			}
+	
 			return c;
 		}
 	}
+	
 	
 	static class SymbolCellRenderer extends DefaultTableCellRenderer {
 	    @Override
@@ -146,15 +247,22 @@ public class PunkteTabelleGUI extends AbstractGUI {
 		
 	}
 	
+	public interface KategorieSelectListener{
+		void onKategorieSelected(Kategorie kategorie);
+	}
+	
+	public void setKategorieSelectListener(KategorieSelectListener listener) {
+		this.selectListener = listener;
+	}
+	
 	static class ZugTableModel extends AbstractTableModel{
 		private String[] columnNames;
 		private Object[][] data;
 		private final int spielerAnzahl; //muss später übergeben werden!!!!Wichtig!!!ToDo
 		private Map<Kategorie, Integer> moeglichePunkte = new HashMap<>();
-		private SpielLogik spielLogik;
+		private int highlightedSpalte = -1;
 		
-		public ZugTableModel(StartmenueLogik menueDaten, SpielLogik spielLogik) {
-			this.spielLogik = spielLogik;
+		public ZugTableModel(StartmenueLogik menueDaten) {
 			this.spielerAnzahl = menueDaten.getSpieleranzahl();
 			columnNames = new String[2 + spielerAnzahl];
 			columnNames[0] = "Kategorie";
@@ -209,7 +317,23 @@ public class PunkteTabelleGUI extends AbstractGUI {
 		}
 		
         public void setMoeglichePunkte(Map<Kategorie, Integer> moeglichePunkte) {
-            this.moeglichePunkte = moeglichePunkte;
+        	Map<Kategorie,Integer>gefiltertePunkte = new HashMap<>();
+        	for(Map.Entry<Kategorie, Integer> entry : moeglichePunkte.entrySet()) {
+        		Kategorie kategorie = entry.getKey();
+        		int row = kategorie.getTabellenIndex();
+        		boolean hatFestenWert = false;
+        		for(int col = 2;col<getColumnCount(); col++) {
+        			if(data[row][col] != null) {
+        				hatFestenWert = true;
+        				break;
+        			}
+        		}
+        		if(!hatFestenWert) {
+        			gefiltertePunkte.put(kategorie,entry.getValue());
+        		}
+        	}
+        	
+            this.moeglichePunkte = gefiltertePunkte;
             fireTableDataChanged(); 
         }
 
@@ -226,10 +350,8 @@ public class PunkteTabelleGUI extends AbstractGUI {
         	fireTableDataChanged();
         }
         
-        public void resetMoeglichePunkte() {
-        	moeglichePunkte.clear();
-        	fireTableDataChanged();
-        }
+
+
 		
 		
 		@Override
@@ -242,18 +364,31 @@ public class PunkteTabelleGUI extends AbstractGUI {
 			return columnNames.length;
 		}
 		
+		public void setHighlightedSpalte(int spalte) {
+			this.highlightedSpalte = spalte	;
+			fireTableDataChanged();
+		}
 		
+		public void resetMoeglichePunkte() {
+			moeglichePunkte.clear();
+			fireTableDataChanged();
+			System.out.println("MoeglichePunkte zurückgeetzt");
+		}
 		
         @Override
         public Object getValueAt(int row, int column) {
-            // Zeige mögliche Punkte in grau oder speziell formatieren
-            if (column == 2 + spielLogik.getAktiverSpielerIndex() && !moeglichePunkte.isEmpty()) {
+        	
+        	if(column >= 2 && data [row][column] != null) {
+        		return data [row][column] ;
+        	}
+            
+            if (column == highlightedSpalte && !moeglichePunkte.isEmpty()) {
                 Kategorie kategorie = Kategorie.fromTabellenIndex(row);
                 if (kategorie != null && moeglichePunkte.containsKey(kategorie)) {
                     return moeglichePunkte.get(kategorie);
                 }
             }
-            return data[row][column];
+            return null;
         }
 		
 		@Override
@@ -262,7 +397,6 @@ public class PunkteTabelleGUI extends AbstractGUI {
 		}
 		
 		@Override
-		// Datentype der Spalten 
 		public Class<?> getColumnClass(int column){
 			if(column == 0) return Object.class; // Bilder( und Text
 			if(column >= 2) return Integer.class; // Spieler
@@ -271,7 +405,7 @@ public class PunkteTabelleGUI extends AbstractGUI {
 		
 		@Override
 		public boolean isCellEditable(int row, int column) {
-			return column >=2; //nur Punkte editierbar
+			return false;
 		}
 		
 		@Override 

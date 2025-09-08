@@ -1,5 +1,7 @@
 package presenter;
 
+import java.awt.Container;
+
 import gui.WuerfelnButtonGUI;
 import model.WuerfelnButtonLogik;
 
@@ -10,21 +12,17 @@ public class WuerfelnButtonPresenter {
 	private WuerfelPresenter wuerfel;
 	private PunktetabellePresenter tabelle;
 
-	public WuerfelnButtonPresenter(WuerfelPresenter wuerfel, PunktetabellePresenter tabelle) {
+	public WuerfelnButtonPresenter(Container Eimer, WuerfelPresenter wuerfel, PunktetabellePresenter tabelle) {
 		logik = new WuerfelnButtonLogik();
-		gui = new WuerfelnButtonGUI();
-		gui.getButton().addActionListener(klick -> { WuerfelnButtonGeklickt(); }); 
+		gui = new WuerfelnButtonGUI(Eimer);
+		
+		
+		
 		this.wuerfel = wuerfel;
 		this.tabelle = tabelle;
 	}
 	
-	public void WuerfelnButtonGeklickt() {
 	
-		wuerfel.wuerfeln(); 
-		if (wuerfel.getWurfAnzahl() == wuerfel.getMaxWuerfe()) {
-            tabelle.aktualisierePunkteTabelle();
-		}
-	}
 
 	
 	

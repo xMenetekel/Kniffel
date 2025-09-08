@@ -2,13 +2,16 @@ package presenter;
 
 import model.*;
 
+import java.awt.Container;
 import java.awt.Dimension;
 import java.awt.GridLayout;
+import java.util.List;
 
 import javax.swing.BorderFactory;
 import javax.swing.JButton;
 import javax.swing.JCheckBox;
 import javax.swing.JDialog;
+import javax.swing.JFrame;
 import javax.swing.JOptionPane;
 
 import gui.*;
@@ -17,12 +20,18 @@ public class StartmenuePresenter {
 	
 	private StartmenueGUI menueGUI;
 	private StartmenueLogik menueDaten;
+	private JFrame hauptfenster;
 
 
-	public StartmenuePresenter() {
-		this.menueGUI = new StartmenueGUI();
+
+	public StartmenuePresenter(JFrame hauptfenster, Container Eimer) {
+		this.hauptfenster = hauptfenster;
+		this.menueGUI = new StartmenueGUI(Eimer);
 		this.menueDaten = new StartmenueLogik();
 		starteStartmenue();
+		Eimer.revalidate();
+		Eimer.repaint();
+		
 	}
 	
 	private void starteStartmenue() {
@@ -32,7 +41,7 @@ public class StartmenuePresenter {
 			JCheckBox debugBox = new JCheckBox("Debugging aktivieren");
 			debugBox.setSelected(menueDaten.isDebugingModus());
 			
-			int auswahl = JOptionPane.showConfirmDialog(menueGUI.getStartmenueGesamt(),
+			int auswahl = JOptionPane.showConfirmDialog(menueGUI.getEimer(),
 					debugBox,
 					"Einstellungen",
 					JOptionPane.OK_CANCEL_OPTION,
@@ -52,7 +61,7 @@ public class StartmenuePresenter {
 	
 	private void zeigeSpielerAuswahl() {
 		//Hauptfenster Blockieren und eingabe User
-		JDialog abfrage = new JDialog(menueGUI.getStartmenueGesamt(), "Anzahl Spieler",true);
+		JDialog abfrage = new JDialog(hauptfenster, "Anzahl Spieler",true);
 		abfrage.setLayout(new GridLayout(2,2,15,15)); //Abstand zwischenButtons
 		abfrage.getRootPane().setBorder(BorderFactory.createEmptyBorder(25, 25, 25, 25));
 		//Banstand von Button zu Fenster oben, links, unten, rechts
@@ -69,35 +78,69 @@ public class StartmenuePresenter {
 				menueDaten.setSpieleranzahl(anzahl); //speichern 
 				abfrage.dispose(); //schließen
 				
-				benenneSpieler(anzahl); //Namen hinzufügen
+				SpielerDaten(anzahl); //Namen hinzufügen
 				
 				SpielLogik spielLogik = new SpielLogik();
 				spielLogik.setSpieler(menueDaten.getSpielerListe()); //Initialisierung Spiellogik mit Spielern
 				
-				new SpielfeldPresenter(menueGUI.getEimer(), menueDaten, spielLogik);
+				new SpielfeldPresenter(menueGUI.getEimer(), spielLogik, menueDaten);
 				
-				menueGUI.getStartmenueGesamt().setVisible(true);
+				menueGUI.getEimer().setVisible(true);
 			});
 			abfrage.add(druecker);
 		}
 		abfrage.pack(); // größe anpassen es könnte so einfach sein
-		abfrage.setLocationRelativeTo(menueGUI.getStartmenueGesamt()); //schön zentrieren
+		abfrage.setLocationRelativeTo(menueGUI.getEimer()); //schön zentrieren
 		abfrage.setVisible(true); 
 	}
 	
-	private void benenneSpieler(int spieleranzahl) {
+	private void SpielerDaten(int spieleranzahl) {
 		for(int i = 0; i < spieleranzahl; i++) {
 			String name = JOptionPane.showInputDialog(
-					menueGUI.getStartmenueGesamt(),
+					menueGUI.getEimer(),
 					"Name fuer Spieler " + (i+1) + ":",
 					"Spieler benennen",
 					JOptionPane.PLAIN_MESSAGE);
+			
+
+			int iconIndex = icons(i);
+			
 			if(name != null) {
 				menueDaten.setSpielerName(i, name);
+				menueDaten.setSpielerIcon(i, iconIndex);
 			}
 		}
 	}
 	
+	private int icons(int indexSpieler) {
+		
+		List<JButton> buttons = menueGUI.getIconButtons();
+		Object[] liste = new Object[buttons.size()];
+		for(int i = 0; i < buttons.size(); i++){
+			liste[i] = buttons.get(i).getIcon();
+		}
+												
+		int auswahl = JOptionPane.showOptionDialog(
+				menueGUI.getEimer(), 
+				"Wähle ein Icon :)", 
+				"Icon Auswahl",
+				JOptionPane.DEFAULT_OPTION, 
+				JOptionPane.PLAIN_MESSAGE,
+				null, 
+				liste, 
+				liste[0]);
+		
+		return auswahl;
+	}
+	
+	public void setMenueGUI(StartmenueGUI menueGUI) {
+		this.menueGUI = menueGUI;
+	}
+
+	public StartmenueLogik getMenueDaten() {
+		return menueDaten;
+	}
+
 	public void setMenueDaten(StartmenueLogik menueDaten) {
 		this.menueDaten = menueDaten;
 	}

@@ -186,9 +186,14 @@ public class WuerfelPresenter  {
 			for(WuerfelLogik wuerfel : alleWuerfelLogik) {
 				if(!wuerfel.istBehalten()) {
 					wuerfel.setAugen(debugWert);
-					debugWert++;
-					if(debugWert > 6) debugWert = 1;
+			
 				}
+			} 
+		}else {
+			for(WuerfelLogik wuerfel : alleWuerfelLogik) {
+				if(!wuerfel.istBehalten()) {
+					wuerfel.wuerfeln();
+				}		
 			}
 		}
 		
@@ -223,31 +228,23 @@ public class WuerfelPresenter  {
 		
 		wurfAnzahl++;
 		
-		spielLogik.erhoeheWurfAnzahl();
 		List<Integer> wuerfelWerte = new ArrayList<>();
 		for(WuerfelLogik wuerfel : alleWuerfelLogik) {
 			wuerfelWerte.add(wuerfel.getAugen());
 		}
-		keinBockMehr.wasPassiertWennWirEinenWuerfelWerfen(wuerfelWerte);	
+		if(keinBockMehr != null) {
+			keinBockMehr.wasPassiertWennWirEinenWuerfelWerfen(wuerfelWerte);
+
+		}
+		System.out.println("Wurf"+ wurfAnzahl + "/" + maxWuerfe + "-Würfel: "+ wuerfelWerte);
 	}
 	
 	public void neueRunde() {
-	  	wurfAnzahl = 0;
-        spielLogik.setWuerfeAnzahl(0);
+		wurfAnzahl =0;
+	  	spielLogik.setWuerfeAnzahl(0); 
         for (WuerfelLogik wuerfel : alleWuerfelLogik) {
             wuerfel.setBehalten(false);
-            wuerfel.wuerfeln();
-        }
-        for (WuerfelGUI gui : alleWuerfelGUI) {
-            gui.fresherButton();
-            int x = getValidesX(flaeche);
-            int y = getValidesY(flaeche);
-            int[] xy = korrigierteKollision(gui,x,y);
-            gui.zeichneLinie(gui.getButton(), xy[0], xy[1], false);
-        }
-        moeglicheZuege.getAktiveMoeglichePunkte().clear();
-        if (keinBockMehr != null) {
-        	keinBockMehr.zeigeMoeglichePunkte(new HashMap<>());
+            
         }
         
         System.out.println("Neue Runde Gestartet");

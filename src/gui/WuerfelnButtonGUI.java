@@ -1,8 +1,10 @@
 package gui;
 
+import java.awt.Container;
 import java.awt.event.ComponentAdapter;
 import java.awt.event.ComponentEvent;
 
+import javax.swing.ImageIcon;
 import javax.swing.JButton;
 import javax.swing.JPanel;
 import javax.swing.JTable;
@@ -11,36 +13,32 @@ import javax.swing.JTable;
 
 public class WuerfelnButtonGUI extends AbstractGUI{
 	
-	private JButton wuerfeln;
-
-	private static final double X = 0.156;
-	private static final double Y = 0.55;	
-	private static final double B = 0.15;	
-	private static final double H = 0.030165913;	
 	
-	public WuerfelnButtonGUI(){
-		super(X, Y, B, H);
-		this.wuerfeln = new JButton("Wuerfeln");
+
+	private static final double X = 0.12;
+	private static final double Y = 0.51;	
+	private static final double B = 0.25;	
+	private static final double H = 0.07;	
+	
+	public WuerfelnButtonGUI(Container Eimer){
+		super(X, Y, B, H, Eimer);
+		knopf = new JButton();
 		
+		bildIcon = new ImageIcon("Other/wuerfelnButton.jpg");		
 		
 		panel.addComponentListener(new ComponentAdapter() {
 			@Override
 			public void componentResized(ComponentEvent e) {
-				wuerfeln.setSize(panel.getSize());
+				knopf.setSize(panel.getSize());
 			}
 		});
-		
-		panel.add(wuerfeln);
+		setzeneueGroesse((int)(B * Eimer.getWidth()), (int)(H * Eimer.getHeight()));
+		knopf.setIcon(bild.getIcon());
+		knopf.setVisible(true);
+		panel.add(knopf);
 		
 	}
-	
 
-	public JButton getButton() {
-		return wuerfeln;
-	}
-	public void setButton(JButton wuerfeln) {
-		this.wuerfeln = wuerfeln;
-	}
 	
 
 }

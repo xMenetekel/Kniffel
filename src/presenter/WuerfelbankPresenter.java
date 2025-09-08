@@ -1,5 +1,7 @@
 package presenter;
 
+import java.awt.Container;
+
 import gui.WuerfelBankGUI;
 import model.WuerfelbankLogik;
 
@@ -7,9 +9,9 @@ public class WuerfelbankPresenter {
 	private WuerfelBankGUI gui;
 	private WuerfelbankLogik logik;
 	
-	public WuerfelbankPresenter() {
+	public WuerfelbankPresenter(Container Eimer) {
 		
-		gui = new WuerfelBankGUI();
+		gui = new WuerfelBankGUI(Eimer);
 		logik = new WuerfelbankLogik();
 		
 	}

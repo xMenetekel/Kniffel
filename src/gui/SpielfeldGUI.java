@@ -25,16 +25,26 @@ import model.SpielLogik;
 
 public class SpielfeldGUI extends AbstractGUI{
 	
-	/*	
-	private SpielLogik spielLogik;
+	private SpielfeldPresenter presenter;
+	private WuerfelnButtonGUI wuerfelnButton;
+	private PunkteEintragenButtonGUI punkteEintragenButton;
+	private PunkteTabelleGUI punkteTabelle;
+	private StartmenueLogik menueDaten;
 	
+
 	
 	private PunkteEintragenButtonGUI punkteEintragen;	
 	private Kategorie ausgewaehlteKategorie = null; 
-	*/
 	
-	public SpielfeldGUI(Container Eimer, SpielfeldPresenter presenter) {
-		super(1,1,1,1);
+	
+	
+	public SpielfeldGUI(Container Eimer, SpielfeldPresenter presenter, StartmenueLogik menueDaten) {
+		super(1,1,1,1, Eimer);
+		this.presenter = presenter;
+		this.menueDaten = menueDaten;
+		
+		
+
 		
 		Eimer.removeAll();
 		Eimer.setLayout(null);
@@ -44,7 +54,8 @@ public class SpielfeldGUI extends AbstractGUI{
 		panel.add(bild);
 		setzeneueGroesse(Eimer.getHeight(),Eimer.getWidth());
 		
-	
+		Eimer.revalidate();
+		Eimer.repaint();
 		
 		Eimer.addComponentListener(new ComponentAdapter() { //der ganze spaß hier ist dafür da das beim neu ziehen alles prozentual angepasst wird
 			@Override
@@ -53,9 +64,18 @@ public class SpielfeldGUI extends AbstractGUI{
 				
 			}
 		});
-		
-		
-		
+	}
+	
+	public WuerfelnButtonGUI getWuerfelnButton() {
+		return wuerfelnButton;
+	}
+	
+	public PunkteEintragenButtonGUI getPunkteEintragenButton() {
+		return punkteEintragenButton;
+	}
+	
+	public PunkteTabelleGUI getPunkteTabelle() {
+		return punkteTabelle;
 	}
 	
 }
