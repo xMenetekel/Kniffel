@@ -1,27 +1,36 @@
 package presenter;
 
 import java.awt.Container;
+import java.util.List;
 
 import javax.swing.JButton;
 
 import gui.SpielerbankGUI;
+import model.SpielLogik;
 import model.SpielerLogik;
 
 public class SpielerbankPresenter {
 	
 	private SpielerbankGUI gui;
-	private SpielerLogik logik;
+	private List<SpielerLogik> spielerListe;
+	private SpielLogik logik;
 	
-	public SpielerbankPresenter(Container Eimer) {
-		
-		logik = new SpielerLogik();
+	public SpielerbankPresenter(Container Eimer, List<SpielerLogik> spielerListe, SpielLogik logik) {
+		this.spielerListe = spielerListe;		
+		this.logik = logik;
 		gui = new SpielerbankGUI(Eimer, this);
 		
 		
 	}
+	public int getAktiverSpieler() { //lmao
+		logik.getAktiverSpieler();
+		return 0;
+	}
 	
-	public String getBildname() {
-		switch(logik.getIconIndex()) {
+	
+
+	public String getBildname(int i) {
+		switch(spielerListe.get(i).getIconIndex()) {
 		case 0:
 			return "bebi";					
 		case 1:
@@ -65,14 +74,20 @@ public class SpielerbankPresenter {
 	public void setGui(SpielerbankGUI gui) {
 		this.gui = gui;
 	}
+	public List<SpielerLogik> getSpielerListe() {
+		return spielerListe;
+	}
 
-	public SpielerLogik getLogik() {
+	public void setSpielerListe(List<SpielerLogik> spielerListe) {
+		this.spielerListe = spielerListe;
+	}
+	public SpielLogik getLogik() {
 		return logik;
 	}
-
-	public void setLogik(SpielerLogik logik) {
+	public void setLogik(SpielLogik logik) {
 		this.logik = logik;
 	}
+
 	
 	
 }

@@ -53,7 +53,7 @@ public class SpielfeldPresenter {
 		 bank = new WuerfelbankPresenter(Eimer);
 		 tabelle = new PunktetabellePresenter(Eimer, menueDaten, spielLogik); 	
 		 wuerfel = new WuerfelPresenter(Eimer, spielLogik, flaeche.getGui(), bank.getGui(), tabelle, menueDaten);  			 	 
-		 spieler = new SpielerbankPresenter(Eimer);
+		 spieler = new SpielerbankPresenter(Eimer, menueDaten.getSpielerListe(), spielLogik);
 
 		
 		 wuerfelnKlick = new WuerfelnButtonPresenter(Eimer, wuerfel, tabelle);

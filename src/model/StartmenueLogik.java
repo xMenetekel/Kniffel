@@ -70,8 +70,8 @@ public class StartmenueLogik {
 		this.hintergrundfarbe = hintergrundfarbe;
 	}
 
-	public void setSpielerIcon(int i, int iconIndex) {
-		spielerListe.get(i).setIconIndex(iconIndex);
+	public void setSpielerIcon(int index, int iconIndex) {
+		spielerListe.get(index).setIconIndex(iconIndex);
 		
 	}
 	

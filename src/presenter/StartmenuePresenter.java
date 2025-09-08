@@ -104,7 +104,6 @@ public class StartmenuePresenter {
 			
 
 			int iconIndex = icons(i);
-			
 			if(name != null) {
 				menueDaten.setSpielerName(i, name);
 				menueDaten.setSpielerIcon(i, iconIndex);
@@ -119,6 +118,7 @@ public class StartmenuePresenter {
 		for(int i = 0; i < buttons.size(); i++){
 			liste[i] = buttons.get(i).getIcon();
 		}
+		
 												
 		int auswahl = JOptionPane.showOptionDialog(
 				menueGUI.getEimer(), 

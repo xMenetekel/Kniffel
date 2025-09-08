@@ -19,7 +19,7 @@ public class SpielerbankGUI extends AbstractGUI{
 
 	public SpielerbankGUI(Container Eimer, SpielerbankPresenter presenter) {
 		super(X, Y, B, H, Eimer);
-		bildIcon = new ImageIcon("Other/" + presenter.getBildname() + ".jpg" );		
+		bildIcon = new ImageIcon("Other/" + presenter.getBildname(presenter.getAktiverSpieler()) + ".jpg" );		
 			
 		setzeneueGroesse((int)(B * Eimer.getWidth()), (int)(H * Eimer.getHeight()));
 		panel.add(bild);				
