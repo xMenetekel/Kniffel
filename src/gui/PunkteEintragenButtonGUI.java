@@ -10,7 +10,7 @@ import javax.swing.JPanel;
 
 public class PunkteEintragenButtonGUI extends AbstractGUI{
 
-	private JButton punkteEintragen;
+	
 
 	private static final double X = 0.12;
 	private static final double Y = 0.678;	
@@ -20,30 +20,25 @@ public class PunkteEintragenButtonGUI extends AbstractGUI{
 	
 	public PunkteEintragenButtonGUI(Container Eimer){
 		super(X, Y, B, H, Eimer);
-		this.punkteEintragen = new JButton();
+		knopf = new JButton();
 		
 		bildIcon = new ImageIcon("Other/punkteButton.jpg");
 		
 		panel.addComponentListener(new ComponentAdapter() {
 			@Override
 			public void componentResized(ComponentEvent e) {
-				punkteEintragen.setSize(panel.getSize());
+				knopf.setSize(panel.getSize());
 			}
 		});
 		setzeneueGroesse((int)(B * Eimer.getWidth()), (int)(H * Eimer.getHeight()));
 		
-		punkteEintragen.setIcon(bild.getIcon());
+		knopf.setIcon(bild.getIcon());
 		
-		panel.add(punkteEintragen);
+		panel.add(knopf);
 		
 	}
 	
-	public JButton getButton() {
-		return punkteEintragen;
-	}
-	public void setButton(JButton punkteButton) {
-		this.punkteEintragen = punkteButton;
-	}
+	
 	
 
 }

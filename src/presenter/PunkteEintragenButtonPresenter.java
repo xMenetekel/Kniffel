@@ -13,7 +13,9 @@ public class PunkteEintragenButtonPresenter {
 	public PunkteEintragenButtonPresenter(Container Eimer, SpielfeldPresenter arsch) {
 		gui = new PunkteEintragenButtonGUI(Eimer);
 		logik = new PunkteEintragenButtonLogik();
-		gui.getButton().addActionListener(klick -> {punkteEintragenButtonGeklickt();});
+		
+		gui.getKnopf().addActionListener(klick -> {punkteEintragenButtonGeklickt();});
+		
 		this.ichBraucheNurDieseEineMethodeEsIstHalbDreiNachtsIchWillInsBett = arsch;
 	}
 	

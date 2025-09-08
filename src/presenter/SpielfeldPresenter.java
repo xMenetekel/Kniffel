@@ -11,7 +11,7 @@ import java.util.Map;
 import javax.swing.JLabel;
 import javax.swing.JTable;
 
-import gui.AbstractGUI;
+import gui.*;
 import gui.SpielfeldGUI;
 import gui.WuerfelBankGUI;
 import model.SpielfeldLogik;
@@ -59,8 +59,8 @@ public class SpielfeldPresenter {
 
 
 		 
-		 wuerfelnKlick.getGui().getButton().addActionListener(e->onWuerfelnClick());
-		 punkteKlick.getGui().getButton().addActionListener(e->onPunkteEintragenClick());
+		 wuerfelnKlick.getGui().getKnopf().addActionListener(e->onWuerfelnClick());
+		 punkteKlick.getGui().getKnopf().addActionListener(e->onPunkteEintragenClick());
 		 
 		 if (tabelle.getGui() != null) {
 			 tabelle.getGui().setKategorieSelectListener(this::onKategorieAusgewaehlt);
@@ -159,6 +159,7 @@ public class SpielfeldPresenter {
 		 rearrangiere(fenstar, wuerfelnKlick.getGui());
 		 rearrangiere(fenstar, punkteKlick.getGui());
 		 rearrangiereWuerfel(fenstar, wuerfel, bank.getGui());
+		 
 	 }
 	 
 	 
@@ -187,6 +188,9 @@ public class SpielfeldPresenter {
 									(int)Math.floor(breite*gui.getProzentFlaecheBreite()),
 									(int)Math.floor(hoehe*gui.getProzentFlaecheHoehe()));
 			
+			if(!(gui instanceof PunkteTabelleGUI)){
+			gui.setzeneueGroesse((int)(breite * gui.getProzentFlaecheBreite()), (int)(hoehe * gui.getProzentFlaecheHoehe()));
+			}
 		}
 		
 		private void highlightAktuelleSpalte() {

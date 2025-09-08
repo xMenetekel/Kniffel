@@ -6,6 +6,9 @@ import javax.swing.ImageIcon;
 import javax.swing.JLabel;
 import javax.swing.JPanel;
 
+
+import presenter.SpielerbankPresenter;
+
 public class SpielerbankGUI extends AbstractGUI{	
 	
 	private static final double X = 0.0625;
@@ -14,9 +17,9 @@ public class SpielerbankGUI extends AbstractGUI{
 	private static final double H = 0.142857;	
 	
 
-	public SpielerbankGUI(Container Eimer) {
+	public SpielerbankGUI(Container Eimer, SpielerbankPresenter presenter) {
 		super(X, Y, B, H, Eimer);
-		bildIcon = new ImageIcon("Other/spielerbank.jpg" );		
+		bildIcon = new ImageIcon("Other/" + presenter.getBildname() + ".jpg" );		
 			
 		setzeneueGroesse((int)(B * Eimer.getWidth()), (int)(H * Eimer.getHeight()));
 		panel.add(bild);				

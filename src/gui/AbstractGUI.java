@@ -4,6 +4,7 @@ import java.awt.Container;
 import java.awt.Image;
 
 import javax.swing.ImageIcon;
+import javax.swing.JButton;
 import javax.swing.JLabel;
 import javax.swing.JPanel;
 
@@ -11,7 +12,7 @@ public abstract class AbstractGUI{
 	JPanel panel;
 	JLabel bild;
 	ImageIcon bildIcon;
-
+	JButton knopf;
 	Container Eimer;
 	
 	private final double prozentFlaecheX;
@@ -30,15 +31,18 @@ public abstract class AbstractGUI{
 		bild.setLayout(null);
 		panel.setLayout(null);
 		panel.setVisible(true);
-		bild.setVisible(true);
-		
-		//panel.setOpaque(false);
+		bild.setVisible(true);		
+		panel.setOpaque(false);
 		
 	}
 	private void skaliereBild(int breite, int hoehe) {
 		Image bildii = bildIcon.getImage();
 		Image skaliertesBild = bildii.getScaledInstance(breite, hoehe, Image.SCALE_SMOOTH);
+		if(knopf != null) {
+			knopf.setIcon(new ImageIcon(skaliertesBild));
+		} else {
 		bild.setIcon(new ImageIcon(skaliertesBild));
+		}
 	}
 	public void setzeneueGroesse(int breite, int hoehe) {
 		panel.setSize(breite, hoehe);
@@ -92,6 +96,13 @@ public abstract class AbstractGUI{
 	}
 	public void setPanel(JPanel panel) {
 		this.panel = panel;
+	}
+
+	public JButton getKnopf() {
+		return knopf;
+	}
+	public void setKnopf(JButton knopf) {
+		this.knopf = knopf;
 	}
 
 

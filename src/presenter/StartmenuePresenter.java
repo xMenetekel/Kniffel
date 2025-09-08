@@ -5,6 +5,7 @@ import model.*;
 import java.awt.Container;
 import java.awt.Dimension;
 import java.awt.GridLayout;
+import java.util.List;
 
 import javax.swing.BorderFactory;
 import javax.swing.JButton;
@@ -29,6 +30,7 @@ public class StartmenuePresenter {
 		starteStartmenue();
 		Eimer.revalidate();
 		Eimer.repaint();
+		
 	}
 	
 	private void starteStartmenue() {
@@ -60,7 +62,7 @@ public class StartmenuePresenter {
 				menueDaten.setSpieleranzahl(anzahl); //speichern 
 				abfrage.dispose(); //schließen
 				
-				benenneSpieler(anzahl); //Namen hinzufügen
+				SpielerDaten(anzahl); //Namen hinzufügen
 				
 				SpielLogik spielLogik = new SpielLogik();
 				spielLogik.setSpieler(menueDaten.getSpielerListe()); //Initialisierung Spiellogik mit Spielern
@@ -76,17 +78,43 @@ public class StartmenuePresenter {
 		abfrage.setVisible(true); 
 	}
 	
-	private void benenneSpieler(int spieleranzahl) {
+	private void SpielerDaten(int spieleranzahl) {
 		for(int i = 0; i < spieleranzahl; i++) {
 			String name = JOptionPane.showInputDialog(
 					menueGUI.getEimer(),
 					"Name fuer Spieler " + (i+1) + ":",
 					"Spieler benennen",
 					JOptionPane.PLAIN_MESSAGE);
+			
+
+			int iconIndex = icons(i);
+			
 			if(name != null) {
 				menueDaten.setSpielerName(i, name);
+				menueDaten.setSpielerIcon(i, iconIndex);
 			}
 		}
+	}
+	
+	private int icons(int indexSpieler) {
+		
+		List<JButton> buttons = menueGUI.getIconButtons();
+		Object[] liste = new Object[buttons.size()];
+		for(int i = 0; i < buttons.size(); i++){
+			liste[i] = buttons.get(i).getIcon();
+		}
+												
+		int auswahl = JOptionPane.showOptionDialog(
+				menueGUI.getEimer(), 
+				"Wähle ein Icon :)", 
+				"Icon Auswahl",
+				JOptionPane.DEFAULT_OPTION, 
+				JOptionPane.PLAIN_MESSAGE,
+				null, 
+				liste, 
+				liste[0]);
+		
+		return auswahl;
 	}
 	
 	public void setMenueGUI(StartmenueGUI menueGUI) {

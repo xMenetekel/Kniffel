@@ -2,6 +2,8 @@ package presenter;
 
 import java.awt.Container;
 
+import javax.swing.JButton;
+
 import gui.SpielerbankGUI;
 import model.SpielerLogik;
 
@@ -12,13 +14,32 @@ public class SpielerbankPresenter {
 	
 	public SpielerbankPresenter(Container Eimer) {
 		
-		gui = new SpielerbankGUI(Eimer);
 		logik = new SpielerLogik();
+		gui = new SpielerbankGUI(Eimer, this);
+		
 		
 	}
+	
+	public String getBildname() {
+		switch(logik.getIconIndex()) {
+		case 0:
+			return "bebi";					
+		case 1:
+			return "kiki";
+		case 2:
+			return "bubu";
+		case 3:
+			return "crystal";
+		case 4:
+			return "schrinke";
+		case 5:
+			return "transistor";
+		case 6:
+			return "integral";
+		default: return "spielerbank";
+		}
+	}
 
-	
-	
 	
 	
 	

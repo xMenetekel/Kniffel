@@ -68,5 +68,10 @@ public class StartmenueLogik {
 	public void setHintergrundfarbe(Color hintergrundfarbe) {
 		this.hintergrundfarbe = hintergrundfarbe;
 	}
+
+	public void setSpielerIcon(int i, int iconIndex) {
+		spielerListe.get(i).setIconIndex(iconIndex);
+		
+	}
 	
 }
