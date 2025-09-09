@@ -10,6 +10,7 @@ import java.util.Map;
 
 import javax.swing.JLabel;
 import javax.swing.JTable;
+import javax.swing.JTextArea;
 
 import gui.*;
 import gui.SpielfeldGUI;
@@ -33,7 +34,7 @@ public class SpielfeldPresenter {
 	 private PunkteEintragenButtonPresenter punkteKlick;
 	 
 	 private Kategorie ausgewaehlteKategorie = null; 
-	 private JLabel statusLabel;	
+	 private JTextArea statusLabel;	
 	 private SpielLogik spielLogik; 
 	 private MoeglicheZuege moeglicheZuege = new MoeglicheZuege();
 	 private StartmenueLogik menueDaten;
@@ -67,10 +68,14 @@ public class SpielfeldPresenter {
 			 tabelle.getGui().setKategorieSelectListener(this::onKategorieAusgewaehlt);
 		 }
 		 
-		 statusLabel = new JLabel();
-			statusLabel.setBounds((int)(Eimer.getWidth() * 0.15), (int)(Eimer.getHeight() * 0.95), (int)(Eimer.getWidth() * 0.3),30);
+		
+		 
+		 statusLabel = new JTextArea();
+			statusLabel.setBounds((int)(Eimer.getWidth() * 0.28), (int)(Eimer.getHeight() * 0.81), (int)(Eimer.getWidth() * 0.3),70);
 			statusLabel.setVisible(true);
-			statusLabel.setFont(new Font(Font.SANS_SERIF, Font.BOLD, 10));
+			statusLabel.setEditable(false);
+			statusLabel.setOpaque(false);
+			statusLabel.setFont(new Font(Font.SANS_SERIF, Font.BOLD, 20));
 			updateStatusLabel();
 			
 			if (spielLogik != null) {
@@ -79,7 +84,7 @@ public class SpielfeldPresenter {
 				statusLabel.setText("Spiel wird initialisiert...");
 			}
 			
-		 Eimer.add(statusLabel); 		
+		 Eimer.add(statusLabel);
 		 Eimer.add(flaeche.getGui().getPanel());
 		 Eimer.add(bank.getGui().getPanel());
 		 Eimer.add(tabelle.getGui().getPanel());
@@ -184,8 +189,8 @@ public class SpielfeldPresenter {
 
 		private void updateStatusLabel() {
 			String status = "Runde " + spielLogik.getRunde() + 
-					"| Spieler: " + spielLogik.getAktiverSpieler().getName() + 
-					"| Würfe: " + spielLogik.getWuerfeAnzahl() + "/3";
+					"\nSpieler: " + spielLogik.getAktiverSpieler().getName() + 
+					"\nWürfe: " + spielLogik.getWuerfeAnzahl() + "/3";
 			statusLabel.setText(status);
 		}
 		

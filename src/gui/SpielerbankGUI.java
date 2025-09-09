@@ -12,9 +12,9 @@ import presenter.SpielerbankPresenter;
 public class SpielerbankGUI extends AbstractGUI{	
 	
 	private static final double X = 0.0625;
-	private static final double Y = 0.77;
-	private static final double B = 0.37;	
-	private static final double H = 0.142857;	
+	private static final double Y = 0.75;
+	private static final double B = 0.2;	
+	private static final double H = 0.2;	
 	
 
 	public SpielerbankGUI(Container Eimer, SpielerbankPresenter presenter) {
