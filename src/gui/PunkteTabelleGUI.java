@@ -4,6 +4,7 @@ import java.awt.BorderLayout;
 import java.awt.Color;
 import java.awt.Component;
 import java.awt.Container;
+import java.awt.Point;
 import java.awt.event.MouseAdapter;
 import java.awt.event.MouseEvent;
 import java.awt.event.KeyAdapter;
@@ -18,6 +19,7 @@ import javax.swing.JPanel;
 import javax.swing.JScrollPane;
 import javax.swing.JTable;
 import javax.swing.ListSelectionModel;
+import javax.swing.SwingUtilities;
 import javax.swing.table.AbstractTableModel;
 import javax.swing.table.DefaultTableCellRenderer;
 
@@ -36,6 +38,7 @@ public class PunkteTabelleGUI extends AbstractGUI {
 	private final int spielerAnzahl;
 	private SpielLogik spielLogik;
 	private KategorieSelectListener selectListener;
+	private Point selectedCell = null;
 	
 	private Map<String, Integer> finalePunkte = new HashMap<>();
 	
@@ -79,32 +82,63 @@ public class PunkteTabelleGUI extends AbstractGUI {
 			}
 		});
 		
+       /* table.addMouseListener(new MouseAdapter() {
+
+            @Override
+            public void mousePressed(MouseEvent evt) {
+                int row = table.rowAtPoint(evt.getPoint());
+                int col = table.columnAtPoint(evt.getPoint());
+                
+                if(k)
+
+                if (col >= 2) { 
+                    Kategorie kategorie = Kategorie.fromTabellenIndex(row);
+                    
+                    if (kategorie != null && tableModel.hatMoeglichePunkteFuerKategorie(kategorie)) {
+                    	HighlightingCellRenderer renderer = (HighlightingCellRenderer)table.getDefaultRenderer(Object.class);
+                    	setSelectedCell(row,col);
+         
+                    	selectedCell = new Point (row, col);
+	            		selectListener.onKategorieSelected(kategorie);
+	                	System.out.println("Kategorie ausgewählt: "+ kategorie);
+	                	
+	                	table.repaint();
+	                	
+            		}
+            	}
+            }
+            
+        });*/
+		
         table.addMouseListener(new MouseAdapter() {
 
             @Override
             public void mousePressed(MouseEvent evt) {
-
-
                 int row = table.rowAtPoint(evt.getPoint());
                 int col = table.columnAtPoint(evt.getPoint());
-  
+               
 
                 if (col >= 2) { 
-                	
-
-                	
                     Kategorie kategorie = Kategorie.fromTabellenIndex(row);
-                    if (kategorie != null && tableModel.hatMoeglichePunkteFuerKategorie(kategorie)) {
-         
+                    
+                    if(kategorie != null) {
+                    	setSelectedCell(row,col);
+                    	boolean hatMoeglichePunkte = tableModel.hatMoeglichePunkteFuerKategorie(kategorie);
+                    	boolean feldIstLeer = (tableModel.getValueAt(row, col)==null);
+                    	boolean dreiMalGewuerfelt = (spielLogik.getWuerfeAnzahl() >= 3);
+                    	
+                    	if (hatMoeglichePunkte || (feldIstLeer&&dreiMalGewuerfelt)) {
                     		selectListener.onKategorieSelected(kategorie);
-                        	System.out.println("Kategorie ausgewählt: "+ kategorie);
-                        	
-                    		}
-                	}
+                    		System.out.println("Kategorie ausgewaehlt: "+ kategorie);
+                    	}else if (feldIstLeer&& !dreiMalGewuerfelt) {
+                    		System.out.println("Null kann erst nach 3 Würfen eingetragen werden!");
+                    	}
+                    }
+            	}
             }
             
         });
-		
+        
 		table.getColumnModel().getColumn(0).setCellRenderer(new SymbolCellRenderer());	//Brauchen CellRenderer um in der ersten spalte sowohl Bilder als auch Text verwenden zu können
 		
 		JScrollPane scroll = new JScrollPane(table);
@@ -115,31 +149,19 @@ public class PunkteTabelleGUI extends AbstractGUI {
 		
 				
 		}
-	
-	
-	/*public void macheTabelleNichtEditierbar() {
-		if(table != null) {
-			table.setEnabled(true);
-			table.setFocusable(false);
-			table.setRowSelectionAllowed(false);
-			table.setColumnSelectionAllowed(false);
-			table.setCellSelectionEnabled(false);
-			
-			table.setDefaultEditor(Object.class, null);
-			table.setDefaultEditor(Object.class, null);
-			table.setDefaultEditor(String.class, null);
-			table.setDefaultEditor(Integer.class, null);
-			table.setDefaultEditor(Double.class, null);
-			table.setDefaultEditor(Boolean.class, null);
 
-			
-			if(tableModel != null) {
-				
-			}
-		}
-	}*/
 	
-	public void macheTabelleNichtEditierbar() {
+	public void setSelectedCell(int row, int col) {
+		this.selectedCell = new Point(row,col);
+		HighlightingCellRenderer renderer = (HighlightingCellRenderer)table.getDefaultRenderer(Object.class);
+		if(renderer != null) {
+			renderer.setSelectedCell(row, col);
+		}
+		table.repaint();
+	}
+
+	
+	public void macheTabelleNichtEditierbar() {	//UMSCHREIBEN ITS COPIED FROM CHATGPT	
 	    if(table != null) {
 	        // Tabelle komplett aktiv für Selektion
 	        table.setEnabled(true);
@@ -220,18 +242,51 @@ public class PunkteTabelleGUI extends AbstractGUI {
 	
 	static class HighlightingCellRenderer extends DefaultTableCellRenderer {
 		private int highlightedSpalte = -1;
+		private int selectedRow = -1;
+		private int selectedCol = -1;
+		private int wuerfeAnzahl = 0;
+		private Color DUNKELGRÜN = new Color (100,180,100);
+		private Color AUSWAHL = new Color (150,200,150);
+		
+		
 		public void setHighlightedSpalte (int spalte) {
 			this.highlightedSpalte = spalte;
+		}
+		
+		public void setSelectedCell(int row, int col) {
+			this.selectedRow = row;
+			this.selectedCol = col;
+			System.out.println("Renderer: selectedRow ="+ row + " , selectedCol =" + col);
+		}
+		
+		public void setWuerfeAnzahl (int anzahl) {
+			this.wuerfeAnzahl = anzahl;
 		}
 		
 		@Override
 		public Component getTableCellRendererComponent(JTable table, Object value, boolean isSelected, boolean hasFocus, int row, int column) {
 			Component c = super.getTableCellRendererComponent(table, value, isSelected, hasFocus, row, column);
 			
+			ZugTableModel model = (ZugTableModel) table.getModel();
+			Kategorie kategorie = Kategorie.fromTabellenIndex(row);
+			boolean hatMoeglichePunkte = false;
+			boolean feldIstLeer = (value == null);
+			boolean dreiMalGewuerfelt = (wuerfeAnzahl >= 3);
+			Container container = SwingUtilities.getAncestorOfClass(PunkteTabelleGUI.class, table);
+			
+			if(kategorie != null) {
+				hatMoeglichePunkte = model.hatMoeglichePunkteFuerKategorie(kategorie);
+			}
+			
+			if(row == selectedRow &&  column == selectedCol) {
+				c.setBackground(AUSWAHL);
+				c.setForeground(Color.BLACK);
+				setToolTipText("Ausgewählt - Punkte eintragen Bestätigen");
+			}
 			
 			
-			if (column >= 2 && table.getModel().getValueAt(row,  column)!=null) {
-				c.setBackground(new Color(200,255,200));
+			if (column >= 2 && value !=null) {
+				c.setBackground(DUNKELGRÜN);
 				c.setForeground(Color.BLACK);
 				setToolTipText("Fester Wert - Kann nicht geändert werden");
 			} else if(column == highlightedSpalte && value != null) {
@@ -397,7 +452,16 @@ public class PunkteTabelleGUI extends AbstractGUI {
         }
         
 
-
+        public boolean istFeldLeer(int row, int column) {
+        	if(column <2)return false;
+        	return (data[row][column]==null);
+        }
+        
+        public boolean kannKategorieEingetragenWerden(Kategorie kategorie, int spielerIndex) {
+        	int row = kategorie.getTabellenIndex();
+        	int column = 2 + spielerIndex;
+        	return (data[row][column]== null);
+        }
 		
 		
 		@Override
