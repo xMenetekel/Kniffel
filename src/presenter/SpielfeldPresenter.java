@@ -126,11 +126,11 @@ public class SpielfeldPresenter {
 
 	 public void rearrangiereAlles(Component fenstar) {
 		 rearrangiere(fenstar, flaeche.getGui());
-		 rearrangiere(fenstar, bank.getGui());
 		 rearrangiere(fenstar, tabelle.getGui());
 		 rearrangiere(fenstar, spieler.getGui());		 
 		 rearrangiere(fenstar, wuerfelnKlick.getGui());
 		 rearrangiere(fenstar, punkteKlick.getGui());
+		 rearrangiere(fenstar, gui);
 		 rearrangiereWuerfel(fenstar, wuerfel, bank.getGui());
 		 
 	 }
@@ -141,14 +141,23 @@ public class SpielfeldPresenter {
 			int breite = e.getWidth();
 			int hoehe = e.getHeight();
 			
-			w.getAlleWuerfelGUI().forEach(t -> { t.setxPos( (int) Math.round(t.prozentXAufFeld * breite)  );
-												 t.setyPos( (int) Math.round(t.prozentYAufFeld * hoehe));
-												 t.setProzentXAufFeld(t.getxPos() *1.0 / breite);
-												 t.setProzentYAufFeld(t.getyPos() *1.0 / hoehe);
-												 t.getButton().setBounds(t.getxPos(), t.getyPos(), 50, 50);
-												 });
+			
 			bank.getPanel().setBounds((int)Math.floor(breite*bank.getProzentFlaecheX()), 
 									  (int)Math.floor(hoehe*bank.getProzentFlaecheY()), 280, 60);
+			
+			w.getAlleWuerfelGUI().forEach(t -> { if(!t.getLogik().istBehalten()) {				
+												 t.setxPos( (int) Math.round(t.prozentXAufFeld * breite)  );
+												 t.setyPos( (int) Math.round(t.prozentYAufFeld * hoehe));
+												 t.setProzentXAufFeld(t.getxPos() * 1.0 / breite);
+												 t.setProzentYAufFeld(t.getyPos() * 1.0 / hoehe);
+												 t.getButton().setBounds(t.getxPos(), t.getyPos(), 50, 50);
+												} else {
+												//TODO neue logik für bank	
+													
+												}
+												});
+			
+			
 				
 		}
 		

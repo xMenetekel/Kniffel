@@ -39,7 +39,7 @@ public class SpielfeldGUI extends AbstractGUI{
 	
 	
 	public SpielfeldGUI(Container Eimer, SpielfeldPresenter presenter, StartmenueLogik menueDaten) {
-		super(1,1,1,1, Eimer);
+		super(0,0,1,1, Eimer);
 		this.presenter = presenter;
 		this.menueDaten = menueDaten;
 		

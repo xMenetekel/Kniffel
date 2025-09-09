@@ -2,7 +2,7 @@ package gui;
 
 import java.awt.Container;
 import java.awt.Dimension;
-import java.awt.Image;
+
 import java.awt.event.ComponentAdapter;
 import java.awt.event.ComponentEvent;
 import java.util.ArrayList;
@@ -10,14 +10,13 @@ import java.util.List;
 
 import javax.swing.ImageIcon;
 import javax.swing.JButton;
-import javax.swing.JFrame;
-import javax.swing.JPanel;
 
 public class StartmenueGUI extends AbstractGUI{
 		
 		private JButton starteSpiel;
 		private JButton einstellungen;
 		private JButton exit;
+		private Container Eimer;
 		
 		private List<JButton> iconButtons = new ArrayList<>();
 		
@@ -25,12 +24,17 @@ public class StartmenueGUI extends AbstractGUI{
 	
 	
 	public StartmenueGUI(Container Eimer) {
-		super(1,1,1,1, Eimer);
+		super(0,0,1,1, Eimer);
+		this.Eimer = Eimer;
 		this.Eimer.setLayout(null); //Hab erstmal den Layout Manager ausgemacht um es manuell anzuordnen, können wir später aber noch ändern : famous last words, i am so sorry
 		
-		this.starteSpiel = new JButton("Starte Spiel");
-		this.einstellungen = new JButton("Einstellungen");
-		this.exit = new JButton("Schließen");
+		this.starteSpiel = new JButton();
+		this.einstellungen = new JButton();
+		this.exit = new JButton();
+		
+		starteSpiel.setIcon(new ImageIcon("Other/starteSpiel.jpg"));
+		einstellungen.setIcon(new ImageIcon("Other/einstellungen.jpg"));
+		exit.setIcon(new ImageIcon("Other/schliessen.jpg"));
 		
 		erstelleButtons();	
 		
@@ -38,14 +42,24 @@ public class StartmenueGUI extends AbstractGUI{
 			@Override
 			public void componentResized(ComponentEvent e) {
 				rearrangiereFelder(Eimer, starteSpiel, einstellungen, exit);
+				setzeneueGroesse(Eimer.getWidth(), Eimer.getHeight());
 				Eimer.revalidate();
 				Eimer.repaint();
 			}			
 		});
+		bildIcon = new ImageIcon("Other/startHintergrund.jpg");	
+		bild.setBounds(0,0, Eimer.getWidth(), Eimer.getHeight());
+		bild.setIcon(bildIcon);
+		panel.add(bild);
+		//
+		
+		
+		
 		
 		this.Eimer.add(starteSpiel);
 		this.Eimer.add(exit);
 		this.Eimer.add(einstellungen); 
+		this.Eimer.add(panel);
 		Eimer.revalidate();
 		Eimer.repaint();
 		
@@ -56,15 +70,15 @@ public class StartmenueGUI extends AbstractGUI{
 		int breite = eimer.getWidth();
 		int hoehe = eimer.getHeight();
 		
-		starteSpiel.setBounds((int)Math.floor(breite*0.125), (int)Math.floor(hoehe*0.14285), (int)Math.floor(breite*0.75),(int)Math.floor(hoehe*0.071));
-		einstellungen.setBounds((int)Math.floor(breite*0.125), (int)Math.floor(hoehe*0.28571), (int)Math.floor(breite*0.75),(int)Math.floor(hoehe*0.071));
-		exit.setBounds((int)Math.floor(breite*0.125), (int)Math.floor(hoehe*0.42857), (int)Math.floor(breite*0.75),(int)Math.floor(hoehe*0.071));
+		starteSpiel.setBounds(	(int)Math.floor(breite*0.33), (int)Math.floor(hoehe*0.33), (int)Math.floor(breite*0.33),(int)Math.floor(hoehe*0.1));
+		einstellungen.setBounds((int)Math.floor(breite*0.33), (int)Math.floor(hoehe*0.44), (int)Math.floor(breite*0.33),(int)Math.floor(hoehe*0.1));
+		exit.setBounds(			(int)Math.floor(breite*0.33), (int)Math.floor(hoehe*0.55), (int)Math.floor(breite*0.33),(int)Math.floor(hoehe*0.1));
 		
 		
 		
 	}
 	
-	private void erstelleButtons(){
+	private void erstelleButtons(){ //semi obsolet weil man eigentlich nur die image icons braucht und nicht die ganzen buttons :( aber ich will buttons :(
 		JButton bebi = new JButton();
 		bebi.setName("bebi");
 		JButton kiki = new JButton();
@@ -102,37 +116,30 @@ public class StartmenueGUI extends AbstractGUI{
 	public void setIconButtons(List<JButton> iconButtons) {
 		this.iconButtons = iconButtons;
 	}
-
 	
 	public JButton getStarteSpiel() {
 		return starteSpiel;
 	}
 
-
 	public void setStarteSpiel(JButton starteSpiel) {
 		this.starteSpiel = starteSpiel;
 	}
-
 
 	public JButton getEinstellungen() {
 		return einstellungen;
 	}
 
-
 	public void setEinstellungen(JButton einstellungen) {
 		this.einstellungen = einstellungen;
 	}
-
 
 	public JButton getExit() {
 		return exit;
 	}
 
-
 	public void setExit(JButton exit) {
 		this.exit = exit;
 	}
-
 
 	public void moeglicheSpielModi() {
 		
@@ -148,7 +155,6 @@ public class StartmenueGUI extends AbstractGUI{
 	
 	public void auswahlSpiel() {
 	
-		
 	}
 	
 	public void debugging() {
@@ -157,8 +163,7 @@ public class StartmenueGUI extends AbstractGUI{
 	
 	public void exit() {
 		
-	}
-	
+	}	
 
 	public Container getEimer() {
 		return Eimer;

@@ -18,8 +18,8 @@ public class WuerfelnButtonPresenter {
 		
 		
 		
-		this.wuerfel = wuerfel;
-		this.tabelle = tabelle;
+		this.setWuerfel(wuerfel);
+		this.setTabelle(tabelle);
 	}
 	
 	
@@ -57,5 +57,21 @@ public class WuerfelnButtonPresenter {
 
 	public void setGui(WuerfelnButtonGUI gui) {
 		this.gui = gui;
+	}
+
+	public WuerfelPresenter getWuerfel() {
+		return wuerfel;
+	}
+
+	public void setWuerfel(WuerfelPresenter wuerfel) {
+		this.wuerfel = wuerfel;
+	}
+
+	public PunktetabellePresenter getTabelle() {
+		return tabelle;
+	}
+
+	public void setTabelle(PunktetabellePresenter tabelle) {
+		this.tabelle = tabelle;
 	}
 }
