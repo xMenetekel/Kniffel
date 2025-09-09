@@ -112,7 +112,7 @@ public class SpielfeldPresenter {
 			 
 			 moeglicheZuege.setWuerfelWerte(wuerfelWerte);
 			 Map<Kategorie,Integer> moeglichePunkte = moeglicheZuege.getAktiveMoeglichePunkte();
-			 tabelle.getGui().zeigeMoeglichePunkte(moeglichePunkte);
+			 tabelle.getGui().zeigeMoeglichePunkte(moeglichePunkte, spielLogik.getAktiverSpielerIndex());
 			 System.out.println("Wuerfelwerte nach Wurf: "+ wuerfelWerte);
 		 }
 	 }
@@ -203,7 +203,7 @@ public class SpielfeldPresenter {
 				 ausgewaehlteKategorie = null;
 				 updateStatusLabel();
 				 highlightAktuelleSpalte();
-				 tabelle.getGui().zeigeMoeglichePunkte(new HashMap<>());
+				 tabelle.getGui().zeigeMoeglichePunkte(new HashMap<>(),spielLogik.getAktiverSpielerIndex());
 				 System.out.println("Punkte erfolgreich eingetragen!");
 				 
 				 }catch (Exception e) {

@@ -22,6 +22,7 @@ public class PunktetabellePresenter implements DummeChatGPTLoesungIchHasseAlles{
 	private MoeglicheZuege moeglicheZuege;
 	private Kategorie ausgewaehlteKategorie = null; 
 	private List<Integer>wuerfelWerte = new ArrayList<>();
+	private SpielLogik spielLogik;
 	
 
 	int wurfAnzahl = 0;
@@ -30,8 +31,8 @@ public class PunktetabellePresenter implements DummeChatGPTLoesungIchHasseAlles{
 	
 
 	public PunktetabellePresenter(Container Eimer, StartmenueLogik menueDaten,SpielLogik spielLogik) {
+		this.spielLogik = spielLogik;
 		gui = new PunkteTabelleGUI(Eimer, menueDaten,spielLogik);
-
 		logik = new PunktetabelleLogik();
 		this.moeglicheZuege = new MoeglicheZuege();
 		
@@ -49,7 +50,7 @@ public class PunktetabellePresenter implements DummeChatGPTLoesungIchHasseAlles{
         Map<Kategorie, Integer> moeglichePunkte = moeglicheZuege.getAktiveMoeglichePunkte();
         System.out.println("Mögliche Punkte: " + moeglichePunkte); // DEBUG
         if (gui != null) {
-            gui.zeigeMoeglichePunkte(moeglichePunkte);
+            gui.zeigeMoeglichePunkte(moeglichePunkte, spielLogik.getAktiverSpielerIndex());
             System.out.println("Punkte aktualisiert"+moeglichePunkte);
         }
     }
@@ -83,7 +84,7 @@ public class PunktetabellePresenter implements DummeChatGPTLoesungIchHasseAlles{
 		public void wasPassiertWennWirEineNeueRundeAusloesen(List<WuerfelLogik> alleWuerfelLogik) {
 			wuerfelWerte.clear();
 			if(gui != null) {
-				gui.zeigeMoeglichePunkte(new HashMap<>());
+				gui.zeigeMoeglichePunkte(new HashMap<>(),spielLogik.getAktiverSpielerIndex());
 			}
 			System.out.println("NeueRunde in PunktetabellePresenter gestartet");
 		}

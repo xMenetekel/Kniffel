@@ -17,6 +17,7 @@ import javax.swing.JLabel;
 import javax.swing.JPanel;
 import javax.swing.JScrollPane;
 import javax.swing.JTable;
+import javax.swing.ListSelectionModel;
 import javax.swing.table.AbstractTableModel;
 import javax.swing.table.DefaultTableCellRenderer;
 
@@ -79,23 +80,27 @@ public class PunkteTabelleGUI extends AbstractGUI {
 		});
 		
         table.addMouseListener(new MouseAdapter() {
+
             @Override
-            public void mouseClicked(MouseEvent evt) {
-            	
-            	if (evt.getClickCount()==2) {
-                    int row = table.rowAtPoint(evt.getPoint());
-                    int col = table.columnAtPoint(evt.getPoint());
+            public void mousePressed(MouseEvent evt) {
+
+
+                int row = table.rowAtPoint(evt.getPoint());
+                int col = table.columnAtPoint(evt.getPoint());
   
 
                 if (col >= 2) { 
                 	
+
+                	
                     Kategorie kategorie = Kategorie.fromTabellenIndex(row);
                     if (kategorie != null && tableModel.hatMoeglichePunkteFuerKategorie(kategorie)) {
-                    	selectListener.onKategorieSelected(kategorie);
-                    	System.out.println("Kategorie ausgewählt: "+ kategorie);
-                    }
-                }
-            	}
+         
+                    		selectListener.onKategorieSelected(kategorie);
+                        	System.out.println("Kategorie ausgewählt: "+ kategorie);
+                        	
+                    		}
+                	}
             }
             
         });
@@ -112,7 +117,7 @@ public class PunkteTabelleGUI extends AbstractGUI {
 		}
 	
 	
-	public void macheTabelleNichtEditierbar() {
+	/*public void macheTabelleNichtEditierbar() {
 		if(table != null) {
 			table.setEnabled(true);
 			table.setFocusable(false);
@@ -132,13 +137,43 @@ public class PunkteTabelleGUI extends AbstractGUI {
 				
 			}
 		}
+	}*/
+	
+	public void macheTabelleNichtEditierbar() {
+	    if(table != null) {
+	        // Tabelle komplett aktiv für Selektion
+	        table.setEnabled(true);
+	        table.setFocusable(true);
+	        
+	        // Nur Einzelzellen-Selektion erlauben
+	        table.setSelectionMode(ListSelectionModel.SINGLE_SELECTION);
+	        table.setRowSelectionAllowed(false);
+	        table.setColumnSelectionAllowed(false);
+	        table.setCellSelectionEnabled(true);
+	        
+	        // Alle Editoren entfernen
+	        for (int i = 0; i < table.getColumnCount(); i++) {
+	            table.getColumnModel().getColumn(i).setCellEditor(null);
+	        }
+	        
+	        // Alle Editor-Klassen auf null setzen
+	        table.setDefaultEditor(Object.class, null);
+	        table.setDefaultEditor(String.class, null);
+	        table.setDefaultEditor(Integer.class, null);
+	        table.setDefaultEditor(Double.class, null);
+	        table.setDefaultEditor(Boolean.class, null);
+	        
+	        // Tastatureingaben blockieren
+	        table.getInputMap().clear();
+	        table.getActionMap().clear();
+	    }
 	}
 	
 
 	
-	public void zeigeMoeglichePunkte(Map<Kategorie, Integer> moeglichePunkte) {
+	public void zeigeMoeglichePunkte(Map<Kategorie, Integer> moeglichePunkte, int aktuellerSpielerIndex) {
 	    if (tableModel != null) {
-	        tableModel.setMoeglichePunkte(moeglichePunkte); 
+	        tableModel.setMoeglichePunkte(moeglichePunkte, aktuellerSpielerIndex); 
 	        macheTabelleNichtEditierbar();
 	    }
 	}
@@ -204,7 +239,7 @@ public class PunkteTabelleGUI extends AbstractGUI {
 				setToolTipText("MöglichePunkte - doppelklick zum Auswählen");
 			}else {
 				c.setBackground(table.getBackground());
-				c.setForeground(table.getBackground());
+				c.setForeground(table.getForeground());
 				setToolTipText(null);
 			}
 	
@@ -218,27 +253,35 @@ public class PunkteTabelleGUI extends AbstractGUI {
 	    public Component getTableCellRendererComponent(JTable table, Object value, 
 	            boolean isSelected, boolean hasFocus, int row, int column) {
 	        
-	        super.getTableCellRendererComponent(table, value, isSelected, hasFocus, row, column);
-	        
+	        Component c = super.getTableCellRendererComponent(table, value, isSelected, hasFocus, row, column);
 	        Kategorie kategorie = Kategorie.fromTabellenIndex(row);
 	        
 	        if (kategorie != null) {
-	            if (kategorie.hatBild()) {
-	                setIcon(new ImageIcon(kategorie.getBildDatei()));
-	                setText(null);
-	            } else {
-	                setIcon(null);
-	                setText(kategorie.getAnzeigeName());
-	            }
-	        } else {
-	            setIcon(null);
-	            setText("");
+	        	if(kategorie.hatBild()) {
+	        		setIcon(new ImageIcon(kategorie.getBildDatei()));
+	        		setText("");
+	 
+	        	} else {
+	        		setIcon(null);
+	        		if(value != null) {
+	        			setText(value.toString());
+	        		}else {
+	        			setText("");
+	        		}
+	        }
+	        }else {
+	        	setIcon(null);
+	        	if(value != null) {
+	        		setText(value.toString());
+	        	}else {
+	        		setText("");
+	        	}
 	        }
 	        
 	        setHorizontalAlignment(CENTER);
 	        setVerticalAlignment(CENTER);
 	        
-	        return this;
+	        return c;
 	    }
 	}
 	
@@ -316,19 +359,17 @@ public class PunkteTabelleGUI extends AbstractGUI {
 			
 		}
 		
-        public void setMoeglichePunkte(Map<Kategorie, Integer> moeglichePunkte) {
+        public void setMoeglichePunkte(Map<Kategorie, Integer> moeglichePunkte, int aktuellerSpielerIndex) {
         	Map<Kategorie,Integer>gefiltertePunkte = new HashMap<>();
         	for(Map.Entry<Kategorie, Integer> entry : moeglichePunkte.entrySet()) {
         		Kategorie kategorie = entry.getKey();
         		int row = kategorie.getTabellenIndex();
-        		boolean hatFestenWert = false;
-        		for(int col = 2;col<getColumnCount(); col++) {
-        			if(data[row][col] != null) {
-        				hatFestenWert = true;
-        				break;
-        			}
-        		}
-        		if(!hatFestenWert) {
+        		int spielerSpalte = 2 + aktuellerSpielerIndex;
+
+        		
+        		boolean aktuellerSpielerHatWert = (data [row][spielerSpalte] != null);
+        		
+        		if(!aktuellerSpielerHatWert) {
         			gefiltertePunkte.put(kategorie,entry.getValue());
         		}
         	}
@@ -348,6 +389,11 @@ public class PunkteTabelleGUI extends AbstractGUI {
         public void entferneMoeglicheKategorie(Kategorie kategorie) {
         	moeglichePunkte.remove(kategorie);
         	fireTableDataChanged();
+        }
+        
+        public boolean hatSpielerBereitsWert (int row, int spielerIndex) {
+        	int spielerSpalte= 2+ spielerIndex;
+        	return (data[row][spielerSpalte] != null);
         }
         
 
@@ -377,18 +423,26 @@ public class PunkteTabelleGUI extends AbstractGUI {
 		
         @Override
         public Object getValueAt(int row, int column) {
+        	Object result = null;
         	
-        	if(column >= 2 && data [row][column] != null) {
-        		return data [row][column] ;
-        	}
-            
-            if (column == highlightedSpalte && !moeglichePunkte.isEmpty()) {
+        	
+        	if(column == 0||column ==1) {
+        			result = data[row][column];
+        			return result;
+        		}
+ 
+        	if(column >= 2) {
+        		if(data[row][column] != null) {
+        			result = data[row][column];
+        		}else if (column == highlightedSpalte && !moeglichePunkte.isEmpty()) {
+
                 Kategorie kategorie = Kategorie.fromTabellenIndex(row);
                 if (kategorie != null && moeglichePunkte.containsKey(kategorie)) {
-                    return moeglichePunkte.get(kategorie);
+                    result = moeglichePunkte.get(kategorie);
                 }
             }
-            return null;
+        	}	
+            return result;
         }
 		
 		@Override
@@ -421,8 +475,8 @@ public class PunkteTabelleGUI extends AbstractGUI {
 		
 
 	}
-    public void aktualisiereFuerNeuenSpieler() {
-    	zeigeMoeglichePunkte(new HashMap<>());
+    public void aktualisiereFuerNeuenSpieler(int aktuellerSpielerIndex) {
+    	zeigeMoeglichePunkte(new HashMap<>(), aktuellerSpielerIndex);
     	if (table != null) {
     		table.repaint();
     	}
