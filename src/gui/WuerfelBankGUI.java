@@ -9,8 +9,6 @@ import javax.swing.ImageIcon;
 import javax.swing.JLabel;
 import javax.swing.JPanel;
 
-
-
 public class WuerfelBankGUI extends AbstractGUI {
 
 	
@@ -19,7 +17,7 @@ public class WuerfelBankGUI extends AbstractGUI {
 	private static final double H = 0.085714; //nicht nutzen zum resizen //sagte sie und nutzt nur diese werte. also jedenfalls nicht skalieren diese komponente haha
 	private static final double B = 0.35;	 //auch nicht nutzen zum resizen
 	
-	List<Boolean> reihenfolge;
+	List<WuerfelGUI> reihenfolge;
 	
 	
 
@@ -31,18 +29,25 @@ public class WuerfelBankGUI extends AbstractGUI {
 		this.panel.setPreferredSize(new Dimension((int)(B * Eimer.getWidth()), (int)(H * Eimer.getHeight())));
 		this.bild.setBounds(0,0,(int)(B * Eimer.getWidth()), (int)(H * Eimer.getHeight()));
 		reihenfolge = new ArrayList<>();
-		for(int i = 0; i < 5; i++) { reihenfolge.add(false); }
+		for(int i = 0; i < 5; i++) { reihenfolge.add(null); }
 		this.panel.add(bild);
 		
 	}
 	
-	public List<Boolean> getReihenfolge() {
+	public List<WuerfelGUI> getReihenfolge() {
 		return reihenfolge;
 	}
 
-	public void setReihenfolge(List<Boolean> reihenfolge) {
+	public void setReihenfolge(List<WuerfelGUI> reihenfolge) {
 		this.reihenfolge = reihenfolge;
-	}	
+	}
+
+	
+	
+
+	
+	
+	
 	
 
 }

@@ -107,7 +107,7 @@ public class SpielfeldPresenter {
 		 if(spielLogik.getWuerfeAnzahl() < 3 && wuerfel.getWurfAnzahl() < wuerfel.getMaxWuerfe()) {
 			 
 			 wuerfel.wuerfeln();
-			 bank.getGui().getReihenfolge().clear();
+			
 			 spielLogik.erhoeheWurfAnzahl();
 			 updateStatusLabel();
 			 

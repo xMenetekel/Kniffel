@@ -39,6 +39,8 @@ public class WuerfelPresenter  {
 	final int WUERFEL_GROESSE = 50;	
 	
 	
+	
+	
 	public WuerfelPresenter(Container Eimer, SpielLogik spielLogik, 
 							WuerfelflaecheGUI flaeche, WuerfelBankGUI bank, 
 							DummeChatGPTLoesungIchHasseAlles keinBockMehr,
@@ -135,12 +137,13 @@ public class WuerfelPresenter  {
 	private void hochRunterhochRunter(WuerfelLogik wuerfel) { 
 		
 		if(wuerfel.istBehalten()) {
-			
+				
 			this.runter(wuerfel.getGui());
+			bank.getReihenfolge().set(bank.getReihenfolge().indexOf(null), wuerfel.getGui());	
 			
 		
 		} else {
-			
+			bank.getReihenfolge().set(bank.getReihenfolge().indexOf(wuerfel.getGui()), null);
 			this.hoch(wuerfel.getGui());			
 			
 		}
@@ -151,8 +154,8 @@ public class WuerfelPresenter  {
 		int x = (int)(container.getWidth() * bank.getProzentFlaecheX());
 		int y = (int)(container.getHeight() * bank.getProzentFlaecheY());
 		
-		x = ((gui.getButton().getWidth() + 5) * bank.getReihenfolge().indexOf(gui) ) + x;
-		y = y + 5;
+		x = ((gui.getButton().getWidth() + 5) * bank.getReihenfolge().indexOf(null) ) + x+4; //die +4 sind pixel ausgleiche weil meine völlig legitime rechnung nicht funktioniert
+		y = y + 6; //ebenso hier, eigentlich sollte es +5 sein aber das ist einen pixel zuviel verschoben weil natürlich ist es das
 	
 		gui.zeichneLinie(gui.getButton(), x, y, false);
 		
