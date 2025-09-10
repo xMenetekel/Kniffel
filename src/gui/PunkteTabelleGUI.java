@@ -60,8 +60,10 @@ public class PunkteTabelleGUI extends AbstractGUI {
 		
 		macheTabelleNichtEditierbar();
 		table.setRowHeight(40);
-		Color mischmasch = new Color(200,224,170);
-		//table.setBackground(mischmasch);
+
+		Color mischmasch = new Color(150,190,140); // evtl muss raus
+		table.setBackground(mischmasch);
+
 		
 		table.setDefaultRenderer(Object.class, new HighlightingCellRenderer());
 		
@@ -209,6 +211,15 @@ public class PunkteTabelleGUI extends AbstractGUI {
     		tableModel.setValueAt(punkte, kategorie.getTabellenIndex(), 2 + spielerIndex);
     		macheTabelleNichtEditierbar();
             tableModel.entferneMoeglicheKategorie(kategorie);
+            
+            if(kategorie.ordinal() <= Kategorie.SECHSER.ordinal()) {
+            	tableModel.berechneUndSetzeGesamtOben(spielerIndex);
+            }
+            
+            if(kategorie.ordinal() >= Kategorie.DREIER_PASCH.ordinal() && kategorie.ordinal() <= Kategorie.CHANCE.ordinal()) {
+            	tableModel.berechneUndSetzeGesamtUnten(spielerIndex);
+            }
+            
             table.repaint();
             System.out.println("Punkte erfolgreich eingetragen");
     	}catch(Exception e) {
@@ -462,6 +473,85 @@ public class PunkteTabelleGUI extends AbstractGUI {
         	int column = 2 + spielerIndex;
         	return (data[row][column]== null);
         }
+        
+        public void berechneUndSetzeGesamtOben(int spielerIndex) {
+        	int spielerSpalte = 2 + spielerIndex;
+        	int gesamtOben = 0;
+        	for(int row = 0; row <= 5; row ++) {
+        		if(data[row][spielerSpalte] instanceof Integer) {
+        			gesamtOben += (Integer)data[row][spielerSpalte];
+        		}
+        	}
+        	data[6][spielerSpalte] = gesamtOben;
+        	fireTableCellUpdated(6,spielerSpalte);
+        	
+        	if(istObereHaelfteVoll(spielerIndex)) {
+        	int bonus = (gesamtOben >= 63) ? 35 : 0;
+        	data[7][spielerSpalte] = bonus;
+        	fireTableCellUpdated(6,spielerSpalte);
+        	
+        	data[8][spielerSpalte] = gesamtOben + bonus;
+        	fireTableCellUpdated(8,spielerSpalte);
+        	
+        	data[17][spielerSpalte] = gesamtOben + bonus;
+        	fireTableCellUpdated(17,spielerSpalte);
+        	
+        	System.out.println("Gesamt oben für Spieler " + bonus + ", Gesamt mit Bonus: "+ (gesamtOben + bonus));
+        	}else {
+        		
+        		data[7][spielerSpalte] = null;
+        		data[8][spielerSpalte] = null;
+        		data[17][spielerSpalte] = null;
+        		fireTableCellUpdated(7,spielerSpalte);
+        		fireTableCellUpdated(8,spielerSpalte);
+
+        	}
+        }
+        
+        public void berechneUndSetzeGesamtUnten(int spielerIndex) {
+        	int spielerSpalte = 2+spielerIndex;
+        	int gesamtUnten = 0;
+        	for (int row = 9;row<=15; row++) {
+        		if(data[row][spielerSpalte] instanceof Integer) {
+        			gesamtUnten += (Integer)data[row][spielerSpalte]; 
+        		}
+        	}
+        	data[16][spielerSpalte] = gesamtUnten;
+        	fireTableCellUpdated(16,spielerSpalte);
+        	
+        	if(istUntereHaelfteVoll(spielerIndex)) {
+            	int gesamtObenMitBonus = (data[8][spielerSpalte] instanceof Integer)? (Integer)data[8][spielerSpalte]:0;
+            	data[18][spielerSpalte] = gesamtObenMitBonus + gesamtUnten;
+            	fireTableCellUpdated(18,spielerSpalte);        	
+            	System.out.println("Endsumme berechnet: "+ (gesamtObenMitBonus + gesamtUnten));
+   
+        	}else {
+        		data[18][spielerSpalte] = null;
+        		fireTableCellUpdated(18,spielerSpalte);
+        	}
+        	System.out.println("Gesamt unten für Spieler "+spielerIndex + ": "+ gesamtUnten);
+        	
+        }
+        
+        public boolean istObereHaelfteVoll(int spielerIndex) {
+        	int spielerSpalte = 2 + spielerIndex;
+        	for (int row = 0; row <= 5; row++) {
+        		if(data[row][spielerSpalte] == null) {
+        			return false;
+        		}
+        	}
+        	return true;
+        }
+        
+        public boolean istUntereHaelfteVoll(int spielerIndex) {
+        	int spielerSpalte = 2 + spielerIndex;
+        	for(int row = 9; row <= 15; row ++) {
+        		if(data[row][spielerSpalte]== null) {
+        			return false;
+        		}
+        	}
+        	return true;
+        }
 		
 		
 		@Override
@@ -487,14 +577,13 @@ public class PunkteTabelleGUI extends AbstractGUI {
 		
         @Override
         public Object getValueAt(int row, int column) {
-        	Object result = null;
         	
+        	Object result = null;
         	
         	if(column == 0||column ==1) {
         			result = data[row][column];
         			return result;
         		}
- 
         	if(column >= 2) {
         		if(data[row][column] != null) {
         			result = data[row][column];
@@ -530,7 +619,22 @@ public class PunkteTabelleGUI extends AbstractGUI {
 		public void setValueAt(Object value, int row, int column) {
 			data[row][column] = value;
 			fireTableCellUpdated(row, column);
+			
+			if(column >=2) {
+				int spielerIndex = column -2;
+				if (row <=5) {
+					if(istObereHaelfteVoll(spielerIndex)) {
+						berechneUndSetzeGesamtOben(spielerIndex);
+					}
+				}
+			
+			if (row >= 9 && row <= 15) {
+				if(istUntereHaelfteVoll(spielerIndex)) {
+				berechneUndSetzeGesamtUnten(spielerIndex);
+				}
+			}
 		}
+	}
 		
 		
 		
@@ -542,6 +646,16 @@ public class PunkteTabelleGUI extends AbstractGUI {
     public void aktualisiereFuerNeuenSpieler(int aktuellerSpielerIndex) {
     	zeigeMoeglichePunkte(new HashMap<>(), aktuellerSpielerIndex);
     	if (table != null) {
+    		table.repaint();
+    	}
+    }
+    public void berechneAlleGesamtPunkte() {
+    	if(tableModel != null) {
+    		for (int spielerIndex = 0; spielerIndex < spielerAnzahl; spielerIndex++) {
+    			if(tableModel.istObereHaelfteVoll(spielerIndex)){
+    				tableModel.berechneUndSetzeGesamtOben(spielerIndex);
+    			}
+    		}
     		table.repaint();
     	}
     }
