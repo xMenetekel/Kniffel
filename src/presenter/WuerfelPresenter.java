@@ -250,7 +250,7 @@ public class WuerfelPresenter  {
 	public void neueRunde() {
 		wurfAnzahl =0;
 	  	spielLogik.setWuerfeAnzahl(0); 
-	  	bank.getReihenfolge().clear();
+	  	for(int i = 0; i < 5; i++) { bank.getReihenfolge().set(i, null); }
         for (WuerfelLogik wuerfel : alleWuerfelLogik) {
             wuerfel.setBehalten(false);
             
