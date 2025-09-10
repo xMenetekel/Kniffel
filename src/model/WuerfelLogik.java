@@ -17,18 +17,30 @@ public class WuerfelLogik {
 	private int bankXPosition;
 	private int bankYPosition;
 	private WuerfelGUI gui;
+	private boolean init;
 	
 	
 	//Konstruktor 
 	public WuerfelLogik(int seiten) {
 		this.seiten = seiten;
 		this.behalten = false;
+		this.init = true;
 		this.zufall = new Random();
 		wuerfeln();
 		
 	}
 	
 	
+	public boolean isInit() {
+		return init;
+	}
+
+
+	public void setInit(boolean init) {
+		this.init = init;
+	}
+
+
 	public void wuerfeln() {
 		if(!behalten) {
 			this.augen = zufall.nextInt(seiten)+1; //keine 0 seiten

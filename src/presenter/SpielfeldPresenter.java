@@ -102,10 +102,12 @@ public class SpielfeldPresenter {
 	}
 	 
 	 public void onWuerfelnClick() {
-	     tabelle.aktualisierePunkteTabelle();  		 
+	     tabelle.aktualisierePunkteTabelle();  
+	     wuerfel.getAlleWuerfelLogik().forEach(w -> {w.setInit(false);});
 		 if(spielLogik.getWuerfeAnzahl() < 3 && wuerfel.getWurfAnzahl() < wuerfel.getMaxWuerfe()) {
 			 
 			 wuerfel.wuerfeln();
+			 bank.getGui().getReihenfolge().clear();
 			 spielLogik.erhoeheWurfAnzahl();
 			 updateStatusLabel();
 			 
@@ -150,15 +152,14 @@ public class SpielfeldPresenter {
 			bank.getPanel().setBounds((int)Math.floor(breite*bank.getProzentFlaecheX()), 
 									  (int)Math.floor(hoehe*bank.getProzentFlaecheY()), 280, 60);
 			
-			w.getAlleWuerfelGUI().forEach(t -> { if(!t.getLogik().istBehalten()) {				
-												 t.setxPos( (int) Math.round(t.prozentXAufFeld * breite)  );
-												 t.setyPos( (int) Math.round(t.prozentYAufFeld * hoehe));
-												 t.setProzentXAufFeld(t.getxPos() * 1.0 / breite);
-												 t.setProzentYAufFeld(t.getyPos() * 1.0 / hoehe);
-												 t.getButton().setBounds(t.getxPos(), t.getyPos(), 50, 50);
+			w.getAlleWuerfelGUI().forEach(t -> { if(t.getLogik().istBehalten() || t.getLogik().isInit()) {				
+													//TODO banklogik
 												} else {
-												//TODO neue logik für bank	
-													
+													 t.setxPos( (int) Math.round(t.prozentXAufFeld * breite)  );
+													 t.setyPos( (int) Math.round(t.prozentYAufFeld * hoehe));
+													 t.setProzentXAufFeld(t.getxPos() * 1.0 / breite);
+													 t.setProzentYAufFeld(t.getyPos() * 1.0 / hoehe);
+													 t.getButton().setBounds(t.getxPos(), t.getyPos(), 50, 50);													
 												}
 												});
 			

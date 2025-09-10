@@ -27,9 +27,10 @@ public class WuerfelPresenter  {
 	
 	private SpielLogik spielLogik;	
 	
+	
 	private WuerfelflaecheGUI flaeche;
 	private WuerfelBankGUI bank; //ich hasse das so sehr 
-	private DummeChatGPTLoesungIchHasseAlles keinBockMehr;
+	private DummeChatGPTLoesungIchHasseAlles keinBockMehr; //TODO umbennenenen
 	private StartmenueLogik menueDaten;
 	
 	int wurfAnzahl = 0;
@@ -37,7 +38,6 @@ public class WuerfelPresenter  {
 	
 	final int WUERFEL_GROESSE = 50;	
 	
-	//, PunkteTabelleGUI punkteTabelle,SpielLogik spielLogik
 	
 	public WuerfelPresenter(Container Eimer, SpielLogik spielLogik, 
 							WuerfelflaecheGUI flaeche, WuerfelBankGUI bank, 
@@ -52,7 +52,9 @@ public class WuerfelPresenter  {
 		
 		for(int i = 0; i < 5; i++) {		//das erstellt 5 würfel und fügt in jeder iteration den wuerfel den entsprechenden arrays hinzu
 			WuerfelLogik model = new WuerfelLogik(6);
-			WuerfelGUI view = new WuerfelGUI(this, model, i*55+((int)(0.1 * Eimer.getWidth())), (int)(0.592857 * Eimer.getHeight()+5), Eimer);
+			WuerfelGUI view = new WuerfelGUI(this, model, 
+											(i*55+((int)(bank.getProzentFlaecheX() * Eimer.getWidth())))+5, 
+												   (int)((bank.getProzentFlaecheY() * Eimer.getHeight())+6), Eimer); //+6 weil aus irgendeinem grund will es das nicht ordentlich mit 5 machen was aber sinn machen würde
 			
 			model.setGui(view);
 			
@@ -133,10 +135,14 @@ public class WuerfelPresenter  {
 	private void hochRunterhochRunter(WuerfelLogik wuerfel) { 
 		
 		if(wuerfel.istBehalten()) {
+			
 			this.runter(wuerfel.getGui());
+			
 		
 		} else {
-			this.hoch(wuerfel.getGui());
+			
+			this.hoch(wuerfel.getGui());			
+			
 		}
 		
 	}
@@ -145,7 +151,7 @@ public class WuerfelPresenter  {
 		int x = (int)(container.getWidth() * bank.getProzentFlaecheX());
 		int y = (int)(container.getHeight() * bank.getProzentFlaecheY());
 		
-		x = ((gui.getButton().getWidth() + 5) * zaehleBankFuelle()-1) + x;
+		x = ((gui.getButton().getWidth() + 5) * bank.getReihenfolge().indexOf(gui) ) + x;
 		y = y + 5;
 	
 		gui.zeichneLinie(gui.getButton(), x, y, false);
@@ -175,6 +181,7 @@ public class WuerfelPresenter  {
 
 	public void wuerfeln() {
 		int aktuellesMaxWuerfeln;
+		
 		if(menueDaten.isDebugingModus()) {
 			aktuellesMaxWuerfeln = 999;
 		} else {
@@ -193,6 +200,7 @@ public class WuerfelPresenter  {
 				}
 			} 
 		}else {
+			
 			for(WuerfelLogik wuerfel : alleWuerfelLogik) {
 				if(!wuerfel.istBehalten()) {
 					wuerfel.wuerfeln();
@@ -245,6 +253,7 @@ public class WuerfelPresenter  {
 	public void neueRunde() {
 		wurfAnzahl =0;
 	  	spielLogik.setWuerfeAnzahl(0); 
+	  	bank.getReihenfolge().clear();
         for (WuerfelLogik wuerfel : alleWuerfelLogik) {
             wuerfel.setBehalten(false);
             
