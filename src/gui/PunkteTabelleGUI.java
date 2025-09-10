@@ -60,8 +60,10 @@ public class PunkteTabelleGUI extends AbstractGUI {
 		
 		macheTabelleNichtEditierbar();
 		table.setRowHeight(40);
+
 		Color mischmasch = new Color(150,190,140); // evtl muss raus
 		table.setBackground(mischmasch);
+
 		
 		table.setDefaultRenderer(Object.class, new HighlightingCellRenderer());
 		
