@@ -82,7 +82,8 @@ public class WuerfelPresenter  {
 		int validesX;
 		int xVon = (int) (flaeche.getProzentFlaecheX() * this.container.getWidth());
 		int xBis = (int) ((flaeche.getProzentFlaecheBreite() * this.container.getWidth()) + xVon);
-		validesX = new Random().nextInt(xBis-xVon-WUERFEL_GROESSE)+xVon;		
+		validesX = new Random().nextInt(xBis-xVon-WUERFEL_GROESSE)+xVon;	
+		
 		
 		
 		return validesX;
@@ -128,7 +129,7 @@ public class WuerfelPresenter  {
 						break;
 					}
 				}					
-		} while (kollisionGefunden);
+		} while (kollisionGefunden || zielX == aktuellerWuerfel.getStartX() || zielY == aktuellerWuerfel.getStartY());
 			return new int[] {zielX, zielY};
 		}
 		
@@ -172,13 +173,6 @@ public class WuerfelPresenter  {
 		
 	}
 	
-	private int zaehleBankFuelle() {
-		int bank = 0;
-		for (WuerfelLogik wuerfel : alleWuerfelLogik) {
-			if (wuerfel.istBehalten()) { bank++; }			
-		}		
-		return bank;
-	}
 	
 	
 
