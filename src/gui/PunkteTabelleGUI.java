@@ -118,8 +118,9 @@ public class PunkteTabelleGUI extends AbstractGUI {
                 int col = table.columnAtPoint(evt.getPoint());
                
 
-                if (col >= 2) { 
+                if (col >= 2 && (row < 6||(row>8 && row < 16)|| row >18)) { 
                     Kategorie kategorie = Kategorie.fromTabellenIndex(row);
+                    
                     
                     if(kategorie != null) {
                     	setSelectedCell(row,col);
@@ -134,6 +135,8 @@ public class PunkteTabelleGUI extends AbstractGUI {
                     		System.out.println("Null kann erst nach 3 Würfen eingetragen werden!");
                     	}
                     }
+            	}else if (col >= 2) {
+            		System.out.println("Berechnungsfeld- kann nicht ausgewählt werden!");
             	}
             }
             
