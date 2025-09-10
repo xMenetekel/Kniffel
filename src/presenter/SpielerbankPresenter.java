@@ -45,6 +45,8 @@ public class SpielerbankPresenter {
 			return "transistor";
 		case 6:
 			return "integral";
+		case 7: 
+			return "fey";
 		default: return "spielerbank";
 		}
 	}

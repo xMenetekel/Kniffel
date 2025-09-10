@@ -93,6 +93,8 @@ public class StartmenueGUI extends AbstractGUI{
 		transistor.setName("transistor");
 		JButton integral = new JButton();
 		integral.setName("integral");
+		JButton fey = new JButton();
+		fey.setName("fey");
 		
 		this.iconButtons.add(bebi);
 		this.iconButtons.add(kiki);
@@ -101,6 +103,7 @@ public class StartmenueGUI extends AbstractGUI{
 		this.iconButtons.add(schrinke);
 		this.iconButtons.add(transistor);
 		this.iconButtons.add(integral);
+		this.iconButtons.add(fey);
 		
 		iconButtons.forEach(button -> {button.setIcon(new ImageIcon("Other/" + button.getName() + "klein.jpg"));
 										button.setPreferredSize(new Dimension(50,50));
