@@ -34,7 +34,7 @@ public class WuerfelPresenter  {
 	private StartmenueLogik menueDaten;
 	
 	int wurfAnzahl = 0;
-	int maxWuerfe = 3;
+	int maxWuerfe = 3; //Standardwert
 	
 	final int WUERFEL_GROESSE = 50;	
 	
@@ -184,15 +184,13 @@ public class WuerfelPresenter  {
 	
 
 	public void wuerfeln() {
-		int aktuellesMaxWuerfeln;
-		
-		if(menueDaten.isDebugingModus()) {
-			aktuellesMaxWuerfeln = 999;
+				if(menueDaten.isDebugingModus()) {
+			maxWuerfe = 999;
 		} else {
-			aktuellesMaxWuerfeln = 3;
+			maxWuerfe = 3;
 		}
 		
-		if(wurfAnzahl >= aktuellesMaxWuerfeln) { return; }
+		if(wurfAnzahl >= maxWuerfe) { return; }
 		
 		if(menueDaten.isDebugingModus()) {
 			int debugWert = (wurfAnzahl % 6) +1;
