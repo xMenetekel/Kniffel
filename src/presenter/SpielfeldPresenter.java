@@ -214,6 +214,7 @@ public class SpielfeldPresenter {
 				 spielLogik.setWuerfeAnzahl(0);
 				 
 				 spielLogik.naechsterSpieler();
+				 spieler.aktualisiereAktivesSpielerIcon(spielLogik.getAktiverSpielerIndex());
 				 wuerfel.neueRunde();
 				 ausgewaehlteKategorie = null;
 				 updateStatusLabel();
