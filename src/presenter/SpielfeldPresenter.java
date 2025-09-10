@@ -105,7 +105,9 @@ public class SpielfeldPresenter {
 	     tabelle.aktualisierePunkteTabelle();  
 	     wuerfel.getAlleWuerfelLogik().forEach(w -> {w.setInit(false);});
 	     for(int i = 0; i < 5; i++) { bank.getGui().getReihenfolge().set(i, null); }
-		 if(spielLogik.getWuerfeAnzahl() < 3 && wuerfel.getWurfAnzahl() < wuerfel.getMaxWuerfe()) {
+	     
+	     int aktuellesMaxWuerfeln = wuerfel.getMaxWuerfe();
+		 if(spielLogik.getWuerfeAnzahl() < aktuellesMaxWuerfeln && wuerfel.getWurfAnzahl() < aktuellesMaxWuerfeln) {
 			 
 			 wuerfel.wuerfeln();
 			
@@ -202,9 +204,10 @@ public class SpielfeldPresenter {
 	 
 
 		private void updateStatusLabel() {
+			String maxWurf = menueDaten.isDebugingModus() ? "inf" : String.valueOf(wuerfel.getMaxWuerfe());
 			String status = "Runde " + spielLogik.getRunde() + 
 					"\nSpieler: " + spielLogik.getAktiverSpieler().getName() + 
-					"\nWürfe: " + spielLogik.getWuerfeAnzahl() + "/3";
+					"\nWürfe: " + wuerfel.getWurfAnzahl() + "/" + maxWurf;
 			statusLabel.setText(status);
 		}
 		
