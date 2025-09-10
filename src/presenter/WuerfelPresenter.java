@@ -59,7 +59,7 @@ public class WuerfelPresenter  {
 												   (int)((bank.getProzentFlaecheY() * Eimer.getHeight())+6), Eimer); //+6 weil aus irgendeinem grund will es das nicht ordentlich mit 5 machen was aber sinn machen würde
 			
 			model.setGui(view);
-			
+			bank.getReihenfolge().set(i, view);
 			alleWuerfelGUI.add(view);
 			alleWuerfelLogik.add(model);		
 			container.add(view.getButton());
@@ -229,7 +229,8 @@ public class WuerfelPresenter  {
 				x = getValidesX(flaeche);
 				y = getValidesY(flaeche);
 				int[] xy = korrigierteKollision(wuerfelGUI, x, y);
-			  wuerfelGUI.zeichneLinie(wuerfelGUI.getButton(), xy[0], xy[1], true);											  										  
+			  wuerfelGUI.zeichneLinie(wuerfelGUI.getButton(), xy[0], xy[1], true);	
+		
 			}	
 		});	
 			
