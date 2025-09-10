@@ -104,6 +104,7 @@ public class SpielfeldPresenter {
 	 public void onWuerfelnClick() {
 	     tabelle.aktualisierePunkteTabelle();  
 	     wuerfel.getAlleWuerfelLogik().forEach(w -> {w.setInit(false);});
+	     for(int i = 0; i < 5; i++) { bank.getGui().getReihenfolge().set(i, null); }
 		 if(spielLogik.getWuerfeAnzahl() < 3 && wuerfel.getWurfAnzahl() < wuerfel.getMaxWuerfe()) {
 			 
 			 wuerfel.wuerfeln();
@@ -154,6 +155,18 @@ public class SpielfeldPresenter {
 			
 			w.getAlleWuerfelGUI().forEach(t -> { if(t.getLogik().istBehalten() || t.getLogik().isInit()) {				
 													//TODO banklogik
+													t.setxPos((int) ((bank.getProzentFlaecheX() * breite ) +5  ) + 55* (bank.getReihenfolge().indexOf(t))  );
+													t.setyPos((int) ((bank.getProzentFlaecheY() * hoehe ) + 6 )  );
+													t.setProzentXAufFeld(t.getxPos() * 1.0 / breite);
+													 t.setProzentYAufFeld(t.getyPos() * 1.0 / hoehe);
+													 t.getButton().setBounds(t.getxPos(), t.getyPos(), 50, 50);	
+				
+				
+				
+				
+				
+				
+				
 												} else {
 													 t.setxPos( (int) Math.round(t.prozentXAufFeld * breite)  );
 													 t.setyPos( (int) Math.round(t.prozentYAufFeld * hoehe));
