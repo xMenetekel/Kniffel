@@ -11,7 +11,9 @@ import java.awt.event.KeyAdapter;
 import java.awt.event.KeyEvent;
 
 import java.util.HashMap;
+import java.util.HashSet;
 import java.util.Map;
+import java.util.Set;
 
 import javax.swing.ImageIcon;
 import javax.swing.JLabel;
@@ -38,9 +40,17 @@ public class PunkteTabelleGUI extends AbstractGUI {
 	private final int spielerAnzahl;
 	private SpielLogik spielLogik;
 	private KategorieSelectListener selectListener;
+	private Set<Point>festeEintraege = new HashSet<>();
 	private Point selectedCell = null;
 	
 	private Map<String, Integer> finalePunkte = new HashMap<>();
+	
+	private void aktualisiereRenderer() {// ki
+	    HighlightingCellRenderer renderer = (HighlightingCellRenderer)table.getDefaultRenderer(Object.class);
+	    if (renderer != null) {
+	        renderer.setFesteEintraege(this.festeEintraege);
+	    }
+	}
 	
 	public JTable getTable() {
 		return this.table;
@@ -202,6 +212,11 @@ public class PunkteTabelleGUI extends AbstractGUI {
 	    if (tableModel != null) {
 	        tableModel.setMoeglichePunkte(moeglichePunkte, aktuellerSpielerIndex); 
 	        macheTabelleNichtEditierbar();
+	        
+	        HighlightingCellRenderer renderer = (HighlightingCellRenderer)table.getDefaultRenderer(Object.class); // KI
+	        if (renderer != null) {
+	            renderer.setFesteEintraege(this.festeEintraege);
+	        }
 	    }
 	}
 
@@ -211,6 +226,9 @@ public class PunkteTabelleGUI extends AbstractGUI {
     	try {
     		int row= kategorie.getTabellenIndex();
     		int column = 2+spielerIndex;
+    		
+    		festeEintraege.add(new Point(row,column));
+    		
     		tableModel.setValueAt(punkte, kategorie.getTabellenIndex(), 2 + spielerIndex);
     		macheTabelleNichtEditierbar();
             tableModel.entferneMoeglicheKategorie(kategorie);
@@ -221,6 +239,11 @@ public class PunkteTabelleGUI extends AbstractGUI {
             
             if(kategorie.ordinal() >= Kategorie.DREIER_PASCH.ordinal() && kategorie.ordinal() <= Kategorie.CHANCE.ordinal()) {
             	tableModel.berechneUndSetzeGesamtUnten(spielerIndex);
+            }
+            
+            HighlightingCellRenderer renderer = (HighlightingCellRenderer)table.getDefaultRenderer(Object.class);
+            if (renderer != null){
+            	renderer.setFesteEintraege(festeEintraege);
             }
             
             table.repaint();
@@ -242,6 +265,8 @@ public class PunkteTabelleGUI extends AbstractGUI {
     public void highlightSpalte(int spielerIndex) {
     	if(tableModel != null) {
     		tableModel.setHighlightedSpalte(2+spielerIndex);
+    		//renderer.setFesteEintraege(this.festeEintraege);
+    		aktualisiereRenderer();
     	}
     	if (table != null) {
     		HighlightingCellRenderer renderer = (HighlightingCellRenderer)table.getDefaultRenderer(Object.class);
@@ -261,6 +286,9 @@ public class PunkteTabelleGUI extends AbstractGUI {
 		private int wuerfeAnzahl = 0;
 		private Color DUNKELGRÜN = new Color (100,180,100);
 		private Color AUSWAHL = new Color (150,200,150);
+		private Color GELB = new Color (255,200,150);
+		private Color FEST_GELB = new Color (255,255,100);
+		private Set<Point>festeEintraege= new HashSet<>();
 		
 		
 		public void setHighlightedSpalte (int spalte) {
@@ -277,6 +305,10 @@ public class PunkteTabelleGUI extends AbstractGUI {
 			this.wuerfeAnzahl = anzahl;
 		}
 		
+		public void setFesteEintraege(Set<Point>festeEintraege) {
+			this.festeEintraege = new HashSet <>(festeEintraege);
+		}
+		
 		@Override
 		public Component getTableCellRendererComponent(JTable table, Object value, boolean isSelected, boolean hasFocus, int row, int column) {
 			Component c = super.getTableCellRendererComponent(table, value, isSelected, hasFocus, row, column);
@@ -286,26 +318,31 @@ public class PunkteTabelleGUI extends AbstractGUI {
 			boolean hatMoeglichePunkte = false;
 			boolean feldIstLeer = (value == null);
 			boolean dreiMalGewuerfelt = (wuerfeAnzahl >= 3);
+			boolean istFesterEintrag = festeEintraege.contains(new Point (row,column));
 			Container container = SwingUtilities.getAncestorOfClass(PunkteTabelleGUI.class, table);
+			
 			
 			if(kategorie != null) {
 				hatMoeglichePunkte = model.hatMoeglichePunkteFuerKategorie(kategorie);
 			}
 			
-			if(row == selectedRow &&  column == selectedCol) {
-				c.setBackground(AUSWAHL);
+			if(istFesterEintrag && column >= 2) {
+				c.setBackground(FEST_GELB);
 				c.setForeground(Color.BLACK);
+				setToolTipText("Fester Eintrag");
+			}
+			
+			else if(row == selectedRow &&  column == selectedCol) {
+				c.setBackground(AUSWAHL);
+				c.setForeground(GELB);
 				setToolTipText("Ausgewählt - Punkte eintragen Bestätigen");
 			}
 			
-			
-			if (column >= 2 && value !=null) {
+			else if (column >= 2 && value !=null) {
 				c.setBackground(DUNKELGRÜN);
-				c.setForeground(Color.BLACK);
+				c.setForeground(GELB);
 				setToolTipText("Fester Wert - Kann nicht geändert werden");
-			} else if(column == highlightedSpalte && value != null) {
-				c.setBackground(new Color(220,240,255));
-				setToolTipText("MöglichePunkte - doppelklick zum Auswählen");
+		
 			}else {
 				c.setBackground(table.getBackground());
 				c.setForeground(table.getForeground());
@@ -367,7 +404,7 @@ public class PunkteTabelleGUI extends AbstractGUI {
 		this.selectListener = listener;
 	}
 	
-	static class ZugTableModel extends AbstractTableModel{
+	class ZugTableModel extends AbstractTableModel{
 		private String[] columnNames;
 		private Object[][] data;
 		private final int spielerAnzahl; //muss später übergeben werden!!!!Wichtig!!!ToDo
@@ -555,6 +592,17 @@ public class PunkteTabelleGUI extends AbstractGUI {
         	}
         	return true;
         }
+        
+		public Set<Point> getFesteEintraege(){
+			return PunkteTabelleGUI.this.festeEintraege;
+		}	
+		
+		public void aktualisiereFesteEintraege() {//KI
+		    HighlightingCellRenderer renderer = (HighlightingCellRenderer)PunkteTabelleGUI.this.table.getDefaultRenderer(Object.class);
+		    if (renderer != null) {
+		        renderer.setFesteEintraege(PunkteTabelleGUI.this.festeEintraege);
+		    }
+		}
 		
 		
 		@Override
@@ -577,6 +625,8 @@ public class PunkteTabelleGUI extends AbstractGUI {
 			fireTableDataChanged();
 			System.out.println("MoeglichePunkte zurückgeetzt");
 		}
+		
+
 		
         @Override
         public Object getValueAt(int row, int column) {
@@ -642,7 +692,7 @@ public class PunkteTabelleGUI extends AbstractGUI {
 		
 		
 		
-		
+
 		
 
 	}
