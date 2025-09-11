@@ -3,6 +3,7 @@ package presenter;
 import java.awt.Container;
 import java.util.List;
 
+import javax.swing.ImageIcon;
 import javax.swing.JButton;
 
 import gui.SpielerbankGUI;
@@ -53,10 +54,8 @@ public class SpielerbankPresenter {
 
 	// aktuallisieren von Spieler Icon in GUI
 	public void aktualisiereAktivesSpielerIcon(int spielerIndex) {
-		gui.setBildIcon(new javax.swing.ImageIcon("Other/" + getBildname(spielerIndex) + ".jpg"));
-		gui.getBild().setIcon(gui.getBildIcon());
-		gui.getPanel().revalidate();
-		gui.getPanel().repaint();
+		gui.aktualisiereIcon(spielerIndex);
+		
 	}
 	
 	
