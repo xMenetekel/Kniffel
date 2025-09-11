@@ -40,18 +40,18 @@ public class PunktetabellePresenter implements DummeChatGPTLoesungIchHasseAlles{
 	
 	public void aktualisierePunkteTabelle() {
 		if(wuerfelWerte == null || wuerfelWerte.isEmpty()) {
-			System.out.println("Keine Wuerfelwerte zum ANzeigen");
+			System.out.println("Keine Wuerfelwerte zum Anzeigen");
 			return;
 		}
 		
-		System.out.println("AktualisiereTabelle mit Würfeln: " + wuerfelWerte);
+		System.out.println("Aktualisiere Tabelle mit Würfeln: " + wuerfelWerte);
 		moeglicheZuege.setWuerfelWerte(wuerfelWerte);
 		
         Map<Kategorie, Integer> moeglichePunkte = moeglicheZuege.getAktiveMoeglichePunkte();
         System.out.println("Mögliche Punkte: " + moeglichePunkte); // DEBUG
         if (gui != null) {
             gui.zeigeMoeglichePunkte(moeglichePunkte, spielLogik.getAktiverSpielerIndex());
-            System.out.println("Punkte aktualisiert"+moeglichePunkte);
+            System.out.println("Punkte aktualisiert "+moeglichePunkte);
         }
     }
 	 public void speichereWuerfelWerte(List<Integer> werte) {	        
@@ -86,7 +86,7 @@ public class PunktetabellePresenter implements DummeChatGPTLoesungIchHasseAlles{
 			if(gui != null) {
 				gui.zeigeMoeglichePunkte(new HashMap<>(),spielLogik.getAktiverSpielerIndex());
 			}
-			System.out.println("NeueRunde in PunktetabellePresenter gestartet");
+			System.out.println("Neue Runde in PunktetabellePresenter gestartet");
 		}
 
 

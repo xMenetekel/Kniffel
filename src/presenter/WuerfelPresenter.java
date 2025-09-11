@@ -7,6 +7,10 @@ import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 import java.util.Random;
+
+import javax.swing.JButton;
+import javax.swing.JOptionPane;
+
 import gui.WuerfelGUI;
 import gui.WuerfelflaecheGUI;
 import gui.WuerfelBankGUI;
@@ -39,6 +43,7 @@ public class WuerfelPresenter  {
 	final int WUERFEL_GROESSE = 50;	
 	
 	private boolean init;
+
 	
 	
 	
@@ -75,11 +80,29 @@ public class WuerfelPresenter  {
 	
 	public void wuerfelAngeklickt(WuerfelGUI gui) {
 		if(this.isInit()) { return; }
-		WuerfelLogik zustandDerLogik = gui.getLogik();
-		boolean neuerZustand = !zustandDerLogik.istBehalten();										
-		zustandDerLogik.setBehalten(neuerZustand);
-		gui.setIstinBank(!gui.isIstinBank());
-		hochRunterhochRunter(zustandDerLogik);
+		
+		if(menueDaten.isDebugingModus()) {
+			String[] liste = {"1", "2", "3", "4", "5", "6"};
+			
+			int auswahl = JOptionPane.showOptionDialog(
+					container, 
+					"Zahl wählen", 
+					"Cheatermodus",
+					JOptionPane.DEFAULT_OPTION, 
+					JOptionPane.PLAIN_MESSAGE,
+					null, 
+					liste, 
+					liste[0]);
+			gui.getLogik().setAugen(auswahl+1); 
+			gui.fresherButton();
+			tabellenkommunikation();
+		} else {			
+			WuerfelLogik zustandDerLogik = gui.getLogik();
+			boolean neuerZustand = !zustandDerLogik.istBehalten();										
+			zustandDerLogik.setBehalten(neuerZustand);
+			gui.setIstinBank(!gui.isIstinBank());
+			hochRunterhochRunter(zustandDerLogik);
+		}
 		
 	}
 	
@@ -184,50 +207,16 @@ public class WuerfelPresenter  {
 	
 
 	public void wuerfeln() {
-				if(menueDaten.isDebugingModus()) {
-			maxWuerfe = 999;
-		} else {
-			maxWuerfe = 3;
-		}
-		
+		maxWuerfe = menueDaten.isEndloseWuerfe() ? 999 : 3;		
 		if(wurfAnzahl >= maxWuerfe) { return; }
 		
-		if(menueDaten.isDebugingModus()) {
-			int debugWert = (wurfAnzahl % 6) +1;
-			
-			for(WuerfelLogik wuerfel : alleWuerfelLogik) {
-				if(!wuerfel.istBehalten()) {
-					wuerfel.setAugen(debugWert);
-			
-				}
-			} 
-		}else {
-			
-			for(WuerfelLogik wuerfel : alleWuerfelLogik) {
-				if(!wuerfel.istBehalten()) {
+		for(WuerfelLogik wuerfel : alleWuerfelLogik) {
+			if(!wuerfel.istBehalten()) {
 					wuerfel.wuerfeln();
-				}		
-			}
+				
+			}				
+		
 		}
-		
-		//getAlleWuerfelLogik().forEach(w -> { if(menueDaten.isDebugingModus()) {
-			//int counter = 1;
-			//for(WuerfelLogik wuerfel : alleWuerfelLogik) {
-			//	if (!wuerfel.istBehalten()) {
-			//		wuerfel.setAugen(counter); 
-			//		counter++;
-			//		if(counter > 6) counter = 1;
-			//	}
-			//}
-		//}else {
-			//getAlleWuerfelLogik().forEach(wuerfel ->{
-			//	if(!w.istBehalten()) {
-				//	w.wuerfeln();
-				//}
-			//});	
-	//	}
-	//});
-		
 		getAlleWuerfelGUI().forEach(wuerfelGUI -> {
 			
 			if (!wuerfelGUI.getLogik().istBehalten()) {
@@ -243,22 +232,26 @@ public class WuerfelPresenter  {
 			  wuerfelGUI.zeichneLinie(wuerfelGUI.getButton(), xy[0], xy[1], true);	
 		
 			}	
-		});	
-			
+		});				
 		
 		wurfAnzahl++;
 		
+		tabellenkommunikation();
+	}
+	
+	private void tabellenkommunikation() {
 		List<Integer> wuerfelWerte = new ArrayList<>();
 		for(WuerfelLogik wuerfel : alleWuerfelLogik) {
 			wuerfelWerte.add(wuerfel.getAugen());
 		}
 		if(keinBockMehr != null) {
 			keinBockMehr.wasPassiertWennWirEinenWuerfelWerfen(wuerfelWerte);
-
 		}
-		System.out.println("Wurf"+ wurfAnzahl + "/" + maxWuerfe + "-Würfel: "+ wuerfelWerte);
+		System.out.println("Wurf "+ wurfAnzahl + "/" + maxWuerfe + "-Würfel: "+ wuerfelWerte);
+		
 	}
-	
+
+
 	public void neueRunde() {
 		wurfAnzahl = 0;
 	  	spielLogik.setWuerfeAnzahl(0); 
@@ -313,6 +306,12 @@ public class WuerfelPresenter  {
 
 		public void setInit(boolean init) {
 			this.init = init;
+		}
+
+
+		public int debug() {
+			// TODO Auto-generated method stub
+			return 0;
 		}
 }
     
