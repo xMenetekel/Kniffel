@@ -22,9 +22,6 @@ public class WuerfelGUI {
 	private WuerfelPresenter presenter; 
 	boolean istinBank;
 	
-
-	
-
 	public WuerfelGUI(WuerfelPresenter presenter, WuerfelLogik model, int startX, int startY, Container Eimer){
 		this.setPresenter(presenter);
 		this.model = model;
@@ -39,8 +36,7 @@ public class WuerfelGUI {
 		this.prozentXAufFeld = startX * 1.0 / Eimer.getWidth();
 		this.prozentYAufFeld = startY * 1.0 / Eimer.getHeight();
 		wuerfel.addActionListener(klick -> presenter.wuerfelAngeklickt(this));
-		this.istinBank = true;
-		
+		this.istinBank = true;	
 	}
 	
 	public void fresherButton() {
@@ -48,9 +44,7 @@ public class WuerfelGUI {
 		wuerfel.setIcon(bildi);
 		wuerfel.setVisible(true);
 		wuerfel.setBounds(this.xPos, this.yPos, 50, 50);
-	
-	}
-	
+	}	
 	
 	/**
 	 * /**
@@ -120,11 +114,10 @@ public class WuerfelGUI {
 				}
 			}
 		});
-		zeichnenTimer.start();		
-		
-		
+		zeichnenTimer.start();				
 	}
 
+	// Getter und Setter
 	public JButton getButton() {
 		return this.wuerfel;
 	}

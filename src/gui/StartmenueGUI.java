@@ -13,20 +13,18 @@ import javax.swing.JButton;
 
 public class StartmenueGUI extends AbstractGUI{
 		
-		private JButton starteSpiel;
-		private JButton einstellungen;
-		private JButton exit;
-		private Container Eimer;
-		
-		private List<JButton> iconButtons = new ArrayList<>();
-		
-			
+	private JButton starteSpiel;
+	private JButton einstellungen;
+	private JButton exit;
+	private Container Eimer;
 	
-	
+	private List<JButton> iconButtons = new ArrayList<>();
+		
+	// Konstruktor erstellt GUI, Layout und fuergt Buttons Hintergrund hinzu ohne Layout Manager
 	public StartmenueGUI(Container Eimer) {
 		super(0,0,1,1, Eimer);
 		this.Eimer = Eimer;
-		this.Eimer.setLayout(null); //Hab erstmal den Layout Manager ausgemacht um es manuell anzuordnen, können wir später aber noch ändern : famous last words, i am so sorry
+		this.Eimer.setLayout(null); 
 		
 		this.starteSpiel = new JButton();
 		this.einstellungen = new JButton();
@@ -38,7 +36,8 @@ public class StartmenueGUI extends AbstractGUI{
 		
 		erstelleButtons();	
 		
-		this.Eimer.addComponentListener(new ComponentAdapter() { //der ganze spaß hier ist dafür da das beim neu ziehen alles prozentual angepasst wird
+		// Listener groeßenanderungen anpassen 
+		this.Eimer.addComponentListener(new ComponentAdapter() {
 			@Override
 			public void componentResized(ComponentEvent e) {
 				rearrangiereFelder(Eimer, starteSpiel, einstellungen, exit);
@@ -47,38 +46,33 @@ public class StartmenueGUI extends AbstractGUI{
 				Eimer.repaint();
 			}			
 		});
+		
+		// Hintergundbild
 		bildIcon = new ImageIcon("Other/startHintergrund.jpg");	
 		bild.setBounds(0,0, Eimer.getWidth(), Eimer.getHeight());
 		bild.setIcon(bildIcon);
 		panel.add(bild);
-		//
-		
-		
-		
-		
+				
 		this.Eimer.add(starteSpiel);
 		this.Eimer.add(exit);
 		this.Eimer.add(einstellungen); 
 		this.Eimer.add(panel);
 		Eimer.revalidate();
-		Eimer.repaint();
-		
-		
-		
+		Eimer.repaint();		
 	}
+	
+	// und noch mehr groeßenberechnungen 
 	private void rearrangiereFelder(Container eimer, JButton starteSpiel, JButton einstellungen, JButton exit) {
 		int breite = eimer.getWidth();
 		int hoehe = eimer.getHeight();
 		
 		starteSpiel.setBounds(	(int)Math.floor(breite*0.33), (int)Math.floor(hoehe*0.33), (int)Math.floor(breite*0.33),(int)Math.floor(hoehe*0.1));
 		einstellungen.setBounds((int)Math.floor(breite*0.33), (int)Math.floor(hoehe*0.44), (int)Math.floor(breite*0.33),(int)Math.floor(hoehe*0.1));
-		exit.setBounds(			(int)Math.floor(breite*0.33), (int)Math.floor(hoehe*0.55), (int)Math.floor(breite*0.33),(int)Math.floor(hoehe*0.1));
-		
-		
-		
+		exit.setBounds(			(int)Math.floor(breite*0.33), (int)Math.floor(hoehe*0.55), (int)Math.floor(breite*0.33),(int)Math.floor(hoehe*0.1));		
 	}
 	
-	private void erstelleButtons(){ //semi obsolet weil man eigentlich nur die image icons braucht und nicht die ganzen buttons :( aber ich will buttons :(
+	// Icon Bilder erstellen weil wir Buttons lieben 
+	private void erstelleButtons(){
 		JButton bebi = new JButton();
 		bebi.setName("bebi");
 		JButton kiki = new JButton();
@@ -105,17 +99,17 @@ public class StartmenueGUI extends AbstractGUI{
 		this.iconButtons.add(integral);
 		this.iconButtons.add(fey);
 		
-		iconButtons.forEach(button -> {button.setIcon(new ImageIcon("Other/" + button.getName() + "klein.jpg"));
-										button.setPreferredSize(new Dimension(50,50));
-										
-										});
-		
-		
+		iconButtons.forEach(button -> {
+			button.setIcon(new ImageIcon("Other/" + button.getName() + "klein.jpg"));
+			button.setPreferredSize(new Dimension(50,50));
+			});		
 	}
 	
+	// Getter und Setter
 	public List<JButton> getIconButtons() {
 		return iconButtons;
 	}
+	
 	public void setIconButtons(List<JButton> iconButtons) {
 		this.iconButtons = iconButtons;
 	}
@@ -170,9 +164,5 @@ public class StartmenueGUI extends AbstractGUI{
 
 	public Container getEimer() {
 		return Eimer;
-	}
-
-
-	
-	
+	}	
 }

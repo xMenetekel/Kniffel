@@ -55,7 +55,7 @@ public abstract class AbstractGUI{
 	}
 	
 	
-	//GSeetttteerr (Getter und Setter 
+	//GSeetttteerr Getter und Setter 
 	public double getProzentFlaecheX() {
 		return this.prozentFlaecheX;
 	}
