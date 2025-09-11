@@ -22,11 +22,9 @@ public class WuerfelPresenter  {
 	
 	private Container container;
 	private MoeglicheZuege moeglicheZuege = new MoeglicheZuege();
-	
-	
+		
 	private SpielLogik spielLogik;	
-	
-	
+		
 	private WuerfelflaecheGUI flaeche;
 	private WuerfelBankGUI bank; //ich hasse das so sehr 
 	private DummeChatGPTLoesungIchHasseAlles keinBockMehr; //TODO umbennenenen
@@ -39,10 +37,6 @@ public class WuerfelPresenter  {
 	
 	private boolean init;
 
-	
-	
-	
-	
 	public WuerfelPresenter(Container Eimer, SpielLogik spielLogik, 
 							WuerfelflaecheGUI flaeche, WuerfelBankGUI bank, 
 							DummeChatGPTLoesungIchHasseAlles keinBockMehr,
@@ -71,8 +65,7 @@ public class WuerfelPresenter  {
 		container.revalidate();
 		container.repaint();	
 	}
-	
-	
+		
 	public void wuerfelAngeklickt(WuerfelGUI gui) {
 		if(this.isInit()) { return; }
 		
@@ -97,8 +90,7 @@ public class WuerfelPresenter  {
 			zustandDerLogik.setBehalten(neuerZustand);
 			gui.setIstinBank(!gui.isIstinBank());
 			hochRunterhochRunter(zustandDerLogik);
-		}
-		
+		}		
 	}
 	
 	
@@ -107,17 +99,15 @@ public class WuerfelPresenter  {
 		int xVon = (int) (flaeche.getProzentFlaecheX() * this.container.getWidth());
 		int xBis = (int) ((flaeche.getProzentFlaecheBreite() * this.container.getWidth()) + xVon);
 		validesX = new Random().nextInt(xBis-xVon-WUERFEL_GROESSE)+xVon;	
-		
-		
-		
+				
 		return validesX;
 	}
+	
 	public int getValidesY(WuerfelflaecheGUI flaeche) {
 		int validesY;
 		int YVon = (int) (flaeche.getProzentFlaecheY() * this.container.getHeight());
 		int YBis = (int) ((flaeche.getProzentFlaecheHoehe() * this.container.getHeight()) + YVon);
-		validesY = new Random().nextInt(YBis-YVon-WUERFEL_GROESSE)+YVon;		
-		
+		validesY = new Random().nextInt(YBis-YVon-WUERFEL_GROESSE)+YVon;			
 		
 		return validesY;
 	}
@@ -156,23 +146,16 @@ public class WuerfelPresenter  {
 		} while (kollisionGefunden || zielX == aktuellerWuerfel.getStartX() || zielY == aktuellerWuerfel.getStartY());
 			return new int[] {zielX, zielY};
 		}
-		
-
 
 	private void hochRunterhochRunter(WuerfelLogik wuerfel) { 
 		
-		if(wuerfel.istBehalten()) {
-				
+		if(wuerfel.istBehalten()) {				
 			this.runter(wuerfel.getGui());
-			bank.getReihenfolge().set(bank.getReihenfolge().indexOf(null), wuerfel.getGui());	
-			
-		
+			bank.getReihenfolge().set(bank.getReihenfolge().indexOf(null), wuerfel.getGui());		
 		} else {
 			bank.getReihenfolge().set(bank.getReihenfolge().indexOf(wuerfel.getGui()), null);
-			this.hoch(wuerfel.getGui());			
-			
-		}
-		
+			this.hoch(wuerfel.getGui());						
+		}	
 	}
 	
 	private void runter(WuerfelGUI gui) {
@@ -183,10 +166,7 @@ public class WuerfelPresenter  {
 		x = ((gui.getButton().getWidth() + 5) * bank.getReihenfolge().indexOf(null) ) + x+4; //die +4 sind pixel ausgleiche weil meine völlig legitime rechnung nicht funktioniert
 		y = y + 6; //ebenso hier, eigentlich sollte es +5 sein aber das ist einen pixel zuviel verschoben weil natürlich ist es das
 	
-		gui.zeichneLinie(gui.getButton(), x, y, false);
-		
-		
-		
+		gui.zeichneLinie(gui.getButton(), x, y, false);	
 	}
 
 	private void hoch(WuerfelGUI gui) {
@@ -198,9 +178,6 @@ public class WuerfelPresenter  {
 		
 	}
 	
-	
-	
-
 	public void wuerfeln() {
 		maxWuerfe = menueDaten.isEndloseWuerfe() ? 999 : 3;		
 		if(wurfAnzahl >= maxWuerfe) { return; }
@@ -242,10 +219,8 @@ public class WuerfelPresenter  {
 		if(keinBockMehr != null) {
 			keinBockMehr.wasPassiertWennWirEinenWuerfelWerfen(wuerfelWerte);
 		}
-		System.out.println("Wurf "+ wurfAnzahl + "/" + maxWuerfe + "-Würfel: "+ wuerfelWerte);
-		
+		System.out.println("Wurf "+ wurfAnzahl + "/" + maxWuerfe + "-Würfel: "+ wuerfelWerte);		
 	}
-
 
 	public void neueRunde() {
 		wurfAnzahl = 0;
@@ -253,32 +228,23 @@ public class WuerfelPresenter  {
 	  	
 	  	this.init = true;
         for (WuerfelLogik wuerfel : alleWuerfelLogik) {
-            wuerfel.setBehalten(false);
-            
-        }
-        
+            wuerfel.setBehalten(false);           
+        }        
         System.out.println("Neue Runde Gestartet");
     }
-
 	
-	
+	  // Getter und Setter
 	  public List<WuerfelGUI> getAlleWuerfelGUI() {
 			return alleWuerfelGUI;
 		}
-
-
 
 		public void setAlleWuerfelGUI(List<WuerfelGUI> alleWuerfelGUI) {
 			this.alleWuerfelGUI = alleWuerfelGUI;
 		}
 
-
-
 		public List<WuerfelLogik> getAlleWuerfelLogik() {
 			return alleWuerfelLogik;
 		}
-
-
 
 		public void setAlleWuerfelLogik(List<WuerfelLogik> alleWuerfelLogik) {
 			this.alleWuerfelLogik = alleWuerfelLogik;
@@ -291,18 +257,18 @@ public class WuerfelPresenter  {
 	    public int getMaxWuerfe() {
 	        return maxWuerfe;
 	    }
+	    
 	    public MoeglicheZuege getMoeglicheZuege() {
 	        return moeglicheZuege;
 	    }
+	    
 	    public boolean isInit() {
 			return init;
 		}
 
-
 		public void setInit(boolean init) {
 			this.init = init;
 		}
-
 
 		public int debug() {
 			// TODO Auto-generated method stub

@@ -23,16 +23,13 @@ public class StartmenuePresenter {
 	private StartmenueLogik menueDaten;
 	private JFrame hauptfenster;
 
-
-
 	public StartmenuePresenter(JFrame hauptfenster, Container Eimer) {
 		this.hauptfenster = hauptfenster;
 		this.menueDaten = new StartmenueLogik();
 		this.menueGUI = new StartmenueGUI(Eimer);		
 		starteStartmenue();
 		Eimer.revalidate();
-		Eimer.repaint();
-		
+		Eimer.repaint();		
 	}
 	
 	private void starteStartmenue() {
@@ -56,15 +53,13 @@ public class StartmenuePresenter {
 				menueDaten.setDebugingModus(debugBox.isSelected());
 				menueDaten.setEndloseWuerfe(endloseWuerfeBox.isSelected());
 			}
-			
-		});
-		menueGUI.getStarteSpiel().addActionListener(klick ->{
-			zeigeSpielerAuswahl(); //hier wird SpielfeldPresenter() aufgerufen
 		});
 		
+		menueGUI.getStarteSpiel().addActionListener(klick ->{
+			zeigeSpielerAuswahl(); //hier wird SpielfeldPresenter() aufgerufen
+		});		
 	}
-	
-	
+		
 	private void zeigeSpielerAuswahl() {
 		//Hauptfenster Blockieren und eingabe User
 		JDialog abfrage = new JDialog(hauptfenster, "Anzahl Spieler",true);
@@ -124,8 +119,7 @@ public class StartmenuePresenter {
 		for(int i = 0; i < buttons.size(); i++){
 			liste[i] = buttons.get(i).getIcon();
 		}
-		
-												
+														
 		int auswahl = JOptionPane.showOptionDialog(
 				menueGUI.getEimer(), 
 				"Wähle ein Icon :)", 
@@ -149,7 +143,5 @@ public class StartmenuePresenter {
 
 	public void setMenueDaten(StartmenueLogik menueDaten) {
 		this.menueDaten = menueDaten;
-	}
-	
-	
+	}	
 }

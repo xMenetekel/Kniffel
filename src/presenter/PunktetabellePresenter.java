@@ -81,21 +81,16 @@ public class PunktetabellePresenter implements DummeChatGPTLoesungIchHasseAlles{
 			System.out.println("Neue Runde in PunktetabellePresenter gestartet");
 		}
 
-
 		@Override
 		public void wasPassiertWennWirEinenWuerfelWerfen(List<Integer> wuerfel) {
 			moeglicheZuege.setWuerfelWerte(wuerfel);
-			PunkteTabelle();
-			
+			PunkteTabelle();		
 		}
 
 		@Override
 		public void zeigeMoeglichePunkte(HashMap hashMap) {
-			// TODO Auto-generated method stub
-			
-		}
-		
-			
+			// TODO Auto-generated method stub			
+		}			
 	}
 	 
 

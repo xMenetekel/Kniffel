@@ -15,34 +15,12 @@ public class WuerfelnButtonPresenter {
 	public WuerfelnButtonPresenter(Container Eimer, WuerfelPresenter wuerfel, PunktetabellePresenter tabelle) {
 		logik = new WuerfelnButtonLogik();
 		gui = new WuerfelnButtonGUI(Eimer);
-		
-		
-		
+				
 		this.setWuerfel(wuerfel);
 		this.setTabelle(tabelle);
 	}
-	
-	
-
-	
-	
-	
-	
-	
-	
-	
-	
-	
-	
-	
-	
-	
-	
-	
-	
-	
-	//GetterSetterGetterSetterGetterSetterGetterSetterGetterSetterGetterSetter
-	
+		
+	//GetterSetterGetterSetterGetterSetterGetterSetterGetterSetterGetterSetter	
 	public WuerfelnButtonLogik getLogik() {
 		return logik;
 	}

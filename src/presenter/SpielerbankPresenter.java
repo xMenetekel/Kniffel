@@ -16,16 +16,12 @@ public class SpielerbankPresenter {
 	public SpielerbankPresenter(Container Eimer, List<SpielerLogik> spielerListe, SpielLogik logik) {
 		this.spielerListe = spielerListe;		
 		this.logik = logik;
-		gui = new SpielerbankGUI(Eimer, this);
-		
-		
+		gui = new SpielerbankGUI(Eimer, this);		
 	}
 	public int getAktiverSpieler() { //lmao
 		return logik.getAktiverSpielerIndex();
 	}
 	
-	
-
 	public String getBildname(int i) {
 		switch(spielerListe.get(i).getIconIndex()) {
 		case 0:
@@ -53,10 +49,8 @@ public class SpielerbankPresenter {
 		gui.aktualisiereIcon(spielerIndex);
 		
 	}
-	
-	
-//Ready Get Set Go
-	
+		
+	//Ready Get Set Go
 	public SpielerbankGUI getGui() {
 		return gui;
 	}
@@ -64,6 +58,7 @@ public class SpielerbankPresenter {
 	public void setGui(SpielerbankGUI gui) {
 		this.gui = gui;
 	}
+	
 	public List<SpielerLogik> getSpielerListe() {
 		return spielerListe;
 	}
@@ -71,13 +66,13 @@ public class SpielerbankPresenter {
 	public void setSpielerListe(List<SpielerLogik> spielerListe) {
 		this.spielerListe = spielerListe;
 	}
+	
 	public SpielLogik getLogik() {
 		return logik;
 	}
+	
 	public void setLogik(SpielLogik logik) {
 		this.logik = logik;
 	}
 
-	
-	
 }

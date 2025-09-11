@@ -12,18 +12,10 @@ public class WuerfelbankLogik {
 	private List<int[]> wuerfelyPos = new ArrayList<>();
 	private List<double[]> wuerfelxProz = new ArrayList<>();
 	private List<double[]> wuerfelyProz = new ArrayList<>();
-
 	
 	public WuerfelbankLogik() {
-	//	this.setWuerfelbank(Wuerfelbank);
-		
+	//	this.setWuerfelbank(Wuerfelbank);		
 	}
-	
-	
-	
-	
-	
-	
 	
 	
 	public List<int[]> getWuerfelxPos() {
@@ -64,6 +56,5 @@ public class WuerfelbankLogik {
 
 	public void setWuerfelbank(List<WuerfelGUI> wuerfelbank) {
 		Wuerfelbank = wuerfelbank;
-	}
-	
+	}	
 }
