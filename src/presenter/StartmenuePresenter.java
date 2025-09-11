@@ -1,0 +1,149 @@
+package presenter;
+
+import model.*;
+
+import java.awt.Container;
+import java.awt.Dimension;
+import java.awt.GridLayout;
+import java.util.List;
+
+import javax.swing.BorderFactory;
+import javax.swing.JButton;
+import javax.swing.JCheckBox;
+import javax.swing.JDialog;
+import javax.swing.JFrame;
+import javax.swing.JOptionPane;
+
+import gui.*;
+
+public class StartmenuePresenter {
+	
+	private StartmenueGUI menueGUI;
+	private StartmenueLogik menueDaten;
+	private JFrame hauptfenster;
+
+
+
+	public StartmenuePresenter(JFrame hauptfenster, Container Eimer) {
+		this.hauptfenster = hauptfenster;
+		this.menueDaten = new StartmenueLogik();
+		this.menueGUI = new StartmenueGUI(Eimer);		
+		starteStartmenue();
+		Eimer.revalidate();
+		Eimer.repaint();
+		
+	}
+	
+	private void starteStartmenue() {
+		menueGUI.getExit().addActionListener(klick -> {System.exit(0);});
+		
+		menueGUI.getEinstellungen().addActionListener(klick -> {
+			JCheckBox debugBox = new JCheckBox("Debugging aktivieren");
+			debugBox.setSelected(menueDaten.isDebugingModus());
+			
+			int auswahl = JOptionPane.showConfirmDialog(menueGUI.getEimer(),
+					debugBox,
+					"Einstellungen",
+					JOptionPane.OK_CANCEL_OPTION,
+					JOptionPane.PLAIN_MESSAGE
+					);
+			if (auswahl == JOptionPane.OK_OPTION) {
+				menueDaten.setDebugingModus(debugBox.isSelected());
+			}
+			
+		});
+		menueGUI.getStarteSpiel().addActionListener(klick ->{
+			zeigeSpielerAuswahl(); //hier wird SpielfeldPresenter() aufgerufen
+		});
+		
+	}
+	
+	
+	private void zeigeSpielerAuswahl() {
+		//Hauptfenster Blockieren und eingabe User
+		JDialog abfrage = new JDialog(hauptfenster, "Anzahl Spieler",true);
+		abfrage.setLayout(new GridLayout(2,2,15,15)); //Abstand zwischenButtons
+		abfrage.getRootPane().setBorder(BorderFactory.createEmptyBorder(25, 25, 25, 25));
+		//Banstand von Button zu Fenster oben, links, unten, rechts
+		//ja hier machen wir mal ein Layout 
+		
+		//Buttons anlegen zwar nur 1-4 dadurch aber keine Abfragefehler
+		for(int i = 1; i<= 4; i++) {
+			final int anzahl = i; 
+			JButton druecker = new JButton(String.valueOf(i));
+			//auswahl speichern und Schließen
+			druecker.setPreferredSize(new Dimension(200,40));
+			
+			druecker.addActionListener(e ->{
+				menueDaten.setSpieleranzahl(anzahl); //speichern 
+				abfrage.dispose(); //schließen
+				
+				SpielerDaten(anzahl); //Namen hinzufügen
+				
+				SpielLogik spielLogik = new SpielLogik();
+				spielLogik.setSpieler(menueDaten.getSpielerListe()); //Initialisierung Spiellogik mit Spielern
+				
+				new SpielfeldPresenter(menueGUI.getEimer(), spielLogik, menueDaten);
+				
+				menueGUI.getEimer().setVisible(true);
+			});
+			abfrage.add(druecker);
+		}
+		abfrage.pack(); // größe anpassen es könnte so einfach sein
+		abfrage.setLocationRelativeTo(menueGUI.getEimer()); //schön zentrieren
+		abfrage.setVisible(true); 
+	}
+	
+	private void SpielerDaten(int spieleranzahl) {
+		for(int i = 0; i < spieleranzahl; i++) {
+			String name = JOptionPane.showInputDialog(
+					menueGUI.getEimer(),
+					"Name fuer Spieler " + (i+1) + ":",
+					"Spieler benennen",
+					JOptionPane.PLAIN_MESSAGE);
+			
+
+			int iconIndex = icons(i);
+			if(name != null) {
+				menueDaten.setSpielerName(i, name);
+				menueDaten.setSpielerIcon(i, iconIndex);
+			}
+		}
+	}
+	
+	private int icons(int indexSpieler) {
+		
+		List<JButton> buttons = menueGUI.getIconButtons();
+		Object[] liste = new Object[buttons.size()];
+		for(int i = 0; i < buttons.size(); i++){
+			liste[i] = buttons.get(i).getIcon();
+		}
+		
+												
+		int auswahl = JOptionPane.showOptionDialog(
+				menueGUI.getEimer(), 
+				"Wähle ein Icon :)", 
+				"Icon Auswahl",
+				JOptionPane.DEFAULT_OPTION, 
+				JOptionPane.PLAIN_MESSAGE,
+				null, 
+				liste, 
+				liste[0]);
+		
+		return auswahl;
+	}
+	
+	public void setMenueGUI(StartmenueGUI menueGUI) {
+		this.menueGUI = menueGUI;
+	}
+
+	public StartmenueLogik getMenueDaten() {
+		return menueDaten;
+	}
+
+	public void setMenueDaten(StartmenueLogik menueDaten) {
+		this.menueDaten = menueDaten;
+	}
+	
+	
+}

@@ -1,0 +1,178 @@
+package gui;
+
+import java.awt.Container;
+import java.awt.Dimension;
+
+import java.awt.event.ComponentAdapter;
+import java.awt.event.ComponentEvent;
+import java.util.ArrayList;
+import java.util.List;
+
+import javax.swing.ImageIcon;
+import javax.swing.JButton;
+
+public class StartmenueGUI extends AbstractGUI{
+		
+		private JButton starteSpiel;
+		private JButton einstellungen;
+		private JButton exit;
+		private Container Eimer;
+		
+		private List<JButton> iconButtons = new ArrayList<>();
+		
+			
+	
+	
+	public StartmenueGUI(Container Eimer) {
+		super(0,0,1,1, Eimer);
+		this.Eimer = Eimer;
+		this.Eimer.setLayout(null); //Hab erstmal den Layout Manager ausgemacht um es manuell anzuordnen, können wir später aber noch ändern : famous last words, i am so sorry
+		
+		this.starteSpiel = new JButton();
+		this.einstellungen = new JButton();
+		this.exit = new JButton();
+		
+		starteSpiel.setIcon(new ImageIcon("Other/starteSpiel.jpg"));
+		einstellungen.setIcon(new ImageIcon("Other/einstellungen.jpg"));
+		exit.setIcon(new ImageIcon("Other/schliessen.jpg"));
+		
+		erstelleButtons();	
+		
+		this.Eimer.addComponentListener(new ComponentAdapter() { //der ganze spaß hier ist dafür da das beim neu ziehen alles prozentual angepasst wird
+			@Override
+			public void componentResized(ComponentEvent e) {
+				rearrangiereFelder(Eimer, starteSpiel, einstellungen, exit);
+				setzeneueGroesse(Eimer.getWidth(), Eimer.getHeight());
+				Eimer.revalidate();
+				Eimer.repaint();
+			}			
+		});
+		bildIcon = new ImageIcon("Other/startHintergrund.jpg");	
+		bild.setBounds(0,0, Eimer.getWidth(), Eimer.getHeight());
+		bild.setIcon(bildIcon);
+		panel.add(bild);
+		//
+		
+		
+		
+		
+		this.Eimer.add(starteSpiel);
+		this.Eimer.add(exit);
+		this.Eimer.add(einstellungen); 
+		this.Eimer.add(panel);
+		Eimer.revalidate();
+		Eimer.repaint();
+		
+		
+		
+	}
+	private void rearrangiereFelder(Container eimer, JButton starteSpiel, JButton einstellungen, JButton exit) {
+		int breite = eimer.getWidth();
+		int hoehe = eimer.getHeight();
+		
+		starteSpiel.setBounds(	(int)Math.floor(breite*0.33), (int)Math.floor(hoehe*0.33), (int)Math.floor(breite*0.33),(int)Math.floor(hoehe*0.1));
+		einstellungen.setBounds((int)Math.floor(breite*0.33), (int)Math.floor(hoehe*0.44), (int)Math.floor(breite*0.33),(int)Math.floor(hoehe*0.1));
+		exit.setBounds(			(int)Math.floor(breite*0.33), (int)Math.floor(hoehe*0.55), (int)Math.floor(breite*0.33),(int)Math.floor(hoehe*0.1));
+		
+		
+		
+	}
+	
+	private void erstelleButtons(){ //semi obsolet weil man eigentlich nur die image icons braucht und nicht die ganzen buttons :( aber ich will buttons :(
+		JButton bebi = new JButton();
+		bebi.setName("bebi");
+		JButton kiki = new JButton();
+		kiki.setName("kiki");
+		JButton bubu = new JButton();
+		bubu.setName("bubu");
+		JButton crystal = new JButton();
+		crystal.setName("crystal");
+		JButton schrinke = new JButton();
+		schrinke.setName("schrinke");
+		JButton transistor = new JButton();
+		transistor.setName("transistor");
+		JButton integral = new JButton();
+		integral.setName("integral");
+		JButton fey = new JButton();
+		fey.setName("fey");
+		
+		this.iconButtons.add(bebi);
+		this.iconButtons.add(kiki);
+		this.iconButtons.add(bubu);
+		this.iconButtons.add(crystal);
+		this.iconButtons.add(schrinke);
+		this.iconButtons.add(transistor);
+		this.iconButtons.add(integral);
+		this.iconButtons.add(fey);
+		
+		iconButtons.forEach(button -> {button.setIcon(new ImageIcon("Other/" + button.getName() + "klein.jpg"));
+										button.setPreferredSize(new Dimension(50,50));
+										
+										});
+		
+		
+	}
+	
+	public List<JButton> getIconButtons() {
+		return iconButtons;
+	}
+	public void setIconButtons(List<JButton> iconButtons) {
+		this.iconButtons = iconButtons;
+	}
+	
+	public JButton getStarteSpiel() {
+		return starteSpiel;
+	}
+
+	public void setStarteSpiel(JButton starteSpiel) {
+		this.starteSpiel = starteSpiel;
+	}
+
+	public JButton getEinstellungen() {
+		return einstellungen;
+	}
+
+	public void setEinstellungen(JButton einstellungen) {
+		this.einstellungen = einstellungen;
+	}
+
+	public JButton getExit() {
+		return exit;
+	}
+
+	public void setExit(JButton exit) {
+		this.exit = exit;
+	}
+
+	public void moeglicheSpielModi() {
+		
+	}
+	
+	public void hauptmenue() {
+		
+	}
+	
+	public void einstellungen() {
+		
+	}
+	
+	public void auswahlSpiel() {
+	
+	}
+	
+	public void debugging() {
+		
+	}
+	
+	public void exit() {
+		
+	}	
+
+	public Container getEimer() {
+		return Eimer;
+	}
+
+
+	
+	
+}
