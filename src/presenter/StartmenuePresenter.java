@@ -13,6 +13,7 @@ import javax.swing.JCheckBox;
 import javax.swing.JDialog;
 import javax.swing.JFrame;
 import javax.swing.JOptionPane;
+import javax.swing.JPanel;
 
 import gui.*;
 
@@ -40,15 +41,20 @@ public class StartmenuePresenter {
 		menueGUI.getEinstellungen().addActionListener(klick -> {
 			JCheckBox debugBox = new JCheckBox("Debugging aktivieren");
 			debugBox.setSelected(menueDaten.isDebugingModus());
-			
+			JCheckBox endloseWuerfeBox = new JCheckBox("Endlose Würfe aktivieren");
+			endloseWuerfeBox.setSelected(menueDaten.isEndloseWuerfe());
+			JPanel zusammen = new JPanel();
+			zusammen.add(endloseWuerfeBox);
+			zusammen.add(debugBox);			
 			int auswahl = JOptionPane.showConfirmDialog(menueGUI.getEimer(),
-					debugBox,
+					zusammen,
 					"Einstellungen",
 					JOptionPane.OK_CANCEL_OPTION,
 					JOptionPane.PLAIN_MESSAGE
 					);
 			if (auswahl == JOptionPane.OK_OPTION) {
 				menueDaten.setDebugingModus(debugBox.isSelected());
+				menueDaten.setEndloseWuerfe(endloseWuerfeBox.isSelected());
 			}
 			
 		});

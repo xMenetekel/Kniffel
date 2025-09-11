@@ -14,6 +14,7 @@ public class StartmenueLogik {
 	private List<SpielerLogik> spielerListe = new ArrayList<>();
 	
 	private Color hintergrundfarbe = Color.blue;
+	private boolean endloseWuerfe = false;
 	
 	
 	public int getSpieleranzahl() {
@@ -81,6 +82,14 @@ public class StartmenueLogik {
 	
 	public void setDebugingModus(boolean debugMode) {
 		this.debugingModus = debugMode;
+	}
+
+	public boolean isEndloseWuerfe() {
+		return endloseWuerfe;
+	}
+
+	public void setEndloseWuerfe(boolean endloseWuerfe) {
+		this.endloseWuerfe = endloseWuerfe;
 	}
 	
 }
