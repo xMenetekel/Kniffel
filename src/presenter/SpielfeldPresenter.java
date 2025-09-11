@@ -38,12 +38,10 @@ public class SpielfeldPresenter {
 	 private StartmenueLogik menueDaten;
 	 
 	
-
 	public SpielfeldPresenter(Container Eimer, SpielLogik spielLogik, StartmenueLogik menueDaten) {
 		 
 		 this.menueDaten = menueDaten;
 		 this.spielLogik = spielLogik; 
-		 this.menueDaten = menueDaten;
 		 
 		 gui = new SpielfeldGUI(Eimer, this, menueDaten);
 		 logik = new SpielfeldLogik();
@@ -53,8 +51,7 @@ public class SpielfeldPresenter {
 		 tabelle = new PunktetabellePresenter(Eimer, menueDaten, spielLogik); 	
 		 wuerfel = new WuerfelPresenter(Eimer, spielLogik, flaeche.getGui(), bank.getGui(), tabelle, menueDaten);  			 	 
 		 spieler = new SpielerbankPresenter(Eimer, menueDaten.getSpielerListe(), spielLogik);
-
-		
+	
 		 wuerfelnKlick = new WuerfelnButtonPresenter(Eimer, wuerfel, tabelle);
 		 punkteKlick = new PunkteEintragenButtonPresenter(Eimer, this);
 
@@ -100,7 +97,8 @@ public class SpielfeldPresenter {
 	}
 	 
 	 public void onWuerfelnClick() {
-	     tabelle.aktualisierePunkteTabelle();  
+	     //tabelle.aktualisierePunkteTabelle();
+	     tabelle.PunkteTabelle();
 	     
 	     int aktuellesMaxWuerfeln = wuerfel.getMaxWuerfe();
 		 if(spielLogik.getWuerfeAnzahl() < aktuellesMaxWuerfeln && wuerfel.getWurfAnzahl() < aktuellesMaxWuerfeln) {
@@ -248,11 +246,7 @@ public class SpielfeldPresenter {
 		 }
 		
 		
-		
-	
-	 
-	//Getting and Setting  
-	 
+ 
 	 public SpielfeldGUI getGui() {
 		return gui;
 	}

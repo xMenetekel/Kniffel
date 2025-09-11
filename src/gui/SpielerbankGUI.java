@@ -3,9 +3,6 @@ package gui;
 import java.awt.Container;
 
 import javax.swing.ImageIcon;
-import javax.swing.JLabel;
-import javax.swing.JPanel;
-
 
 import presenter.SpielerbankPresenter;
 
