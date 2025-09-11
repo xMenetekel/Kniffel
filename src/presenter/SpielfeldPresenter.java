@@ -192,7 +192,7 @@ public class SpielfeldPresenter {
 									(int)Math.floor(hoehe*gui.getProzentFlaecheHoehe()));
 			
 			if(!(gui instanceof PunkteTabelleGUI)){
-			gui.setzeneueGroesse((int)(breite * gui.getProzentFlaecheBreite()), (int)(hoehe * gui.getProzentFlaecheHoehe()));
+			gui.setzeNeueGroesse((int)(breite * gui.getProzentFlaecheBreite()), (int)(hoehe * gui.getProzentFlaecheHoehe()));
 			}
 		}
 		

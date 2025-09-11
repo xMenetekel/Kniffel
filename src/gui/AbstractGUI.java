@@ -20,6 +20,7 @@ public abstract class AbstractGUI{
 	private final double prozentFlaecheY;
 	private final double prozentFlaecheBreite;	
 	
+	//Konstruktor Prozentuale Positionierung und groeße der GUI-Elemente
 	protected AbstractGUI(double x, double y, double breite, double hoehe, Container Eimer) {
 		this.Eimer = Eimer;
 		this.prozentFlaecheX = x;
@@ -32,9 +33,10 @@ public abstract class AbstractGUI{
 		panel.setLayout(null);
 		panel.setVisible(true);
 		bild.setVisible(true);		
-		panel.setOpaque(false);
-		
+		panel.setOpaque(false);		
 	}
+	
+	// aktuelles Bild skalieren und Anzeigen (Position und Layout)
 	private void skaliereBild(int breite, int hoehe) {
 		Image bildii = bildIcon.getImage();
 		Image skaliertesBild = bildii.getScaledInstance(breite, hoehe, Image.SCALE_SMOOTH);
@@ -44,17 +46,16 @@ public abstract class AbstractGUI{
 		bild.setIcon(new ImageIcon(skaliertesBild));
 		}
 	}
-	public void setzeneueGroesse(int breite, int hoehe) {
+	
+	//Bilddarstellung
+	public void setzeNeueGroesse(int breite, int hoehe) {
 		panel.setSize(breite, hoehe);
 		bild.setBounds(0,0, breite, hoehe);
-		skaliereBild(breite, hoehe);	
-		
+		skaliereBild(breite, hoehe);			
 	}
 	
 	
-	
-	//GSeetttteerr (Getter und Setter aber die Worte wurden gefaroshuffled)
-
+	//GSeetttteerr (Getter und Setter 
 	public double getProzentFlaecheX() {
 		return this.prozentFlaecheX;
 	}
@@ -82,18 +83,23 @@ public abstract class AbstractGUI{
 	public void setBild(JLabel bild) {
 		this.bild = bild;
 	}
+	
 	public ImageIcon getBildIcon() {
 		return bildIcon;
 	}
+	
 	public void setBildIcon(ImageIcon bildIcon) {
 		this.bildIcon = bildIcon;
 	}
+	
 	public Container getEimer() {
 		return Eimer;
 	}
+	
 	public void setEimer(Container eimer) {
 		Eimer = eimer;
 	}
+	
 	public void setPanel(JPanel panel) {
 		this.panel = panel;
 	}
@@ -101,10 +107,10 @@ public abstract class AbstractGUI{
 	public JButton getKnopf() {
 		return knopf;
 	}
+	
 	public void setKnopf(JButton knopf) {
 		this.knopf = knopf;
 	}
-
 
 }
 

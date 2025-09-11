@@ -42,7 +42,7 @@ public class StartmenueGUI extends AbstractGUI{
 			@Override
 			public void componentResized(ComponentEvent e) {
 				rearrangiereFelder(Eimer, starteSpiel, einstellungen, exit);
-				setzeneueGroesse(Eimer.getWidth(), Eimer.getHeight());
+				setzeNeueGroesse(Eimer.getWidth(), Eimer.getHeight());
 				Eimer.revalidate();
 				Eimer.repaint();
 			}			

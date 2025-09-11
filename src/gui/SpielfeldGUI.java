@@ -52,7 +52,7 @@ public class SpielfeldGUI extends AbstractGUI{
 		bild.setBounds(0,0, Eimer.getWidth(), Eimer.getHeight());
 		bild.setIcon(bildIcon);
 		panel.add(bild);
-		setzeneueGroesse(Eimer.getHeight(),Eimer.getWidth());
+		setzeNeueGroesse(Eimer.getHeight(),Eimer.getWidth());
 		
 		Eimer.revalidate();
 		Eimer.repaint();
