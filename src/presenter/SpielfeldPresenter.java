@@ -8,8 +8,7 @@ import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 
-import javax.swing.JLabel;
-import javax.swing.JTable;
+import javax.swing.JTextArea;
 
 import gui.*;
 import gui.SpielfeldGUI;
@@ -33,18 +32,16 @@ public class SpielfeldPresenter {
 	 private PunkteEintragenButtonPresenter punkteKlick;
 	 
 	 private Kategorie ausgewaehlteKategorie = null; 
-	 private JLabel statusLabel;	
+	 private JTextArea statusLabel;	
 	 private SpielLogik spielLogik; 
 	 private MoeglicheZuege moeglicheZuege = new MoeglicheZuege();
 	 private StartmenueLogik menueDaten;
 	 
 	
-
 	public SpielfeldPresenter(Container Eimer, SpielLogik spielLogik, StartmenueLogik menueDaten) {
 		 
 		 this.menueDaten = menueDaten;
 		 this.spielLogik = spielLogik; 
-		 this.menueDaten = menueDaten;
 		 
 		 gui = new SpielfeldGUI(Eimer, this, menueDaten);
 		 logik = new SpielfeldLogik();
@@ -54,8 +51,7 @@ public class SpielfeldPresenter {
 		 tabelle = new PunktetabellePresenter(Eimer, menueDaten, spielLogik); 	
 		 wuerfel = new WuerfelPresenter(Eimer, spielLogik, flaeche.getGui(), bank.getGui(), tabelle, menueDaten);  			 	 
 		 spieler = new SpielerbankPresenter(Eimer, menueDaten.getSpielerListe(), spielLogik);
-
-		
+	
 		 wuerfelnKlick = new WuerfelnButtonPresenter(Eimer, wuerfel, tabelle);
 		 punkteKlick = new PunkteEintragenButtonPresenter(Eimer, this);
 
@@ -67,10 +63,14 @@ public class SpielfeldPresenter {
 			 tabelle.getGui().setKategorieSelectListener(this::onKategorieAusgewaehlt);
 		 }
 		 
-		 statusLabel = new JLabel();
-			statusLabel.setBounds((int)(Eimer.getWidth() * 0.15), (int)(Eimer.getHeight() * 0.95), (int)(Eimer.getWidth() * 0.3),30);
+		
+		 
+		 statusLabel = new JTextArea();
+			statusLabel.setBounds((int)(Eimer.getWidth() * 0.28), (int)(Eimer.getHeight() * 0.81), (int)(Eimer.getWidth() * 0.3),70);
 			statusLabel.setVisible(true);
-			statusLabel.setFont(new Font(Font.SANS_SERIF, Font.BOLD, 10));
+			statusLabel.setEditable(false);
+			statusLabel.setOpaque(false);
+			statusLabel.setFont(new Font(Font.SANS_SERIF, Font.BOLD, 20));
 			updateStatusLabel();
 			
 			if (spielLogik != null) {
@@ -79,7 +79,7 @@ public class SpielfeldPresenter {
 				statusLabel.setText("Spiel wird initialisiert...");
 			}
 			
-		 Eimer.add(statusLabel); 		
+		 Eimer.add(statusLabel);
 		 Eimer.add(flaeche.getGui().getPanel());
 		 Eimer.add(bank.getGui().getPanel());
 		 Eimer.add(tabelle.getGui().getPanel());
@@ -97,10 +97,21 @@ public class SpielfeldPresenter {
 	}
 	 
 	 public void onWuerfelnClick() {
-	     tabelle.aktualisierePunkteTabelle();  		 
-		 if(spielLogik.getWuerfeAnzahl() < 3 && wuerfel.getWurfAnzahl() < wuerfel.getMaxWuerfe()) {
+	     //tabelle.aktualisierePunkteTabelle();
+	     tabelle.PunkteTabelle();
+	     
+	     int aktuellesMaxWuerfeln = wuerfel.getMaxWuerfe();
+		 if(spielLogik.getWuerfeAnzahl() < aktuellesMaxWuerfeln && wuerfel.getWurfAnzahl() < aktuellesMaxWuerfeln) {
+	     
+			 if(wuerfel.isInit()) { wuerfel.setInit(false);
+		     for(int i = 0; i < 5; i++) { bank.getGui().getReihenfolge().set(i, null); }
+			 }
 			 
 			 wuerfel.wuerfeln();
+			 if(wuerfel.isInit()) {  wuerfel.setInit(false); 
+			 						for(int i=0;i<5;i++) {	bank.getGui().getReihenfolge().set(i, null);}}
+		    	
+		      }	 
 			 spielLogik.erhoeheWurfAnzahl();
 			 updateStatusLabel();
 			 
@@ -115,7 +126,7 @@ public class SpielfeldPresenter {
 			 tabelle.getGui().zeigeMoeglichePunkte(moeglichePunkte, spielLogik.getAktiverSpielerIndex());
 			 System.out.println("Wuerfelwerte nach Wurf: "+ wuerfelWerte);
 		 }
-	 }
+	 
 	 
 	 public void onKategorieAusgewaehlt(Kategorie kategorie) {
 		 this.ausgewaehlteKategorie = kategorie;
@@ -145,15 +156,22 @@ public class SpielfeldPresenter {
 			bank.getPanel().setBounds((int)Math.floor(breite*bank.getProzentFlaecheX()), 
 									  (int)Math.floor(hoehe*bank.getProzentFlaecheY()), 280, 60);
 			
-			w.getAlleWuerfelGUI().forEach(t -> { if(!t.getLogik().istBehalten()) {				
-												 t.setxPos( (int) Math.round(t.prozentXAufFeld * breite)  );
-												 t.setyPos( (int) Math.round(t.prozentYAufFeld * hoehe));
-												 t.setProzentXAufFeld(t.getxPos() * 1.0 / breite);
-												 t.setProzentYAufFeld(t.getyPos() * 1.0 / hoehe);
-												 t.getButton().setBounds(t.getxPos(), t.getyPos(), 50, 50);
-												} else {
-												//TODO neue logik für bank	
+			w.getAlleWuerfelGUI().forEach(t -> { if(t.isIstinBank()) {				
 													
+													t.setxPos((int) ((bank.getProzentFlaecheX() * breite ) + 5  ) + 55* (bank.getReihenfolge().indexOf(t))  );
+													t.setyPos((int) ((bank.getProzentFlaecheY() * hoehe ) + 6 )  );
+													t.setProzentXAufFeld(t.getxPos() * 1.0 / breite);
+													 t.setProzentYAufFeld(t.getyPos() * 1.0 / hoehe);
+													 t.getButton().setBounds(t.getxPos(), t.getyPos(), 50, 50);	
+					
+				
+				
+												} else {
+													 t.setxPos( (int) Math.round(t.prozentXAufFeld * breite)  );
+													 t.setyPos( (int) Math.round(t.prozentYAufFeld * hoehe));
+													 t.setProzentXAufFeld(t.getxPos() * 1.0 / breite);
+													 t.setProzentYAufFeld(t.getyPos() * 1.0 / hoehe);
+													 t.getButton().setBounds(t.getxPos(), t.getyPos(), 50, 50);													
 												}
 												});
 			
@@ -183,9 +201,10 @@ public class SpielfeldPresenter {
 	 
 
 		private void updateStatusLabel() {
+			String maxWurf = menueDaten.isDebugingModus() ? "inf" : String.valueOf(wuerfel.getMaxWuerfe());
 			String status = "Runde " + spielLogik.getRunde() + 
-					"| Spieler: " + spielLogik.getAktiverSpieler().getName() + 
-					"| Würfe: " + spielLogik.getWuerfeAnzahl() + "/3";
+					"\nSpieler: " + spielLogik.getAktiverSpieler().getName() + 
+					"\nWürfe: " + wuerfel.getWurfAnzahl() + "/" + maxWurf;
 			statusLabel.setText(status);
 		}
 		
@@ -208,6 +227,7 @@ public class SpielfeldPresenter {
 				 spielLogik.setWuerfeAnzahl(0);
 				 
 				 spielLogik.naechsterSpieler();
+				 spieler.aktualisiereAktivesSpielerIcon(spielLogik.getAktiverSpielerIndex());
 				 wuerfel.neueRunde();
 				 ausgewaehlteKategorie = null;
 				 updateStatusLabel();
@@ -225,11 +245,7 @@ public class SpielfeldPresenter {
 		 }
 		
 		
-		
-	
-	 
-	//Getting and Setting  
-	 
+ 
 	 public SpielfeldGUI getGui() {
 		return gui;
 	}

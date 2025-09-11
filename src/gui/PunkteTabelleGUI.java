@@ -16,12 +16,10 @@ import java.util.Map;
 import java.util.Set;
 
 import javax.swing.ImageIcon;
-import javax.swing.JLabel;
 import javax.swing.JPanel;
 import javax.swing.JScrollPane;
 import javax.swing.JTable;
 import javax.swing.ListSelectionModel;
-import javax.swing.SwingUtilities;
 import javax.swing.table.AbstractTableModel;
 import javax.swing.table.DefaultTableCellRenderer;
 
@@ -38,31 +36,15 @@ public class PunkteTabelleGUI extends AbstractGUI {
 	private static final double H = 1.0;
 	private ZugTableModel tableModel;
 	private final int spielerAnzahl;
-	private SpielLogik spielLogik;
 	private KategorieSelectListener selectListener;
 	private Set<Point>festeEintraege = new HashSet<>();
-	private Point selectedCell = null;
-	
-	private Map<String, Integer> finalePunkte = new HashMap<>();
-	
-	private void aktualisiereRenderer() {// ki
-	    HighlightingCellRenderer renderer = (HighlightingCellRenderer)table.getDefaultRenderer(Object.class);
-	    if (renderer != null) {
-	        renderer.setFesteEintraege(this.festeEintraege);
-	    }
-	}
-	
+		
 	public JTable getTable() {
 		return this.table;
 	}
-	
 
 	public PunkteTabelleGUI(Container Eimer, StartmenueLogik menueDaten,SpielLogik spielLogik) {
 		super(X, Y, B, H, Eimer);
-		
-		
-		
-
 		this.spielerAnzahl = menueDaten.getSpieleranzahl();
 		panel = new JPanel(new BorderLayout());
 		tableModel = new ZugTableModel(menueDaten);
@@ -74,10 +56,8 @@ public class PunkteTabelleGUI extends AbstractGUI {
 		Color mischmasch = new Color(150,190,140); // evtl muss raus
 		table.setBackground(mischmasch);
 
-		
-		table.setDefaultRenderer(Object.class, new HighlightingCellRenderer());
-		
 		table.addKeyListener(new KeyAdapter(){
+			
 			@Override
 			public void keyTyped(KeyEvent e) {
 				e.consume();
@@ -90,52 +70,19 @@ public class PunkteTabelleGUI extends AbstractGUI {
 					e.getKeyCode() == KeyEvent.VK_SPACE) {
 					e.consume();
 				}
-					
 			}
 		});
 		
-       /* table.addMouseListener(new MouseAdapter() {
-
-            @Override
-            public void mousePressed(MouseEvent evt) {
-                int row = table.rowAtPoint(evt.getPoint());
-                int col = table.columnAtPoint(evt.getPoint());
-                
-                if(k)
-
-                if (col >= 2) { 
-                    Kategorie kategorie = Kategorie.fromTabellenIndex(row);
-                    
-                    if (kategorie != null && tableModel.hatMoeglichePunkteFuerKategorie(kategorie)) {
-                    	HighlightingCellRenderer renderer = (HighlightingCellRenderer)table.getDefaultRenderer(Object.class);
-                    	setSelectedCell(row,col);
-         
-                    	selectedCell = new Point (row, col);
-	            		selectListener.onKategorieSelected(kategorie);
-	                	System.out.println("Kategorie ausgewählt: "+ kategorie);
-	                	
-	                	table.repaint();
-	                	
-            		}
-            	}
-            }
-            
-        });*/
-		
         table.addMouseListener(new MouseAdapter() {
-
             @Override
             public void mousePressed(MouseEvent evt) {
                 int row = table.rowAtPoint(evt.getPoint());
                 int col = table.columnAtPoint(evt.getPoint());
                
-
                 if (col >= 2 && (row < 6||(row>8 && row < 16)|| row >18)) { 
                     Kategorie kategorie = Kategorie.fromTabellenIndex(row);
                     
-                    
                     if(kategorie != null) {
-                    	setSelectedCell(row,col);
                     	boolean hatMoeglichePunkte = tableModel.hatMoeglichePunkteFuerKategorie(kategorie);
                     	boolean feldIstLeer = (tableModel.getValueAt(row, col)==null);
                     	boolean dreiMalGewuerfelt = (spielLogik.getWuerfeAnzahl() >= 3);
@@ -151,7 +98,6 @@ public class PunkteTabelleGUI extends AbstractGUI {
             		System.out.println("Berechnungsfeld- kann nicht ausgewählt werden!");
             	}
             }
-            
         });
         
 		table.getColumnModel().getColumn(0).setCellRenderer(new SymbolCellRenderer());	//Brauchen CellRenderer um in der ersten spalte sowohl Bilder als auch Text verwenden zu können
@@ -161,19 +107,8 @@ public class PunkteTabelleGUI extends AbstractGUI {
 		
 		this.Eimer.add(panel);
 		
-		
-				
 		}
 
-	
-	public void setSelectedCell(int row, int col) {
-		this.selectedCell = new Point(row,col);
-		HighlightingCellRenderer renderer = (HighlightingCellRenderer)table.getDefaultRenderer(Object.class);
-		if(renderer != null) {
-			renderer.setSelectedCell(row, col);
-		}
-		table.repaint();
-	}
 
 	
 	public void macheTabelleNichtEditierbar() {	//UMSCHREIBEN ITS COPIED FROM CHATGPT	
@@ -206,21 +141,14 @@ public class PunkteTabelleGUI extends AbstractGUI {
 	    }
 	}
 	
-
-	
 	public void zeigeMoeglichePunkte(Map<Kategorie, Integer> moeglichePunkte, int aktuellerSpielerIndex) {
 	    if (tableModel != null) {
 	        tableModel.setMoeglichePunkte(moeglichePunkte, aktuellerSpielerIndex); 
 	        macheTabelleNichtEditierbar();
 	        
-	        HighlightingCellRenderer renderer = (HighlightingCellRenderer)table.getDefaultRenderer(Object.class); // KI
-	        if (renderer != null) {
-	            renderer.setFesteEintraege(this.festeEintraege);
-	        }
 	    }
 	}
-
-    
+ 
     public void tragePunkteEin(Kategorie kategorie, int punkte, int spielerIndex) {
     	System.out.println("Trage "+ punkte + "Punkte für" + kategorie + "bei Spieler"+ spielerIndex + "Ein");
     	try {
@@ -240,14 +168,14 @@ public class PunkteTabelleGUI extends AbstractGUI {
             if(kategorie.ordinal() >= Kategorie.DREIER_PASCH.ordinal() && kategorie.ordinal() <= Kategorie.CHANCE.ordinal()) {
             	tableModel.berechneUndSetzeGesamtUnten(spielerIndex);
             }
-            
-            HighlightingCellRenderer renderer = (HighlightingCellRenderer)table.getDefaultRenderer(Object.class);
-            if (renderer != null){
-            	renderer.setFesteEintraege(festeEintraege);
-            }
-            
+          
             table.repaint();
             System.out.println("Punkte erfolgreich eingetragen");
+            
+            if(istSpielBeendet()) {
+            	System.out.println("Spiel beendet!");
+            }
+            
     	}catch(Exception e) {
     		System.out.println("Fehler in tragePunkteEin"+ e.getMessage());
     		e.printStackTrace();
@@ -266,93 +194,12 @@ public class PunkteTabelleGUI extends AbstractGUI {
     	if(tableModel != null) {
     		tableModel.setHighlightedSpalte(2+spielerIndex);
     		//renderer.setFesteEintraege(this.festeEintraege);
-    		aktualisiereRenderer();
-    	}
-    	if (table != null) {
-    		HighlightingCellRenderer renderer = (HighlightingCellRenderer)table.getDefaultRenderer(Object.class);
-    		if (renderer != null) {
-    			renderer.setHighlightedSpalte(2+spielerIndex);
-    		}
+    	
     		macheTabelleNichtEditierbar();
     		table.repaint();
     	}
     	System.out.println("Tabelle für Spieler" + (spielerIndex +1)+"aktualisiert.");
     }
-	
-	static class HighlightingCellRenderer extends DefaultTableCellRenderer {
-		private int highlightedSpalte = -1;
-		private int selectedRow = -1;
-		private int selectedCol = -1;
-		private int wuerfeAnzahl = 0;
-		private Color DUNKELGRÜN = new Color (100,180,100);
-		private Color AUSWAHL = new Color (150,200,150);
-		private Color GELB = new Color (255,200,150);
-		private Color FEST_GELB = new Color (255,255,100);
-		private Set<Point>festeEintraege= new HashSet<>();
-		
-		
-		public void setHighlightedSpalte (int spalte) {
-			this.highlightedSpalte = spalte;
-		}
-		
-		public void setSelectedCell(int row, int col) {
-			this.selectedRow = row;
-			this.selectedCol = col;
-			System.out.println("Renderer: selectedRow ="+ row + " , selectedCol =" + col);
-		}
-		
-		public void setWuerfeAnzahl (int anzahl) {
-			this.wuerfeAnzahl = anzahl;
-		}
-		
-		public void setFesteEintraege(Set<Point>festeEintraege) {
-			this.festeEintraege = new HashSet <>(festeEintraege);
-		}
-		
-		@Override
-		public Component getTableCellRendererComponent(JTable table, Object value, boolean isSelected, boolean hasFocus, int row, int column) {
-			Component c = super.getTableCellRendererComponent(table, value, isSelected, hasFocus, row, column);
-			
-			ZugTableModel model = (ZugTableModel) table.getModel();
-			Kategorie kategorie = Kategorie.fromTabellenIndex(row);
-			boolean hatMoeglichePunkte = false;
-			boolean feldIstLeer = (value == null);
-			boolean dreiMalGewuerfelt = (wuerfeAnzahl >= 3);
-			boolean istFesterEintrag = festeEintraege.contains(new Point (row,column));
-			Container container = SwingUtilities.getAncestorOfClass(PunkteTabelleGUI.class, table);
-			
-			
-			if(kategorie != null) {
-				hatMoeglichePunkte = model.hatMoeglichePunkteFuerKategorie(kategorie);
-			}
-			
-			if(istFesterEintrag && column >= 2) {
-				c.setBackground(FEST_GELB);
-				c.setForeground(Color.BLACK);
-				setToolTipText("Fester Eintrag");
-			}
-			
-			else if(row == selectedRow &&  column == selectedCol) {
-				c.setBackground(AUSWAHL);
-				c.setForeground(GELB);
-				setToolTipText("Ausgewählt - Punkte eintragen Bestätigen");
-			}
-			
-			else if (column >= 2 && value !=null) {
-				c.setBackground(DUNKELGRÜN);
-				c.setForeground(GELB);
-				setToolTipText("Fester Wert - Kann nicht geändert werden");
-		
-			}else {
-				c.setBackground(table.getBackground());
-				c.setForeground(table.getForeground());
-				setToolTipText(null);
-			}
-	
-			return c;
-		}
-	}
-	
 	
 	static class SymbolCellRenderer extends DefaultTableCellRenderer {
 	    @Override
@@ -389,11 +236,6 @@ public class PunkteTabelleGUI extends AbstractGUI {
 	        
 	        return c;
 	    }
-	}
-	
-	
-	public void setMoeglichkeiten() {
-		
 	}
 	
 	public interface KategorieSelectListener{
@@ -596,15 +438,7 @@ public class PunkteTabelleGUI extends AbstractGUI {
 		public Set<Point> getFesteEintraege(){
 			return PunkteTabelleGUI.this.festeEintraege;
 		}	
-		
-		public void aktualisiereFesteEintraege() {//KI
-		    HighlightingCellRenderer renderer = (HighlightingCellRenderer)PunkteTabelleGUI.this.table.getDefaultRenderer(Object.class);
-		    if (renderer != null) {
-		        renderer.setFesteEintraege(PunkteTabelleGUI.this.festeEintraege);
-		    }
-		}
-		
-		
+			
 		@Override
 		public int getRowCount() {
 			return data.length;
@@ -688,13 +522,7 @@ public class PunkteTabelleGUI extends AbstractGUI {
 			}
 		}
 	}
-		
-		
-		
-		
-
-		
-
+		 
 	}
     public void aktualisiereFuerNeuenSpieler(int aktuellerSpielerIndex) {
     	zeigeMoeglichePunkte(new HashMap<>(), aktuellerSpielerIndex);
@@ -711,6 +539,21 @@ public class PunkteTabelleGUI extends AbstractGUI {
     		}
     		table.repaint();
     	}
+    }
+    
+    public boolean istSpielBeendet() {
+    	
+    	for (int spielerIndex = 0; spielerIndex < spielerAnzahl; spielerIndex++) {
+    		boolean obenVoll = tableModel.istObereHaelfteVoll(spielerIndex);
+    		boolean untenVoll = tableModel.istUntereHaelfteVoll(spielerIndex);
+    		    		
+    		if(!obenVoll || !untenVoll) {
+    			System.out.println("Spiel läuft");
+    			return false;
+	    	}
+    	}
+    	System.out.println("Spiel beendet!");
+    	return true;
     }
 
 }

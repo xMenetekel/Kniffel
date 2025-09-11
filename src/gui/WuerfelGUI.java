@@ -20,6 +20,9 @@ public class WuerfelGUI {
 	Container Eimer;
 	private Random rnjesus;
 	private WuerfelPresenter presenter; 
+	boolean istinBank;
+	
+
 	
 
 	public WuerfelGUI(WuerfelPresenter presenter, WuerfelLogik model, int startX, int startY, Container Eimer){
@@ -36,7 +39,7 @@ public class WuerfelGUI {
 		this.prozentXAufFeld = startX * 1.0 / Eimer.getWidth();
 		this.prozentYAufFeld = startY * 1.0 / Eimer.getHeight();
 		wuerfel.addActionListener(klick -> presenter.wuerfelAngeklickt(this));
-		
+		this.istinBank = true;
 		
 	}
 	
@@ -185,6 +188,12 @@ public class WuerfelGUI {
 	public void setPresenter(WuerfelPresenter presenter) {
 		this.presenter = presenter;
 	}
-	
+	public boolean isIstinBank() {
+		return istinBank;
+	}
+
+	public void setIstinBank(boolean istinBank) {
+		this.istinBank = istinBank;
+	}
 }
 

@@ -2,16 +2,11 @@ package presenter;
 
 import java.awt.Container;
 import java.util.ArrayList;
-import java.util.Collections;
-import java.util.HashMap;
 import java.util.List;
-import java.util.Map;
 import java.util.Random;
 import gui.WuerfelGUI;
 import gui.WuerfelflaecheGUI;
 import gui.WuerfelBankGUI;
-import gui.PunkteTabelleGUI;
-import model.Kategorie;
 import model.WuerfelLogik;
 import model.SpielLogik;
 import model.StartmenueLogik;
@@ -34,9 +29,11 @@ public class WuerfelPresenter  {
 	private StartmenueLogik menueDaten;
 	
 	int wurfAnzahl = 0;
-	int maxWuerfe = 3;
+	int maxWuerfe = 3; //Standardwert
 	
 	final int WUERFEL_GROESSE = 50;	
+	
+	private boolean init;
 	
 	
 	
@@ -51,6 +48,7 @@ public class WuerfelPresenter  {
 		this.keinBockMehr = keinBockMehr;
 		this.spielLogik = spielLogik;
 		this.menueDaten = menueDaten;
+		this.init = true;
 		
 		for(int i = 0; i < 5; i++) {		//das erstellt 5 würfel und fügt in jeder iteration den wuerfel den entsprechenden arrays hinzu
 			WuerfelLogik model = new WuerfelLogik(6);
@@ -59,7 +57,7 @@ public class WuerfelPresenter  {
 												   (int)((bank.getProzentFlaecheY() * Eimer.getHeight())+6), Eimer); //+6 weil aus irgendeinem grund will es das nicht ordentlich mit 5 machen was aber sinn machen würde
 			
 			model.setGui(view);
-			
+			bank.getReihenfolge().add(view);
 			alleWuerfelGUI.add(view);
 			alleWuerfelLogik.add(model);		
 			container.add(view.getButton());
@@ -71,10 +69,13 @@ public class WuerfelPresenter  {
 	
 	
 	public void wuerfelAngeklickt(WuerfelGUI gui) {
+		if(this.isInit()) { return; }
 		WuerfelLogik zustandDerLogik = gui.getLogik();
 		boolean neuerZustand = !zustandDerLogik.istBehalten();										
 		zustandDerLogik.setBehalten(neuerZustand);
+		gui.setIstinBank(!gui.isIstinBank());
 		hochRunterhochRunter(zustandDerLogik);
+		
 	}
 	
 	
@@ -152,6 +153,7 @@ public class WuerfelPresenter  {
 	}
 	
 	private void runter(WuerfelGUI gui) {
+		gui.setIstinBank(true);
 		int x = (int)(container.getWidth() * bank.getProzentFlaecheX());
 		int y = (int)(container.getHeight() * bank.getProzentFlaecheY());
 		
@@ -169,7 +171,7 @@ public class WuerfelPresenter  {
 		int y = getValidesY(flaeche);
 		int xy[] = korrigierteKollision(gui, x, y);
 		gui.zeichneLinie(gui.getButton(), xy[0], xy[1], false);
-		
+		gui.setIstinBank(false);
 		
 	}
 	
@@ -177,15 +179,13 @@ public class WuerfelPresenter  {
 	
 
 	public void wuerfeln() {
-		int aktuellesMaxWuerfeln;
-		
-		if(menueDaten.isDebugingModus()) {
-			aktuellesMaxWuerfeln = 999;
+				if(menueDaten.isDebugingModus()) {
+			maxWuerfe = 999;
 		} else {
-			aktuellesMaxWuerfeln = 3;
+			maxWuerfe = 3;
 		}
 		
-		if(wurfAnzahl >= aktuellesMaxWuerfeln) { return; }
+		if(wurfAnzahl >= maxWuerfe) { return; }
 		
 		if(menueDaten.isDebugingModus()) {
 			int debugWert = (wurfAnzahl % 6) +1;
@@ -224,12 +224,19 @@ public class WuerfelPresenter  {
 	//});
 		
 		getAlleWuerfelGUI().forEach(wuerfelGUI -> {
+			
 			if (!wuerfelGUI.getLogik().istBehalten()) {
+				
+				if(! (bank.getReihenfolge().indexOf(wuerfelGUI) == -1)) { bank.getReihenfolge().set(bank.getReihenfolge().indexOf(wuerfelGUI), null); } //bitte töten sie mich nicht dafür herr höppner
+				
+				
+				wuerfelGUI.setIstinBank(false);
 				int x, y;
 				x = getValidesX(flaeche);
 				y = getValidesY(flaeche);
 				int[] xy = korrigierteKollision(wuerfelGUI, x, y);
-			  wuerfelGUI.zeichneLinie(wuerfelGUI.getButton(), xy[0], xy[1], true);											  										  
+			  wuerfelGUI.zeichneLinie(wuerfelGUI.getButton(), xy[0], xy[1], true);	
+		
 			}	
 		});	
 			
@@ -248,9 +255,10 @@ public class WuerfelPresenter  {
 	}
 	
 	public void neueRunde() {
-		wurfAnzahl =0;
+		wurfAnzahl = 0;
 	  	spielLogik.setWuerfeAnzahl(0); 
-	  	for(int i = 0; i < 5; i++) { bank.getReihenfolge().set(i, null); }
+	  	
+	  	this.init = true;
         for (WuerfelLogik wuerfel : alleWuerfelLogik) {
             wuerfel.setBehalten(false);
             
@@ -293,6 +301,14 @@ public class WuerfelPresenter  {
 	    public MoeglicheZuege getMoeglicheZuege() {
 	        return moeglicheZuege;
 	    }
+	    public boolean isInit() {
+			return init;
+		}
+
+
+		public void setInit(boolean init) {
+			this.init = init;
+		}
 }
     
   

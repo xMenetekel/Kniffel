@@ -3,8 +3,6 @@ package presenter;
 import java.awt.Container;
 import java.util.List;
 
-import javax.swing.JButton;
-
 import gui.SpielerbankGUI;
 import model.SpielLogik;
 import model.SpielerLogik;
@@ -23,8 +21,7 @@ public class SpielerbankPresenter {
 		
 	}
 	public int getAktiverSpieler() { //lmao
-		logik.getAktiverSpieler();
-		return 0;
+		return logik.getAktiverSpielerIndex();
 	}
 	
 	
@@ -45,27 +42,20 @@ public class SpielerbankPresenter {
 			return "transistor";
 		case 6:
 			return "integral";
+		case 7: 
+			return "fey";
 		default: return "spielerbank";
 		}
 	}
 
+	// aktuallisieren von Spieler Icon in GUI
+	public void aktualisiereAktivesSpielerIcon(int spielerIndex) {
+		gui.aktualisiereIcon(spielerIndex);
+		
+	}
 	
 	
-	
-	
-	
-	
-	
-	
-	
-	
-	
-	
-	
-	
-	
-	
-	//Ready Get Set Go
+//Ready Get Set Go
 	
 	public SpielerbankGUI getGui() {
 		return gui;

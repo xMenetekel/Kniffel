@@ -6,8 +6,6 @@ import java.util.ArrayList;
 import java.util.List;
 
 import javax.swing.ImageIcon;
-import javax.swing.JLabel;
-import javax.swing.JPanel;
 
 public class WuerfelBankGUI extends AbstractGUI {
 
@@ -19,8 +17,6 @@ public class WuerfelBankGUI extends AbstractGUI {
 	
 	List<WuerfelGUI> reihenfolge;
 	
-	
-
 	public WuerfelBankGUI(Container Eimer) {
 		super(X, Y, B, H, Eimer);
 		bildIcon = new ImageIcon("Other/wuerfelbank.jpg" );
@@ -29,7 +25,6 @@ public class WuerfelBankGUI extends AbstractGUI {
 		this.panel.setPreferredSize(new Dimension((int)(B * Eimer.getWidth()), (int)(H * Eimer.getHeight())));
 		this.bild.setBounds(0,0,(int)(B * Eimer.getWidth()), (int)(H * Eimer.getHeight()));
 		reihenfolge = new ArrayList<>();
-		for(int i = 0; i < 5; i++) { reihenfolge.add(null); }
 		this.panel.add(bild);
 		
 	}
