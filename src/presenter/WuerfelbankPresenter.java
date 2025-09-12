@@ -6,13 +6,19 @@ import gui.WuerfelBankGUI;
 import model.WuerfelbankLogik;
 
 public class WuerfelbankPresenter {
+	
 	private WuerfelBankGUI gui;
 	private WuerfelbankLogik logik;
 	
-	public WuerfelbankPresenter(Container Eimer) {
+	/**
+	 * Erzeugt GUI und Logik
+	 * 
+	 * @param eimer		Container in dem die GUI plaziert wird
+	 */
+	public WuerfelbankPresenter(Container eimer) {
 		
-		gui = new WuerfelBankGUI(Eimer);
-		logik = new WuerfelbankLogik();	
+		this.gui = new WuerfelBankGUI(eimer);
+		this.logik = new WuerfelbankLogik();	
 	}
 
 	public WuerfelBankGUI getGui() {
@@ -31,3 +37,4 @@ public class WuerfelbankPresenter {
 		this.logik = logik;
 	}
 }
+

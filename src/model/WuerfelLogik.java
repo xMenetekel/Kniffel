@@ -18,7 +18,11 @@ public class WuerfelLogik {
 	private int bankYPosition;
 	private WuerfelGUI gui;
 		
-	//Konstruktor 
+	/**
+	 * Initialisiert den Wuerfel mit Seitenanzahl und wurfelt
+	 * 
+	 * @param seiten Wuerfelseiten
+	 */
 	public WuerfelLogik(int seiten) {
 		this.seiten = seiten;
 		this.behalten = false;
@@ -27,9 +31,13 @@ public class WuerfelLogik {
 		wuerfeln();	
 	}
 	
+	/**
+	 * wuerfelt fallst nicht behalten
+	 * +1 weil keine 0 seiten
+	 */
 	public void wuerfeln() {
 		if(!behalten) {
-			this.augen = zufall.nextInt(seiten)+1; //keine 0 seiten
+			this.augen = zufall.nextInt(seiten)+1;
 		}	
 	}
 	

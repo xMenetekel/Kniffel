@@ -6,21 +6,30 @@ import gui.WuerfelnButtonGUI;
 import model.WuerfelnButtonLogik;
 
 public class WuerfelnButtonPresenter {
+	
 	private WuerfelnButtonLogik logik;
 	private WuerfelnButtonGUI gui;
 	
 	private WuerfelPresenter wuerfel;
 	private PunktetabellePresenter tabelle;
 
+	/**
+	 * erstellt Logik und GUI des Buttons
+	 * speichert Referenzen zu anderen Presentern
+	 * 
+	 * @param Eimer		Container in dem die GUI angezeigt wird
+	 * @param wuerfel	Referenz auf WuerfelPresenter
+	 * @param tabelle	Referenz auf PunktetabellenPresenter
+	 */
 	public WuerfelnButtonPresenter(Container Eimer, WuerfelPresenter wuerfel, PunktetabellePresenter tabelle) {
-		logik = new WuerfelnButtonLogik();
-		gui = new WuerfelnButtonGUI(Eimer);
+		this.logik = new WuerfelnButtonLogik();
+		this.gui = new WuerfelnButtonGUI(Eimer);
 				
-		this.setWuerfel(wuerfel);
-		this.setTabelle(tabelle);
+		this.wuerfel = wuerfel;
+		this.tabelle = tabelle;
 	}
 		
-	//GetterSetterGetterSetterGetterSetterGetterSetterGetterSetterGetterSetter	
+	
 	public WuerfelnButtonLogik getLogik() {
 		return logik;
 	}

@@ -13,15 +13,34 @@ public class SpielerbankPresenter {
 	private List<SpielerLogik> spielerListe;
 	private SpielLogik logik;
 	
-	public SpielerbankPresenter(Container Eimer, List<SpielerLogik> spielerListe, SpielLogik logik) {
+	/**
+	 * Konstruktor erzeugt Presenter mit Spielerliste und Logik
+	 * 
+	 * @param eimer			Container, in dem die GUI plaziert wird
+	 * @param spielerListe	Liste der SpielerModelle
+	 * @param logik			SpielLogik
+	 */
+	public SpielerbankPresenter(Container eimer, List<SpielerLogik> spielerListe, SpielLogik logik) {
 		this.spielerListe = spielerListe;		
 		this.logik = logik;
-		gui = new SpielerbankGUI(Eimer, this);		
+		this.gui = new SpielerbankGUI(eimer, this);		
 	}
-	public int getAktiverSpieler() { //lmao
+	
+	/**
+	 * Index des aktiven Spielers 
+	 * 
+	 * @return	Index des aktiven Spielers
+	 */
+	public int getAktiverSpieler() {
 		return logik.getAktiverSpielerIndex();
 	}
 	
+	/**
+	 * Namen der SpielerIcons anhand des Indexes
+	 * 
+	 * @param i		Index des Spielser in der Liste
+	 * @return		Name des Icons fuer Darstellung in GUI
+	 */
 	public String getBildname(int i) {
 		switch(spielerListe.get(i).getIconIndex()) {
 		case 0:
@@ -44,13 +63,16 @@ public class SpielerbankPresenter {
 		}
 	}
 
-	// aktuallisieren von Spieler Icon in GUI
+	/**
+	 * aktuallisieren von Spieler Icon in GUI
+	 * 
+	 * @param spielerIndex 	Index des Spieler dessen Icon aktualisiert wird
+	 */
 	public void aktualisiereAktivesSpielerIcon(int spielerIndex) {
 		gui.aktualisiereIcon(spielerIndex);
-		
 	}
 		
-	//Ready Get Set Go
+
 	public SpielerbankGUI getGui() {
 		return gui;
 	}
@@ -74,5 +96,4 @@ public class SpielerbankPresenter {
 	public void setLogik(SpielLogik logik) {
 		this.logik = logik;
 	}
-
 }
