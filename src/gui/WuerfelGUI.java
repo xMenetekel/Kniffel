@@ -52,7 +52,7 @@ public class WuerfelGUI {
 	 * 
 	 * Bei flachem Anstieg muss man x Schrittweise berechnen und bei starken Anstieg y Schrittweise. Wenn m nicht mit 1.0 multipliziert wird dann
 	 * wertet es nicht als Double aus und das ganze kriegt einen hässligen Knick, das plus Hilfe bei der Geschwindigkeit vom Timer (Also das eben erwähnte
-	 * ob man x oder y Schritweise inkrementiert) und wie Timer generell funktionieren wurde mit KI Hilfe verstanden. 
+	 * ob man x ODER y Schrittweise inkrementiert) und wie Timer generell funktionieren wurde mit KI Hilfe verstanden. 
 	 * 
 	 * Für langsamer / Schneller das x bei new Timer{x, e -> ...} vergrößern / verkleinern
 	 * 
@@ -68,31 +68,30 @@ public class WuerfelGUI {
 		if(zielX - wuerfel.getX() == 0) { m = 0; }
 		else { m =(zielY - wuerfel.getY()) * 1.0 / ( zielX - wuerfel.getX()); } 
 		double n = zielY - (zielX * m);
-		int[] moduloBoi = wuerfeln ? new int[] {0} : null; //freche lösung
-		
-		
-		
+		int[] moduloBoi = wuerfeln ? new int[] {0} : new int[]{1}; //freche lösung		
+		final int TOL = 1; //für toleranz, damit es schneller ist :( darf nicht null sein
 			
-		Timer zeichnenTimer = new Timer(10, e -> {
+		Timer zeichnenTimer = new Timer(16, e -> {
 					
 			int xJetzt = wuerfel.getX();
 			int yJetzt = wuerfel.getY();
 			
-			moduloBoi[0]++;		
+			moduloBoi[0]++;	
 			if(wuerfeln && moduloBoi[0] % 5 == 0) {
-			ImageIcon bildi = new ImageIcon("src/Other/wuerfel" + (rnjesus.nextInt(5)+1) + "und50.png" ); //hier sehen sie spaghetti code. ich weiß nicht wie ich die beiden trennen soll und ich will nicht immer ki befragen :((
+			ImageIcon bildi = new ImageIcon("src/Other/wuerfel" + (rnjesus.nextInt(5)+1) + "und50.png" );
 			wuerfel.setIcon(bildi); }
 			
+			
 			if(Math.abs(m) <= 1) {
-				if (xJetzt > zielX) xJetzt = xJetzt - 2;
-				if (xJetzt < zielX) xJetzt = xJetzt + 2;	
+				if (xJetzt > zielX) xJetzt = xJetzt - TOL;
+				if (xJetzt < zielX) xJetzt = xJetzt + TOL;	
 				int yNeu = (int) (m * xJetzt + n);				
 				wuerfel.setLocation(xJetzt, yNeu);	
 				
 				this.setProzentXAufFeld(this.getxPos() * 1.0 / this.getEimer().getWidth());
 				this.setProzentYAufFeld(this.getyPos() * 1.0 / this.getEimer().getHeight());
 			
-				if( xJetzt > (zielX - 2) && xJetzt < (zielX + 2) && yNeu < (zielY+2) && yNeu > (zielY-2)) { 
+				if( xJetzt >= (zielX - TOL) && xJetzt <= (zielX + TOL) && yNeu <= (zielY + TOL) && yNeu >= (zielY - TOL)) { 
 					
 					((Timer)e.getSource()).stop();
 									
@@ -101,15 +100,15 @@ public class WuerfelGUI {
 				
 				}
 			} else {
-				if (yJetzt > zielY) yJetzt = yJetzt -2;	
-				if (yJetzt < zielY) yJetzt = yJetzt + 2;				
+				if (yJetzt > zielY) yJetzt = yJetzt - TOL;	
+				if (yJetzt < zielY) yJetzt = yJetzt + TOL;				
 				int xNeu = (int) ((yJetzt - n) / m);				
 				wuerfel.setLocation(xNeu, yJetzt);	
 				
 				this.setProzentXAufFeld(this.getxPos() * 1.0 / this.getEimer().getWidth());
 				this.setProzentYAufFeld(this.getyPos() * 1.0 / this.getEimer().getHeight());
 				
-				if(xNeu < (zielX+2) && xNeu > (zielX-2) && yJetzt < (zielY+2) && yJetzt > (zielY -2)) { 
+				if(xNeu <= (zielX+TOL) && xNeu >= (zielX-TOL) && yJetzt <= (zielY+TOL) && yJetzt >= (zielY -TOL)) { 
 					
 					((Timer)e.getSource()).stop();
 					

@@ -321,7 +321,7 @@ public class WuerfelPresenter  {
 	/**
 	 * Startet eine neue Runde
 	 * setzt WurfAnzahl zurück und 
-	 * alle Wuerfel wider nicht behalten
+	 * alle Wuerfel wieder nicht behalten
 	 */
 	public void neueRunde() {
 		wurfAnzahl = 0;
