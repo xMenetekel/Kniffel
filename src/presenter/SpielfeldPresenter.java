@@ -108,7 +108,6 @@ public class SpielfeldPresenter {
 			 }
 			 
 			 wuerfel.wuerfeln();
-			 
 			 if(wuerfel.isInit()) {  wuerfel.setInit(false); 
 			 						for(int i=0;i<5;i++) {	bank.getGui().getReihenfolge().set(i, null);}}
 		    	
@@ -202,7 +201,7 @@ public class SpielfeldPresenter {
 	 
 
 		private void updateStatusLabel() {
-			String maxWurf = String.valueOf(wuerfel.getMaxWuerfe());
+			String maxWurf = menueDaten.isDebugingModus() ? "inf" : String.valueOf(wuerfel.getMaxWuerfe());
 			String status = "Runde " + spielLogik.getRunde() + 
 					"\nSpieler: " + spielLogik.getAktiverSpieler().getName() + 
 					"\nWürfe: " + wuerfel.getWurfAnzahl() + "/" + maxWurf;
