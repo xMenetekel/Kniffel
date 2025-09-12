@@ -16,14 +16,13 @@ public class StartmenueGUI extends AbstractGUI{
 	private JButton starteSpiel;
 	private JButton einstellungen;
 	private JButton exit;
-	private Container Eimer;
+	
 	
 	private List<JButton> iconButtons = new ArrayList<>();
 		
-	// Konstruktor erstellt GUI, Layout und fuergt Buttons Hintergrund hinzu ohne Layout Manager
+	// Konstruktor erstellt GUI, Layout und fuegt Buttons Hintergrund hinzu ohne Layout Manager
 	public StartmenueGUI(Container Eimer) {
 		super(0,0,1,1, Eimer);
-		this.Eimer = Eimer;
 		this.Eimer.setLayout(null); 
 		
 		this.starteSpiel = new JButton();
