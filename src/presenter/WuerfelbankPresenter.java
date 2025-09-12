@@ -21,6 +21,7 @@ public class WuerfelbankPresenter {
 		this.logik = new WuerfelbankLogik();	
 	}
 
+	
 	public WuerfelBankGUI getGui() {
 		return gui;
 	}
