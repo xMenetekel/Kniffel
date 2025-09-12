@@ -68,30 +68,20 @@ public class WuerfelGUI {
 		if(zielX - wuerfel.getX() == 0) { m = 0; }
 		else { m =(zielY - wuerfel.getY()) * 1.0 / ( zielX - wuerfel.getX()); } 
 		double n = zielY - (zielX * m);
+		int[] moduloBoi = wuerfeln ? new int[] {0} : null; //freche lösung
 		
 		
-	//	final long startZeit = System.currentTimeMillis();
-	  //  final long timeout = 2000;
 		
-		Timer bildTimer = wuerfeln ? new Timer(25, time -> {
 			
-			ImageIcon bildi = new ImageIcon("src/Other/wuerfel" + (rnjesus.nextInt(5)+1) + "und50.png" ); //hier sehen sie spaghetti code. ich weiß nicht wie ich die beiden trennen soll und ich will nicht immer ki befragen :((
-			wuerfel.setIcon(bildi); } 
-		) : null;
-		
-		if(wuerfeln) { bildTimer.start(); }
-		
 		Timer zeichnenTimer = new Timer(10, e -> {
-			
-		//	if (System.currentTimeMillis() - startZeit > timeout) {
-			//	bildTimer.stop();
-	          //  ((Timer)e.getSource()).stop();
-			//}
-			
+					
 			int xJetzt = wuerfel.getX();
 			int yJetzt = wuerfel.getY();
 			
-			
+			moduloBoi[0]++;		
+			if(wuerfeln && moduloBoi[0] % 5 == 0) {
+			ImageIcon bildi = new ImageIcon("src/Other/wuerfel" + (rnjesus.nextInt(5)+1) + "und50.png" ); //hier sehen sie spaghetti code. ich weiß nicht wie ich die beiden trennen soll und ich will nicht immer ki befragen :((
+			wuerfel.setIcon(bildi); }
 			
 			if(Math.abs(m) <= 1) {
 				if (xJetzt > zielX) xJetzt = xJetzt - 2;
@@ -103,7 +93,7 @@ public class WuerfelGUI {
 				this.setProzentYAufFeld(this.getyPos() * 1.0 / this.getEimer().getHeight());
 			
 				if( xJetzt > (zielX - 2) && xJetzt < (zielX + 2) && yNeu < (zielY+2) && yNeu > (zielY-2)) { 
-					if (wuerfeln && bildTimer != null) bildTimer.stop(); 
+					
 					((Timer)e.getSource()).stop();
 									
 				ImageIcon bildi = new ImageIcon("src/Other/wuerfel" + this.model.getAugen() + "und50.png" );
@@ -120,7 +110,7 @@ public class WuerfelGUI {
 				this.setProzentYAufFeld(this.getyPos() * 1.0 / this.getEimer().getHeight());
 				
 				if(xNeu < (zielX+2) && xNeu > (zielX-2) && yJetzt < (zielY+2) && yJetzt > (zielY -2)) { 
-					if (wuerfeln && bildTimer != null) bildTimer.stop(); 	
+					
 					((Timer)e.getSource()).stop();
 					
 					ImageIcon bildi = new ImageIcon("src/Other/wuerfel" + this.model.getAugen() + "und50.png" );

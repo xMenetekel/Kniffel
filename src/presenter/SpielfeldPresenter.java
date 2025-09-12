@@ -64,7 +64,7 @@ public class SpielfeldPresenter {
 		 }
 		 		 
 		 statusLabel = new JTextArea();
-			statusLabel.setBounds((int)(Eimer.getWidth() * 0.28), (int)(Eimer.getHeight() * 0.81), (int)(Eimer.getWidth() * 0.3),70);
+			statusLabel.setBounds((int)(Eimer.getWidth() * 0.28), (int)(Eimer.getHeight() * 0.81), (int)(Eimer.getWidth() * 0.3),100);
 			statusLabel.setVisible(true);
 			statusLabel.setEditable(false);
 			statusLabel.setOpaque(false);
