@@ -17,7 +17,7 @@ public class SpielerbankGUI extends AbstractGUI{
 
 	public SpielerbankGUI(Container Eimer, SpielerbankPresenter presenter) {
 		super(X, Y, B, H, Eimer);
-		bildIcon = new ImageIcon("Other/" + presenter.getBildname(presenter.getAktiverSpieler()) + ".jpg" );		
+		bildIcon = new ImageIcon("src/Other/" + presenter.getBildname(presenter.getAktiverSpieler()) + ".jpg" );		
 		this.presenter = presenter;
 		setzeNeueGroesse((int)(B * Eimer.getWidth()), (int)(H * Eimer.getHeight()));
 		panel.add(bild);						
@@ -25,7 +25,7 @@ public class SpielerbankGUI extends AbstractGUI{
 	
 	// aktualisiert Spieler Icon wenn Spieler wechselt
 	public void aktualisiereIcon(int index){
-		setBildIcon(new ImageIcon("Other/" + presenter.getBildname(index) + ".jpg"));
+		setBildIcon(new ImageIcon("src/Other/" + presenter.getBildname(index) + ".jpg"));
 		setzeNeueGroesse((int)(B * Eimer.getWidth()), (int)(H * Eimer.getHeight()));
 		getPanel().revalidate();
 		getPanel().repaint();

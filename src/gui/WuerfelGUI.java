@@ -40,7 +40,7 @@ public class WuerfelGUI {
 	}
 	
 	public void fresherButton() {
-		ImageIcon bildi = new ImageIcon("Other/" + model.getAugen() + ":50.png" );
+		ImageIcon bildi = new ImageIcon("src/Other/wuerfel" + model.getAugen() + "und50.png" );
 		wuerfel.setIcon(bildi);
 		wuerfel.setVisible(true);
 		wuerfel.setBounds(this.xPos, this.yPos, 50, 50);
@@ -71,7 +71,7 @@ public class WuerfelGUI {
 		
 		Timer bildTimer = new Timer(25, time -> {
 			
-			if (wuerfeln) {	ImageIcon bildi = new ImageIcon("Other/" + (rnjesus.nextInt(5)+1) + ":50.png" ); //hier sehen sie spaghetti code. ich weiß nicht wie ich die beiden trennen soll und ich will nicht immer ki befragen :((
+			if (wuerfeln) {	ImageIcon bildi = new ImageIcon("src/Other/wuerfel" + (rnjesus.nextInt(5)+1) + "und50.png" ); //hier sehen sie spaghetti code. ich weiß nicht wie ich die beiden trennen soll und ich will nicht immer ki befragen :((
 			wuerfel.setIcon(bildi); } 
 		});
 		
@@ -94,7 +94,7 @@ public class WuerfelGUI {
 			
 				if(xJetzt == zielX && yNeu == zielY) { ((Timer)e.getSource()).stop();
 				if (wuerfeln) {bildTimer.stop(); }
-				ImageIcon bildi = new ImageIcon("Other/" + this.model.getAugen() + ":50.png" );
+				ImageIcon bildi = new ImageIcon("src/Other/wuerfel" + this.model.getAugen() + "und50.png" );
 				wuerfel.setIcon(bildi);
 				
 				}
@@ -109,7 +109,7 @@ public class WuerfelGUI {
 				
 				if(xNeu == zielX && yJetzt == zielY) { ((Timer)e.getSource()).stop();
 				 if (wuerfeln ) { bildTimer.stop(); }
-				ImageIcon bildi = new ImageIcon("Other/" + this.model.getAugen() + ":50.png" );
+				ImageIcon bildi = new ImageIcon("src/Other/wuerfel" + this.model.getAugen() + "und50.png" );
 				wuerfel.setIcon(bildi);
 				}
 			}

@@ -22,7 +22,7 @@ public class PunkteEintragenButtonGUI extends AbstractGUI{
 		super(X, Y, B, H, Eimer);
 		knopf = new JButton();
 		
-		bildIcon = new ImageIcon("Other/punkteButton.jpg");
+		bildIcon = new ImageIcon("src/Other/punkteButton.jpg");
 		
 		panel.addComponentListener(new ComponentAdapter() {
 			@Override

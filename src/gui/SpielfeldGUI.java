@@ -41,7 +41,7 @@ public class SpielfeldGUI extends AbstractGUI{
 		
 		Eimer.removeAll();
 		Eimer.setLayout(null);
-		bildIcon = new ImageIcon("Other/hintergrund.jpg");		
+		bildIcon = new ImageIcon("src/Other/hintergrund.jpg");		
 		bild.setBounds(0,0, Eimer.getWidth(), Eimer.getHeight());
 		bild.setIcon(bildIcon);
 		panel.add(bild);
