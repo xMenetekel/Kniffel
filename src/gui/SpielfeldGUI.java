@@ -59,7 +59,6 @@ public class SpielfeldGUI extends AbstractGUI{
 		});
 	}
 	
-	//Getter und Setter
 	public WuerfelnButtonGUI getWuerfelnButton() {
 		return wuerfelnButton;
 	}

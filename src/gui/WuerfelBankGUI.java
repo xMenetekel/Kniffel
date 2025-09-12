@@ -9,15 +9,23 @@ import javax.swing.ImageIcon;
 
 public class WuerfelBankGUI extends AbstractGUI {
 
-	// Pos und Groeße  der Wuerfelbank in abhaengigkeit zum Container
+	/**
+	 * Pos und Groeße der WuerfelBank im Verhaltnis zum Container
+	 * links, oben, breite, hoehe
+	 */
 	private static final double X = 0.09375; 	
 	private static final double Y = 0.592857;	 
-	private static final double H = 0.085714; // Hoehe Wuerfelbank nicht skalieren
-	private static final double B = 0.35;	  // Breite Wuerfelbank nicht skalieren
+	private static final double H = 0.085714; 
+	private static final double B = 0.35;	 
 	
-	// Liste der Wuerfel in der Bank
+	
 	List<WuerfelGUI> reihenfolge;
 	
+	/**
+	 * erstellt Wuerfelbank in Containter
+	 * 
+	 * @param Eimer		Container in dem die Bank angezeigt wird
+	 */
 	public WuerfelBankGUI(Container Eimer) {
 		super(X, Y, B, H, Eimer);
 		
@@ -33,7 +41,10 @@ public class WuerfelBankGUI extends AbstractGUI {
 		this.panel.add(bild);		
 	}
 	
-	// Getter und Setter 
+	/**
+	 * Reihenfolge der Wuerfel werden zurueckgegebene
+	 * @return Liste der Wuerfel in AnzeigeReihenfolge
+	 */
 	public List<WuerfelGUI> getReihenfolge() {
 		return reihenfolge;
 	}

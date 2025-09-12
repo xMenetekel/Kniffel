@@ -10,7 +10,9 @@ import javax.swing.JPanel;
 import javax.swing.JTable;
 
 
-
+/**
+ * Kuemmert sich um Darstellung und Groeßenanpassung
+ */
 public class WuerfelnButtonGUI extends AbstractGUI{
 	
 	private static final double X = 0.12;
@@ -18,6 +20,11 @@ public class WuerfelnButtonGUI extends AbstractGUI{
 	private static final double B = 0.25;	
 	private static final double H = 0.07;	
 	
+	/**
+	 * Erstellt WuerfelButton und fuegt ihn dem Container hinzu
+	 * 
+	 * @param Eimer		Container in dem der Button angezeigt wird
+	 */
 	public WuerfelnButtonGUI(Container Eimer){
 		super(X, Y, B, H, Eimer);
 		knopf = new JButton();

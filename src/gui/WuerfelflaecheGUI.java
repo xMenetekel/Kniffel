@@ -9,13 +9,20 @@ import javax.swing.ImageIcon;
 
 public class WuerfelflaecheGUI extends AbstractGUI {
 	
-	// Pos und Groeße Wuerfelflache im Verhaeltnis zum Container
-	private static final double X = 0.03;		 // Links
-	private static final double Y = 0.2;		 // Oben
-	private static final double B = 0.4375; 	 // Breite
-	private static final double H = 0.301659125; // Hoehe
+	/**
+	 * Pos und Groeße der Wuerfelflache im Verhaltnis zum Container
+	 * links, oben, breite, hoehe
+	 */
+	private static final double X = 0.03;		 
+	private static final double Y = 0.2;		
+	private static final double B = 0.4375; 	
+	private static final double H = 0.301659125;
 	
-	// Konstruktor erzeugt Wuerfelflaeche
+	/**
+	 * erzeugt Wuerfelflaeche
+	 * 
+	 * @param Eimer Container in der die Wuerfelflaeche angezeigt wird
+	 */
 	public WuerfelflaecheGUI(Container Eimer) {
 		super(X, Y, B, H, Eimer);
 		

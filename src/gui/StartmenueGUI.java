@@ -47,7 +47,6 @@ public class StartmenueGUI extends AbstractGUI{
 			}			
 		});
 		
-		// Hintergundbild
 		bildIcon = new ImageIcon("src/Other/startHintergrund.jpg");	
 		bild.setBounds(0,0, Eimer.getWidth(), Eimer.getHeight());
 		bild.setIcon(bildIcon);
@@ -61,7 +60,7 @@ public class StartmenueGUI extends AbstractGUI{
 		Eimer.repaint();		
 	}
 	
-	// und noch mehr groeßenberechnungen 
+	
 	private void rearrangiereFelder(Container eimer, JButton starteSpiel, JButton einstellungen, JButton exit) {
 		int breite = eimer.getWidth();
 		int hoehe = eimer.getHeight();
