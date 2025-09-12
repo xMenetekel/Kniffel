@@ -69,51 +69,65 @@ public class WuerfelGUI {
 		else { m =(zielY - wuerfel.getY()) * 1.0 / ( zielX - wuerfel.getX()); } 
 		double n = zielY - (zielX * m);
 		
-		Timer bildTimer = new Timer(25, time -> {
+		
+	//	final long startZeit = System.currentTimeMillis();
+	  //  final long timeout = 2000;
+		
+		Timer bildTimer = wuerfeln ? new Timer(25, time -> {
 			
-			if (wuerfeln) {	ImageIcon bildi = new ImageIcon("src/Other/wuerfel" + (rnjesus.nextInt(5)+1) + "und50.png" ); //hier sehen sie spaghetti code. ich weiß nicht wie ich die beiden trennen soll und ich will nicht immer ki befragen :((
+			ImageIcon bildi = new ImageIcon("src/Other/wuerfel" + (rnjesus.nextInt(5)+1) + "und50.png" ); //hier sehen sie spaghetti code. ich weiß nicht wie ich die beiden trennen soll und ich will nicht immer ki befragen :((
 			wuerfel.setIcon(bildi); } 
-		});
+		) : null;
 		
-		if(wuerfeln) {
-			bildTimer.start();
-		}
+		if(wuerfeln) { bildTimer.start(); }
 		
-		Timer zeichnenTimer = new Timer(4, e -> {
+		Timer zeichnenTimer = new Timer(10, e -> {
+			
+		//	if (System.currentTimeMillis() - startZeit > timeout) {
+			//	bildTimer.stop();
+	          //  ((Timer)e.getSource()).stop();
+			//}
+			
 			int xJetzt = wuerfel.getX();
 			int yJetzt = wuerfel.getY();
 			
+			
+			
 			if(Math.abs(m) <= 1) {
-				if (xJetzt > zielX) xJetzt--;
-				if (xJetzt < zielX) xJetzt++;	
-				int yNeu = (int) Math.round(m * xJetzt + n);				
+				if (xJetzt > zielX) xJetzt = xJetzt - 2;
+				if (xJetzt < zielX) xJetzt = xJetzt + 2;	
+				int yNeu = (int) (m * xJetzt + n);				
 				wuerfel.setLocation(xJetzt, yNeu);	
 				
 				this.setProzentXAufFeld(this.getxPos() * 1.0 / this.getEimer().getWidth());
 				this.setProzentYAufFeld(this.getyPos() * 1.0 / this.getEimer().getHeight());
 			
-				if(xJetzt == zielX && yNeu == zielY) { ((Timer)e.getSource()).stop();
-				if (wuerfeln) {bildTimer.stop(); }
+				if( xJetzt > (zielX - 2) && xJetzt < (zielX + 2) && yNeu < (zielY+2) && yNeu > (zielY-2)) { 
+					if (wuerfeln && bildTimer != null) bildTimer.stop(); 
+					((Timer)e.getSource()).stop();
+									
 				ImageIcon bildi = new ImageIcon("src/Other/wuerfel" + this.model.getAugen() + "und50.png" );
 				wuerfel.setIcon(bildi);
 				
 				}
 			} else {
-				if (yJetzt > zielY) yJetzt--;	
-				if (yJetzt < zielY) yJetzt++;				
-				int xNeu = (int) Math.round((yJetzt - n) / m);				
+				if (yJetzt > zielY) yJetzt = yJetzt -2;	
+				if (yJetzt < zielY) yJetzt = yJetzt + 2;				
+				int xNeu = (int) ((yJetzt - n) / m);				
 				wuerfel.setLocation(xNeu, yJetzt);	
 				
 				this.setProzentXAufFeld(this.getxPos() * 1.0 / this.getEimer().getWidth());
 				this.setProzentYAufFeld(this.getyPos() * 1.0 / this.getEimer().getHeight());
 				
-				if(xNeu == zielX && yJetzt == zielY) { ((Timer)e.getSource()).stop();
-				 if (wuerfeln ) { bildTimer.stop(); }
-				ImageIcon bildi = new ImageIcon("src/Other/wuerfel" + this.model.getAugen() + "und50.png" );
-				wuerfel.setIcon(bildi);
+				if(xNeu < (zielX+2) && xNeu > (zielX-2) && yJetzt < (zielY+2) && yJetzt > (zielY -2)) { 
+					if (wuerfeln && bildTimer != null) bildTimer.stop(); 	
+					((Timer)e.getSource()).stop();
+					
+					ImageIcon bildi = new ImageIcon("src/Other/wuerfel" + this.model.getAugen() + "und50.png" );
+					wuerfel.setIcon(bildi);
+					}
 				}
-			}
-		});
+			});
 		zeichnenTimer.start();				
 	}
 
