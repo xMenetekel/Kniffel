@@ -9,10 +9,6 @@ public class SpielLogik {
 	private int aktiverSpielerIndex = 0;
 	private int wuerfeAnzahl = 0;
 	private int runde = 1;
-	
-	public void eintragen(MoeglichkeitLogik moeglichkeit) { //? Do we need this
-		
-	}
 
 	public int getAktiverSpielerIndex() {
 		return aktiverSpielerIndex;

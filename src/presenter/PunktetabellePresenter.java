@@ -16,7 +16,7 @@ import model.SpielLogik;
 import model.StartmenueLogik;
 import model.WuerfelLogik;
 
-public class PunktetabellePresenter implements DummeChatGPTLoesungIchHasseAlles{
+public class PunktetabellePresenter implements SpielEreignisListener{
 	
 	private PunkteTabelleGUI gui;
 	private PunktetabelleLogik logik;
@@ -73,7 +73,7 @@ public class PunktetabellePresenter implements DummeChatGPTLoesungIchHasseAlles{
 		
 		
 		@Override
-		public void wasPassiertWennWirEineNeueRundeAusloesen(List<WuerfelLogik> alleWuerfelLogik) {
+		public void wennNeueRundeStartet(List<WuerfelLogik> alleWuerfelLogik) {
 			
 			if(gui != null) {
 				gui.zeigeMoeglichePunkte(new HashMap<>(),spielLogik.getAktiverSpielerIndex());
@@ -83,7 +83,7 @@ public class PunktetabellePresenter implements DummeChatGPTLoesungIchHasseAlles{
 
 
 		@Override
-		public void wasPassiertWennWirEinenWuerfelWerfen(List<Integer> wuerfel) {
+		public void wennWuerfelGeworfenWerden(List<Integer> wuerfel) {
 			moeglicheZuege.setWuerfelWerte(wuerfel);
 			PunkteTabelle();
 			
