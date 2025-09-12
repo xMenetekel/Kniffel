@@ -21,7 +21,7 @@ public class WuerfelBankGUI extends AbstractGUI {
 	public WuerfelBankGUI(Container Eimer) {
 		super(X, Y, B, H, Eimer);
 		
-		bildIcon = new ImageIcon("Other/wuerfelbank.jpg" );
+		bildIcon = new ImageIcon("src/Other/wuerfelbank.jpg" );
 		this.bild.setIcon(bildIcon);
 		
 		this.panel.setPreferredSize(new Dimension((int)(B * Eimer.getWidth()), (int)(H * Eimer.getHeight())));

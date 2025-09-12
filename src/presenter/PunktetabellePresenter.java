@@ -24,17 +24,17 @@ public class PunktetabellePresenter implements SpielEreignisListener{
 	private SpielLogik spielLogik;
 	int wurfAnzahl = 0;
 	int maxWuerfe = 3;
-
+	private SpielfeldPresenter presenter;
 	
-	public PunktetabellePresenter(Container Eimer, StartmenueLogik menueDaten,SpielLogik spielLogik) {
+	public PunktetabellePresenter(Container Eimer, StartmenueLogik menueDaten,SpielLogik spielLogik, SpielfeldPresenter presenter) {
 		this.spielLogik = spielLogik;
-		gui = new PunkteTabelleGUI(Eimer, menueDaten,spielLogik);
+		this.presenter = presenter;
+		gui = new PunkteTabelleGUI(Eimer, menueDaten,spielLogik, this);
 		logik = new PunktetabelleLogik();
 		this.moeglicheZuege = new MoeglicheZuege();	
 	}
 	
 	public void PunkteTabelle() {
-
 
         Map<Kategorie, Integer> moeglichePunkte = moeglicheZuege.getAktiveMoeglichePunkte();
         
@@ -81,16 +81,26 @@ public class PunktetabellePresenter implements SpielEreignisListener{
 			System.out.println("Neue Runde in PunktetabellePresenter gestartet");
 		}
 
+
 		@Override
 		public void wennWuerfelGeworfenWerden(List<Integer> wuerfel) {
 			moeglicheZuege.setWuerfelWerte(wuerfel);
-			PunkteTabelle();		
+			PunkteTabelle();
+			
 		}
 
 		@Override
 		public void zeigeMoeglichePunkte(HashMap hashMap) {
-			// TODO Auto-generated method stub			
-		}			
+			// TODO Auto-generated method stub
+			
+		}
+
+		public void spielBeendet() {
+			presenter.spielBeendet();
+			
+		}
+		
+			
 	}
 	 
 

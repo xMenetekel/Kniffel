@@ -30,9 +30,9 @@ public class StartmenueGUI extends AbstractGUI{
 		this.einstellungen = new JButton();
 		this.exit = new JButton();
 		
-		starteSpiel.setIcon(new ImageIcon("Other/starteSpiel.jpg"));
-		einstellungen.setIcon(new ImageIcon("Other/einstellungen.jpg"));
-		exit.setIcon(new ImageIcon("Other/schliessen.jpg"));
+		starteSpiel.setIcon(new ImageIcon("src/Other/starteSpiel.jpg"));
+		einstellungen.setIcon(new ImageIcon("src/Other/einstellungen.jpg"));
+		exit.setIcon(new ImageIcon("src/Other/schliessen.jpg"));
 		
 		erstelleButtons();	
 		
@@ -48,7 +48,7 @@ public class StartmenueGUI extends AbstractGUI{
 		});
 		
 		// Hintergundbild
-		bildIcon = new ImageIcon("Other/startHintergrund.jpg");	
+		bildIcon = new ImageIcon("src/Other/startHintergrund.jpg");	
 		bild.setBounds(0,0, Eimer.getWidth(), Eimer.getHeight());
 		bild.setIcon(bildIcon);
 		panel.add(bild);
@@ -71,7 +71,7 @@ public class StartmenueGUI extends AbstractGUI{
 		exit.setBounds(			(int)Math.floor(breite*0.33), (int)Math.floor(hoehe*0.55), (int)Math.floor(breite*0.33),(int)Math.floor(hoehe*0.1));		
 	}
 	
-	// Icon Bilder erstellen weil wir Buttons lieben 
+	// Icon Bilder erstellen weil wir Buttons lieben  TODO umschreiben das es nur die bilder sind
 	private void erstelleButtons(){
 		JButton bebi = new JButton();
 		bebi.setName("bebi");
@@ -100,7 +100,7 @@ public class StartmenueGUI extends AbstractGUI{
 		this.iconButtons.add(fey);
 		
 		iconButtons.forEach(button -> {
-			button.setIcon(new ImageIcon("Other/" + button.getName() + "klein.jpg"));
+			button.setIcon(new ImageIcon("src/Other/" + button.getName() + "klein.jpg"));
 			button.setPreferredSize(new Dimension(50,50));
 			});		
 	}

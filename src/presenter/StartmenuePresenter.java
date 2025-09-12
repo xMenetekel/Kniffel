@@ -59,6 +59,8 @@ public class StartmenuePresenter {
 			zeigeSpielerAuswahl(); //hier wird SpielfeldPresenter() aufgerufen
 		});		
 	}
+	
+	 
 		
 	private void zeigeSpielerAuswahl() {
 		//Hauptfenster Blockieren und eingabe User

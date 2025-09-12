@@ -22,7 +22,7 @@ public class WuerfelnButtonGUI extends AbstractGUI{
 		super(X, Y, B, H, Eimer);
 		knopf = new JButton();
 		
-		bildIcon = new ImageIcon("Other/wuerfelnButton.jpg");		
+		bildIcon = new ImageIcon("src/Other/wuerfelnButton.jpg");		
 		
 		panel.addComponentListener(new ComponentAdapter() {
 			@Override

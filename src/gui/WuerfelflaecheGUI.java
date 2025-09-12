@@ -19,7 +19,7 @@ public class WuerfelflaecheGUI extends AbstractGUI {
 	public WuerfelflaecheGUI(Container Eimer) {
 		super(X, Y, B, H, Eimer);
 		
-		bildIcon = new ImageIcon("Other/wuerfelflaeche.jpg");
+		bildIcon = new ImageIcon("src/Other/wuerfelflaeche.jpg");
 		
 		setzeNeueGroesse(
 			(int)(B * Eimer.getWidth()), 

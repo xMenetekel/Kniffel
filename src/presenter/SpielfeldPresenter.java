@@ -36,19 +36,20 @@ public class SpielfeldPresenter {
 	 private SpielLogik spielLogik; 
 	 private MoeglicheZuege moeglicheZuege = new MoeglicheZuege();
 	 private StartmenueLogik menueDaten;
-	 
+	 private Container Eimer;
 	
 	public SpielfeldPresenter(Container Eimer, SpielLogik spielLogik, StartmenueLogik menueDaten) {
 		 
 		 this.menueDaten = menueDaten;
 		 this.spielLogik = spielLogik; 
+		 this.Eimer = Eimer;
 		 
 		 gui = new SpielfeldGUI(Eimer, this, menueDaten);
 		 logik = new SpielfeldLogik();
 		 
 		 flaeche = new WuerfelflaechePresenter(Eimer);
 		 bank = new WuerfelbankPresenter(Eimer);
-		 tabelle = new PunktetabellePresenter(Eimer, menueDaten, spielLogik); 	
+		 tabelle = new PunktetabellePresenter(Eimer, menueDaten, spielLogik, this); 	
 		 wuerfel = new WuerfelPresenter(Eimer, spielLogik, flaeche.getGui(), bank.getGui(), tabelle, menueDaten);  			 	 
 		 spieler = new SpielerbankPresenter(Eimer, menueDaten.getSpielerListe(), spielLogik);
 	
@@ -235,7 +236,15 @@ public class SpielfeldPresenter {
 			 }
 		 }
 		
-	 public SpielfeldGUI getGui() {
+	public void spielBeendet() {
+		System.out.println("ich bin hier gelandet\n\n\n yay");
+		Eimer.removeAll();
+		Eimer.revalidate();
+		Eimer.repaint();
+		new EndePresenter(Eimer, spielLogik, menueDaten);
+	}
+		
+	public SpielfeldGUI getGui() {
 		return gui;
 	}
 
