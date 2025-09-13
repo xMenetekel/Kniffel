@@ -106,16 +106,11 @@ public class SpielfeldPresenter {
 			 }
 			 
 			 wuerfel.wuerfeln();
-<<<<<<< HEAD
-			 if(wuerfel.isInit()) {  wuerfel.setInit(false); 
-			 						for(int i=0;i<5;i++) {	bank.getGui().getReihenfolge().set(i, null);}}
-		    	
-		      }	 
-=======
+
 			 
 			
 		 }	 
->>>>>>> 81e4c71adec527407e626440d60aaa215c86be46
+
 			 spielLogik.erhoeheWurfAnzahl();
 			 updateStatusLabel();
 			 

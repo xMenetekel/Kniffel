@@ -116,11 +116,8 @@ public class StartmenuePresenter {
 	
 	private int icons(int indexSpieler) {
 		
-		List<JButton> buttons = menueGUI.getIconButtons();
-		Object[] liste = new Object[buttons.size()];
-		for(int i = 0; i < buttons.size(); i++){
-			liste[i] = buttons.get(i).getIcon();
-		}
+		
+		Object[] liste = menueGUI.getIcons().toArray();
 														
 		int auswahl = JOptionPane.showOptionDialog(
 				menueGUI.getEimer(), 
