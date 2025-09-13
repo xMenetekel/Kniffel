@@ -136,7 +136,7 @@ public class SpielfeldPresenter {
 		 rearrangiere(fenstar, punkteKlick.getGui());
 		 rearrangiere(fenstar, gui);
 		 rearrangiereWuerfel(fenstar, wuerfel, bank.getGui());		
-		 statusLabel.setBounds((int)(eimer.getWidth() * 0.28), (int)(eimer.getHeight() * 0.81), (int)(eimer.getWidth() * 0.3),100);
+		 statusLabel.setBounds((int)(eimer.getWidth() * 0.28), (int)(eimer.getHeight() * 0.81), (int)(eimer.getWidth() * 0.22),100);
 	 }
 	 	 
 	 protected void rearrangiereWuerfel(Component e, WuerfelPresenter w, WuerfelBankGUI bank) {

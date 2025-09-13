@@ -34,8 +34,8 @@ public class SpielfeldGUI extends AbstractGUI{
 	private Kategorie ausgewaehlteKategorie = null; 
 		
 	/**
-	 * Erstellt Spielfeld mit Hingerunrbild 
-	 * regiestriert  Groeßenanpassungen
+	 * Erstellt Spielfeld mit Hintergrundbild 
+	 * registriert  Groeßenanpassungen
 	 * 
 	 * @param Eimer			uebergeordneter Container
 	 * @param presenter		zugehoeriger SpielfeldPresenter
