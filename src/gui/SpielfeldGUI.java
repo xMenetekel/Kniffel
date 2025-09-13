@@ -1,6 +1,5 @@
 package gui;
 
-
 import java.awt.Component;
 import java.awt.Container;
 import java.awt.Font;
@@ -30,21 +29,15 @@ public class SpielfeldGUI extends AbstractGUI{
 	private PunkteEintragenButtonGUI punkteEintragenButton;
 	private PunkteTabelleGUI punkteTabelle;
 	private StartmenueLogik menueDaten;
-	
-
-	
+		
 	private PunkteEintragenButtonGUI punkteEintragen;	
 	private Kategorie ausgewaehlteKategorie = null; 
-	
-	
-	
+		
 	public SpielfeldGUI(Container Eimer, SpielfeldPresenter presenter, StartmenueLogik menueDaten) {
 		super(0,0,1,1, Eimer);
 		this.presenter = presenter;
 		this.menueDaten = menueDaten;
 		
-		
-
 		
 		Eimer.removeAll();
 		Eimer.setLayout(null);
@@ -52,20 +45,21 @@ public class SpielfeldGUI extends AbstractGUI{
 		bild.setBounds(0,0, Eimer.getWidth(), Eimer.getHeight());
 		bild.setIcon(bildIcon);
 		panel.add(bild);
-		setzeneueGroesse(Eimer.getHeight(),Eimer.getWidth());
+		setzeNeueGroesse(Eimer.getHeight(),Eimer.getWidth());
 		
 		Eimer.revalidate();
 		Eimer.repaint();
 		
-		Eimer.addComponentListener(new ComponentAdapter() { //der ganze spaß hier ist dafür da das beim neu ziehen alles prozentual angepasst wird
+		// Listener damit es funktioniert 
+		Eimer.addComponentListener(new ComponentAdapter() {
 			@Override
 			public void componentResized(ComponentEvent e) {
-				presenter.rearrangiereAlles(Eimer);
-				
+				presenter.rearrangiereAlles(Eimer);				
 			}
 		});
 	}
 	
+	//Getter und Setter
 	public WuerfelnButtonGUI getWuerfelnButton() {
 		return wuerfelnButton;
 	}

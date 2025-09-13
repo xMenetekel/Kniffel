@@ -4,8 +4,7 @@ import java.util.Random;
 
 public class W6 extends WuerfelLogik {
 	public W6(int seiten) {
-		super(seiten);
-		
+		super(seiten);		
 	}
 
 	private int augen;

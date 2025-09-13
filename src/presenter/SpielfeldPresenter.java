@@ -57,14 +57,11 @@ public class SpielfeldPresenter {
 
 		 wuerfelnKlick.getGui().getKnopf().addActionListener(e->onWuerfelnClick());
 		 punkteKlick.getGui().getKnopf().addActionListener(e->eintragePunkteFuerAktuellenSpieler());
-
-		 
+	 
 		 if (tabelle.getGui() != null) {
 			 tabelle.getGui().setKategorieSelectListener(this::onKategorieAusgewaehlt);
 		 }
-		 
-		
-		 
+		 		 
 		 statusLabel = new JTextArea();
 			statusLabel.setBounds((int)(Eimer.getWidth() * 0.28), (int)(Eimer.getHeight() * 0.81), (int)(Eimer.getWidth() * 0.3),70);
 			statusLabel.setVisible(true);
@@ -104,14 +101,27 @@ public class SpielfeldPresenter {
 		 if(spielLogik.getWuerfeAnzahl() < aktuellesMaxWuerfeln && wuerfel.getWurfAnzahl() < aktuellesMaxWuerfeln) {
 	     
 			 if(wuerfel.isInit()) { wuerfel.setInit(false);
-		     for(int i = 0; i < 5; i++) { bank.getGui().getReihenfolge().set(i, null); }
+		     	for(int i = 0; i < 5; i++) { 
+		     		bank.getGui().getReihenfolge().set(i, null); 
+		     	}
 			 }
 			 
 			 wuerfel.wuerfeln();
+<<<<<<< HEAD
 			 if(wuerfel.isInit()) {  wuerfel.setInit(false); 
 			 						for(int i=0;i<5;i++) {	bank.getGui().getReihenfolge().set(i, null);}}
 		    	
 		      }	 
+=======
+			 
+			 if(wuerfel.isInit()) {  
+				wuerfel.setInit(false); 
+			 	for(int i=0;i<5;i++) {	
+			 		bank.getGui().getReihenfolge().set(i, null);
+			 	}
+			 }
+		 }	 
+>>>>>>> 81e4c71adec527407e626440d60aaa215c86be46
 			 spielLogik.erhoeheWurfAnzahl();
 			 updateStatusLabel();
 			 
@@ -119,7 +129,7 @@ public class SpielfeldPresenter {
 			 for (WuerfelLogik wuerfelLogik : wuerfel.getAlleWuerfelLogik()) {
 				 wuerfelWerte.add(wuerfelLogik.getAugen());
 			 }
-			 System.out.println("Neue Würfelwerte: "+wuerfelWerte);
+			 System.out.println("Neue Würfelwerte: "+ wuerfelWerte);
 			 
 			 moeglicheZuege.setWuerfelWerte(wuerfelWerte);
 			 Map<Kategorie,Integer> moeglichePunkte = moeglicheZuege.getAktiveMoeglichePunkte();
@@ -133,8 +143,6 @@ public class SpielfeldPresenter {
 		 System.out.println("Kategorie Ausgewählt: "+kategorie);
 	 }
 	 
-	 
-
 	 public void rearrangiereAlles(Component fenstar) {
 		 rearrangiere(fenstar, flaeche.getGui());
 		 rearrangiere(fenstar, tabelle.getGui());
@@ -142,41 +150,31 @@ public class SpielfeldPresenter {
 		 rearrangiere(fenstar, wuerfelnKlick.getGui());
 		 rearrangiere(fenstar, punkteKlick.getGui());
 		 rearrangiere(fenstar, gui);
-		 rearrangiereWuerfel(fenstar, wuerfel, bank.getGui());
-		 
+		 rearrangiereWuerfel(fenstar, wuerfel, bank.getGui());		 
 	 }
-	 
-	 
-	 
+	 	 
 	 protected void rearrangiereWuerfel(Component e, WuerfelPresenter w, WuerfelBankGUI bank) {
 			int breite = e.getWidth();
 			int hoehe = e.getHeight();
-			
-			
+						
 			bank.getPanel().setBounds((int)Math.floor(breite*bank.getProzentFlaecheX()), 
 									  (int)Math.floor(hoehe*bank.getProzentFlaecheY()), 280, 60);
 			
-			w.getAlleWuerfelGUI().forEach(t -> { if(t.isIstinBank()) {				
-													
-													t.setxPos((int) ((bank.getProzentFlaecheX() * breite ) + 5  ) + 55* (bank.getReihenfolge().indexOf(t))  );
-													t.setyPos((int) ((bank.getProzentFlaecheY() * hoehe ) + 6 )  );
-													t.setProzentXAufFeld(t.getxPos() * 1.0 / breite);
-													 t.setProzentYAufFeld(t.getyPos() * 1.0 / hoehe);
-													 t.getButton().setBounds(t.getxPos(), t.getyPos(), 50, 50);	
-					
-				
-				
-												} else {
-													 t.setxPos( (int) Math.round(t.prozentXAufFeld * breite)  );
-													 t.setyPos( (int) Math.round(t.prozentYAufFeld * hoehe));
-													 t.setProzentXAufFeld(t.getxPos() * 1.0 / breite);
-													 t.setProzentYAufFeld(t.getyPos() * 1.0 / hoehe);
-													 t.getButton().setBounds(t.getxPos(), t.getyPos(), 50, 50);													
-												}
-												});
-			
-			
-				
+			w.getAlleWuerfelGUI().forEach(t -> { 
+				if(t.isIstinBank()) {						
+					t.setxPos((int) ((bank.getProzentFlaecheX() * breite ) + 5  ) + 55* (bank.getReihenfolge().indexOf(t)));
+					t.setyPos((int) ((bank.getProzentFlaecheY() * hoehe ) + 6 )  );
+					t.setProzentXAufFeld(t.getxPos() * 1.0 / breite);
+					t.setProzentYAufFeld(t.getyPos() * 1.0 / hoehe);
+					t.getButton().setBounds(t.getxPos(), t.getyPos(), 50, 50);	
+				} else {
+					t.setxPos( (int) Math.round(t.prozentXAufFeld * breite)  );
+					t.setyPos( (int) Math.round(t.prozentYAufFeld * hoehe));
+					t.setProzentXAufFeld(t.getxPos() * 1.0 / breite);
+					t.setProzentYAufFeld(t.getyPos() * 1.0 / hoehe);
+					t.getButton().setBounds(t.getxPos(), t.getyPos(), 50, 50);													
+					}
+			});				
 		}
 		
 		public void rearrangiere(Component e, AbstractGUI gui) {
@@ -189,7 +187,7 @@ public class SpielfeldPresenter {
 									(int)Math.floor(hoehe*gui.getProzentFlaecheHoehe()));
 			
 			if(!(gui instanceof PunkteTabelleGUI)){
-			gui.setzeneueGroesse((int)(breite * gui.getProzentFlaecheBreite()), (int)(hoehe * gui.getProzentFlaecheHoehe()));
+			gui.setzeNeueGroesse((int)(breite * gui.getProzentFlaecheBreite()), (int)(hoehe * gui.getProzentFlaecheHoehe()));
 			}
 		}
 		
@@ -210,9 +208,9 @@ public class SpielfeldPresenter {
 		
 		public void eintragePunkteFuerAktuellenSpieler() {
 			 System.out.println("==PUNKTE EINTRAGEN==");
-			 System.out.println("AusgewählteKategorie: "+ausgewaehlteKategorie);
-			 System.out.println("Wuerfeanzahl: "+ spielLogik.getWuerfeAnzahl());
-			 System.out.println("Aktiver Spieler: "+spielLogik.getAktiverSpielerIndex());
+			 System.out.println("AusgewählteKategorie: " + ausgewaehlteKategorie);
+			 System.out.println("Wuerfeanzahl: " + spielLogik.getWuerfeAnzahl());
+			 System.out.println("Aktiver Spieler: " + spielLogik.getAktiverSpielerIndex());
 			 
 			 if(ausgewaehlteKategorie != null && spielLogik.getWuerfeAnzahl()>0) {
 				 try {
@@ -244,8 +242,6 @@ public class SpielfeldPresenter {
 			 }
 		 }
 		
-		
- 
 	 public SpielfeldGUI getGui() {
 		return gui;
 	}
@@ -324,10 +320,11 @@ public class SpielfeldPresenter {
 
 	public SpielLogik getSpielLogik() {
 		 return spielLogik;
-	 }
+	}
+	
 	public StartmenueLogik getMenueDaten() {
 			return menueDaten;
-		}
+	}
 	
 	public void setMenueDaten(StartmenueLogik menueDaten) {
 		this.menueDaten = menueDaten;

@@ -18,33 +18,13 @@ public class PunkteEintragenButtonPresenter {
 		
 		this.ichBraucheNurDieseEineMethodeEsIstHalbDreiNachtsIchWillInsBett = arsch;
 	}
-	
-	
-	
-	
-	
+		
 	private void punkteEintragenButtonGeklickt() {
 		ichBraucheNurDieseEineMethodeEsIstHalbDreiNachtsIchWillInsBett.eintragePunkteFuerAktuellenSpieler();
 		
 	}
 
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-	//Die Gettler und Settler von Catan
-
+	//Gettler und Settler
 	public PunkteEintragenButtonGUI getGui() {
 		return gui;
 	}

@@ -99,7 +99,6 @@ public class MoeglicheZuege {
 	    
 	  	public void entferneKategorie(Kategorie kategorie) {
 	  		aktiveMoeglichePunkte.remove(kategorie);
-
 	  	}
 	
 	    public List<Kategorie> filterMoeglichkeiten() {

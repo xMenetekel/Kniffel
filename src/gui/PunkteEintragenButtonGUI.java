@@ -30,7 +30,7 @@ public class PunkteEintragenButtonGUI extends AbstractGUI{
 				knopf.setSize(panel.getSize());
 			}
 		});
-		setzeneueGroesse((int)(B * Eimer.getWidth()), (int)(H * Eimer.getHeight()));
+		setzeNeueGroesse((int)(B * Eimer.getWidth()), (int)(H * Eimer.getHeight()));
 		
 		knopf.setIcon(bild.getIcon());
 		

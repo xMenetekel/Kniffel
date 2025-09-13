@@ -12,8 +12,7 @@ public class WuerfelbankPresenter {
 	public WuerfelbankPresenter(Container Eimer) {
 		
 		gui = new WuerfelBankGUI(Eimer);
-		logik = new WuerfelbankLogik();
-		
+		logik = new WuerfelbankLogik();	
 	}
 
 	public WuerfelBankGUI getGui() {
@@ -31,5 +30,4 @@ public class WuerfelbankPresenter {
 	public void setLogik(WuerfelbankLogik logik) {
 		this.logik = logik;
 	}
-
 }

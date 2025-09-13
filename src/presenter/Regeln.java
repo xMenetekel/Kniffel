@@ -14,6 +14,5 @@ public class Regeln {
 	public static final String KLEINESTRASSE = "KleineStrasse";
 	public static final String GROSSESTRASSE = "GrosseStrasse";
 	public static final String KNIFFEL = "Kniffel";
-	public static final String CHANCE = "Chance";
-	
+	public static final String CHANCE = "Chance";	
 }

@@ -13,8 +13,6 @@ import javax.swing.JTable;
 
 public class WuerfelnButtonGUI extends AbstractGUI{
 	
-	
-
 	private static final double X = 0.12;
 	private static final double Y = 0.51;	
 	private static final double B = 0.25;	
@@ -32,13 +30,15 @@ public class WuerfelnButtonGUI extends AbstractGUI{
 				knopf.setSize(panel.getSize());
 			}
 		});
-		setzeneueGroesse((int)(B * Eimer.getWidth()), (int)(H * Eimer.getHeight()));
+		
+		setzeNeueGroesse(
+			(int)(B * Eimer.getWidth()), 
+			(int)(H * Eimer.getHeight())
+		);
+
 		knopf.setIcon(bild.getIcon());
 		knopf.setVisible(true);
 		panel.add(knopf);
 		
 	}
-
-	
-
 }
