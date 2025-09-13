@@ -84,7 +84,7 @@ public class StartmenuePresenter {
 				SpielerDaten(anzahl); //Namen hinzufügen
 				
 				SpielLogik spielLogik = new SpielLogik();
-				spielLogik.setSpieler(menueDaten.getSpielerListe()); //Initialisierung Spiellogik mit Spielern
+				spielLogik.setAlleSpieler(menueDaten.getSpielerListe()); //Initialisierung Spiellogik mit Spielern
 				
 				new SpielfeldPresenter(menueGUI.getEimer(), spielLogik, menueDaten);
 				

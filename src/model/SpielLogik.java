@@ -62,11 +62,11 @@ public class SpielLogik {
 		this.wuerfeAnzahl = wuerfeAnzahl;
 	}
 
-	public List<SpielerLogik> getSpieler() {
+	public List<SpielerLogik> getAlleSpieler() {
 		return spieler;
 	}
 
-	public void setSpieler(List<SpielerLogik> spieler) {
+	public void setAlleSpieler(List<SpielerLogik> spieler) {
 		this.spieler = spieler;
 	}
 	

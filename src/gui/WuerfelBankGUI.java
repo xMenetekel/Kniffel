@@ -14,7 +14,7 @@ public class WuerfelBankGUI extends AbstractGUI {
 	 * links, oben, breite, hoehe
 	 */
 	private static final double X = 0.09375; 	
-	private static final double Y = 0.592857;	 
+	private static final double Y = 0.586;	 
 	private static final double H = 0.085714; 
 	private static final double B = 0.35;	 
 	

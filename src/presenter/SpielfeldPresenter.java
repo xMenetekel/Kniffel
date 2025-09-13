@@ -109,12 +109,7 @@ public class SpielfeldPresenter {
 			 
 			 wuerfel.wuerfeln();
 			 
-			 if(wuerfel.isInit()) {  
-				wuerfel.setInit(false); 
-			 	for(int i=0;i<5;i++) {	
-			 		bank.getGui().getReihenfolge().set(i, null);
-			 	}
-			 }
+			
 		 }	 
 			 spielLogik.erhoeheWurfAnzahl();
 			 updateStatusLabel();
@@ -152,22 +147,19 @@ public class SpielfeldPresenter {
 			int hoehe = e.getHeight();
 						
 			bank.getPanel().setBounds((int)Math.floor(breite*bank.getProzentFlaecheX()), 
-									  (int)Math.floor(hoehe*bank.getProzentFlaecheY()), 280, 60);
+									  (int)Math.floor(hoehe*bank.getProzentFlaecheY()), 300, 80);
 			
 			w.getAlleWuerfelGUI().forEach(t -> { 
 				if(t.isIstinBank()) {						
-					t.setxPos((int) ((bank.getProzentFlaecheX() * breite ) + 5  ) + 55* (bank.getReihenfolge().indexOf(t)));
-					t.setyPos((int) ((bank.getProzentFlaecheY() * hoehe ) + 6 )  );
-					t.setProzentXAufFeld(t.getxPos() * 1.0 / breite);
-					t.setProzentYAufFeld(t.getyPos() * 1.0 / hoehe);
-					t.getButton().setBounds(t.getxPos(), t.getyPos(), 50, 50);	
+					t.setxPos((int) ((bank.getProzentFlaecheX() * breite ) + 15 ) + 55 * (bank.getReihenfolge().indexOf(t)));
+					t.setyPos((int) ((bank.getProzentFlaecheY() * hoehe ) + 7 ) );
 				} else {
-					t.setxPos( (int) Math.round(t.prozentXAufFeld * breite)  );
-					t.setyPos( (int) Math.round(t.prozentYAufFeld * hoehe));
-					t.setProzentXAufFeld(t.getxPos() * 1.0 / breite);
-					t.setProzentYAufFeld(t.getyPos() * 1.0 / hoehe);
-					t.getButton().setBounds(t.getxPos(), t.getyPos(), 50, 50);													
+					t.setxPos( (int) Math.round(t.prozentXAufFeld * breite));
+					t.setyPos( (int) Math.round(t.prozentYAufFeld * hoehe));												
 					}
+				t.setProzentXAufFeld(t.getxPos() * 1.0 / breite);
+				t.setProzentYAufFeld(t.getyPos() * 1.0 / hoehe);
+				t.getButton().setBounds(t.getxPos(), t.getyPos(), 50, 50);	
 			});				
 		}
 		
