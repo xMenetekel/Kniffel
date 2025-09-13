@@ -41,28 +41,26 @@ public class SpielfeldGUI extends AbstractGUI{
 	 * @param presenter		zugehoeriger SpielfeldPresenter
 	 * @param menueDaten	Daten aus dem Startmenue
 	 */
-	public SpielfeldGUI(Container Eimer, SpielfeldPresenter presenter, StartmenueLogik menueDaten) {
-		super(0,0,1,1, Eimer);
+	public SpielfeldGUI(Container eimer, SpielfeldPresenter presenter, StartmenueLogik menueDaten) {
+		super(0,0,1,1, eimer);
 		this.presenter = presenter;
 		this.menueDaten = menueDaten;
-		
-		
-		Eimer.removeAll();
-		Eimer.setLayout(null);
+				
+		eimer.removeAll();
+		eimer.setLayout(null);
 		bildIcon = new ImageIcon("src/Other/hintergrund.jpg");		
-		bild.setBounds(0,0, Eimer.getWidth(), Eimer.getHeight());
+		bild.setBounds(0,0, eimer.getWidth(), eimer.getHeight());
 		bild.setIcon(bildIcon);
 		panel.add(bild);
-		setzeNeueGroesse(Eimer.getHeight(),Eimer.getWidth());
+		setzeNeueGroesse(eimer.getHeight(),eimer.getWidth());
 		
-		Eimer.revalidate();
-		Eimer.repaint();
+		eimer.revalidate();
+		eimer.repaint();
 		
-		
-		Eimer.addComponentListener(new ComponentAdapter() {
+		eimer.addComponentListener(new ComponentAdapter() {
 			@Override
 			public void componentResized(ComponentEvent e) {
-				presenter.rearrangiereAlles(Eimer);				
+				presenter.rearrangiereAlles(eimer);				
 			}
 		});
 	}

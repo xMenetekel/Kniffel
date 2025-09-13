@@ -26,10 +26,10 @@ public class PunktetabellePresenter implements SpielEreignisListener{
 	int maxWuerfe = 3;
 	private SpielfeldPresenter presenter;
 	
-	public PunktetabellePresenter(Container Eimer, StartmenueLogik menueDaten,SpielLogik spielLogik, SpielfeldPresenter presenter) {
+	public PunktetabellePresenter(Container eimer, StartmenueLogik menueDaten,SpielLogik spielLogik, SpielfeldPresenter presenter) {
 		this.spielLogik = spielLogik;
 		this.presenter = presenter;
-		gui = new PunkteTabelleGUI(Eimer, menueDaten,spielLogik, this);
+		gui = new PunkteTabelleGUI(eimer, menueDaten,spielLogik, this);
 		logik = new PunktetabelleLogik();
 		this.moeglicheZuege = new MoeglicheZuege();	
 	}

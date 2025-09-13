@@ -17,13 +17,13 @@ public class WuerfelnButtonPresenter {
 	 * erstellt Logik und GUI des Buttons
 	 * speichert Referenzen zu anderen Presentern
 	 * 
-	 * @param Eimer		Container in dem die GUI angezeigt wird
+	 * @param eimer		Container in dem die GUI angezeigt wird
 	 * @param wuerfel	Referenz auf WuerfelPresenter
 	 * @param tabelle	Referenz auf PunktetabellenPresenter
 	 */
-	public WuerfelnButtonPresenter(Container Eimer, WuerfelPresenter wuerfel, PunktetabellePresenter tabelle) {
+	public WuerfelnButtonPresenter(Container eimer, WuerfelPresenter wuerfel, PunktetabellePresenter tabelle) {
 		this.logik = new WuerfelnButtonLogik();
-		this.gui = new WuerfelnButtonGUI(Eimer);
+		this.gui = new WuerfelnButtonGUI(eimer);
 				
 		this.wuerfel = wuerfel;
 		this.tabelle = tabelle;

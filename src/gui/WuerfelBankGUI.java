@@ -24,17 +24,17 @@ public class WuerfelBankGUI extends AbstractGUI {
 	/**
 	 * erstellt Wuerfelbank in Containter
 	 * 
-	 * @param Eimer		Container in dem die Bank angezeigt wird
+	 * @param eimer		Container in dem die Bank angezeigt wird
 	 */
-	public WuerfelBankGUI(Container Eimer) {
-		super(X, Y, B, H, Eimer);
+	public WuerfelBankGUI(Container eimer) {
+		super(X, Y, B, H, eimer);
 		
 		bildIcon = new ImageIcon("src/Other/wuerfelbank.jpg" );
 		this.bild.setIcon(bildIcon);
 		
-		this.panel.setPreferredSize(new Dimension((int)(B * Eimer.getWidth()), (int)(H * Eimer.getHeight())));
+		this.panel.setPreferredSize(new Dimension((int)(B * eimer.getWidth()), (int)(H * eimer.getHeight())));
 		
-		this.bild.setBounds(0,0,(int)(B * Eimer.getWidth()), (int)(H * Eimer.getHeight()));
+		this.bild.setBounds(0,0,(int)(B * eimer.getWidth()), (int)(H * eimer.getHeight()));
 		
 		reihenfolge = new ArrayList<>();
 		

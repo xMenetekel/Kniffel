@@ -5,15 +5,29 @@ import java.awt.GridBagLayout;
 
 import javax.swing.ImageIcon;
 
+import model.SpielLogik;
+import presenter.EndePresenter;
+
 public class EndeGUI extends AbstractGUI {
 
-	public EndeGUI(Container Eimer) {
-		super(0,0,1,1, Eimer);
+	public EndeGUI(Container eimer, EndePresenter presenter) {
+		super(0,0,1,1, eimer);
 		
-		this.Eimer.setLayout(new GridBagLayout()); 
+		this.eimer.setLayout(new GridBagLayout()); 
 		bildIcon = new ImageIcon("src/Other/startHintergrund.jpg");	
-		bild.setBounds(0,0, Eimer.getWidth(), Eimer.getHeight());
+		bild.setBounds(0,0, eimer.getWidth(), eimer.getHeight());
 		bild.setIcon(bildIcon);
+		
+		
+		
+		
+		
+		
+		
+		
+		
+		
+		
 		panel.add(bild);
 	}
 
