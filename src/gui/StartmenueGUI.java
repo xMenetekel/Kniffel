@@ -21,6 +21,10 @@ public class StartmenueGUI extends AbstractGUI{
 	private List<ImageIcon> icons = new ArrayList<>();
 		
 	// Konstruktor erstellt GUI, Layout und fuegt Buttons Hintergrund hinzu ohne Layout Manager
+	/**
+	 * 
+	 * @param eimer
+	 */
 	public StartmenueGUI(Container eimer) {
 		super(0,0,1,1, eimer);
 		this.eimer.setLayout(null); 
@@ -97,9 +101,6 @@ public class StartmenueGUI extends AbstractGUI{
 	
 	}
 	
-	
-	
-	// Getter und Setter
 	
 	public JButton getStarteSpiel() {
 		return starteSpiel;
