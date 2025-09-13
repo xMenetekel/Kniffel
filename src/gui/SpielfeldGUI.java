@@ -28,11 +28,19 @@ public class SpielfeldGUI extends AbstractGUI{
 	private WuerfelnButtonGUI wuerfelnButton;
 	private PunkteEintragenButtonGUI punkteEintragenButton;
 	private PunkteTabelleGUI punkteTabelle;
+	
 	private StartmenueLogik menueDaten;
 		
-	private PunkteEintragenButtonGUI punkteEintragen;	
 	private Kategorie ausgewaehlteKategorie = null; 
 		
+	/**
+	 * Erstellt Spielfeld mit Hingerunrbild 
+	 * regiestriert  Groeßenanpassungen
+	 * 
+	 * @param Eimer			uebergeordneter Container
+	 * @param presenter		zugehoeriger SpielfeldPresenter
+	 * @param menueDaten	Daten aus dem Startmenue
+	 */
 	public SpielfeldGUI(Container Eimer, SpielfeldPresenter presenter, StartmenueLogik menueDaten) {
 		super(0,0,1,1, Eimer);
 		this.presenter = presenter;
@@ -50,7 +58,7 @@ public class SpielfeldGUI extends AbstractGUI{
 		Eimer.revalidate();
 		Eimer.repaint();
 		
-		// Listener damit es funktioniert 
+		
 		Eimer.addComponentListener(new ComponentAdapter() {
 			@Override
 			public void componentResized(ComponentEvent e) {

@@ -20,7 +20,15 @@ public abstract class AbstractGUI{
 	private final double prozentFlaecheY;
 	private final double prozentFlaecheBreite;	
 	
-	//Konstruktor Prozentuale Positionierung und groeße der GUI-Elemente
+	/**
+	 * Initialisiert ein GUI Element mit relativer Positionierung
+	 * 
+	 * @param x			x Position
+	 * @param y			y Position
+	 * @param breite	Breite
+	 * @param hoehe		Hoehe
+	 * @param Eimer		uebergeordneter Container auf dem sich die werte Beziehen
+	 */
 	protected AbstractGUI(double x, double y, double breite, double hoehe, Container Eimer) {
 		this.Eimer = Eimer;
 		this.prozentFlaecheX = x;
@@ -36,7 +44,6 @@ public abstract class AbstractGUI{
 		panel.setOpaque(false);		
 	}
 	
-	// aktuelles Bild skalieren und Anzeigen (Position und Layout)
 	private void skaliereBild(int breite, int hoehe) {
 		Image bildii = bildIcon.getImage();
 		Image skaliertesBild = bildii.getScaledInstance(breite, hoehe, Image.SCALE_SMOOTH);
@@ -46,8 +53,7 @@ public abstract class AbstractGUI{
 		bild.setIcon(new ImageIcon(skaliertesBild));
 		}
 	}
-	
-	//Bilddarstellung
+
 	public void setzeNeueGroesse(int breite, int hoehe) {
 		panel.setSize(breite, hoehe);
 		bild.setBounds(0,0, breite, hoehe);
@@ -55,7 +61,6 @@ public abstract class AbstractGUI{
 	}
 	
 	
-	//GSeetttteerr Getter und Setter 
 	public double getProzentFlaecheX() {
 		return this.prozentFlaecheX;
 	}
