@@ -18,6 +18,7 @@ public class Main {
 		JFrame hauptfenster = new JFrame("Kniffel");
 		hauptfenster.setSize(1000,825);
 		hauptfenster.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
+
 		hauptfenster.setMinimumSize(new Dimension(740, 700));
 		hauptfenster.setMaximizedBounds(new Rectangle(0,0,1100,900));
 		
