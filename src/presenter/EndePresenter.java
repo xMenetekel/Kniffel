@@ -21,8 +21,20 @@ public class EndePresenter {
 		this.spielLogik = spielLogik;
 		this.menueDaten = menueDaten;
 		
+		this.logik = new EndeLogik(spielLogik, menueDaten);
 		this.gui = new EndeGUI(eimer, this);
-		this.logik = new EndeLogik();
+		
 		
 	}
+
+	public String getGewinner() {
+		int gewinnerIndex = logik.getGewinner();
+		return spielLogik.getAlleSpieler().get(gewinnerIndex).toString();
+	}
+
+	public int getGewinnerPunkte() {
+		int gewinnerIndex = logik.getGewinner();
+		return spielLogik.getAlleSpieler().get(gewinnerIndex).getPunktestand();
+	}
+	
 }

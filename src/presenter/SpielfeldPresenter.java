@@ -64,18 +64,8 @@ public class SpielfeldPresenter {
 		 }
 		 		 
 		 statusLabel = new JTextArea();
-			statusLabel.setBounds((int)(eimer.getWidth() * 0.28), (int)(eimer.getHeight() * 0.81), (int)(eimer.getWidth() * 0.3),100);
-			statusLabel.setVisible(true);
-			statusLabel.setEditable(false);
-			statusLabel.setOpaque(false);
-			statusLabel.setFont(new Font(Font.SANS_SERIF, Font.BOLD, 20));
-			updateStatusLabel();
+		 setupStatusLabel();
 			
-			if (spielLogik != null) {
-				updateStatusLabel();
-			}else {
-				statusLabel.setText("Spiel wird initialisiert...");
-			}
 			
 		 eimer.add(statusLabel);
 		 eimer.add(flaeche.getGui().getPanel());
@@ -94,8 +84,16 @@ public class SpielfeldPresenter {
 			eimer.repaint();
 	}
 	 
-	 public void onWuerfelnClick() {
-	     //tabelle.aktualisierePunkteTabelle();
+	 private void setupStatusLabel() {
+		 statusLabel.setVisible(true);
+			statusLabel.setEditable(false);
+			statusLabel.setOpaque(false);
+			statusLabel.setFont(new Font(Font.SANS_SERIF, Font.BOLD, 20));
+			updateStatusLabel();
+		
+	}
+
+	public void onWuerfelnClick() {
 	     tabelle.PunkteTabelle();
 	     
 	     int aktuellesMaxWuerfeln = wuerfel.getMaxWuerfe();
@@ -108,14 +106,16 @@ public class SpielfeldPresenter {
 			 }
 			 
 			 wuerfel.wuerfeln();
+<<<<<<< HEAD
+			 if(wuerfel.isInit()) {  wuerfel.setInit(false); 
+			 						for(int i=0;i<5;i++) {	bank.getGui().getReihenfolge().set(i, null);}}
+		    	
+		      }	 
+=======
 			 
-			 if(wuerfel.isInit()) {  
-				wuerfel.setInit(false); 
-			 	for(int i=0;i<5;i++) {	
-			 		bank.getGui().getReihenfolge().set(i, null);
-			 	}
-			 }
+			
 		 }	 
+>>>>>>> 81e4c71adec527407e626440d60aaa215c86be46
 			 spielLogik.erhoeheWurfAnzahl();
 			 updateStatusLabel();
 			 
@@ -144,7 +144,8 @@ public class SpielfeldPresenter {
 		 rearrangiere(fenstar, wuerfelnKlick.getGui());
 		 rearrangiere(fenstar, punkteKlick.getGui());
 		 rearrangiere(fenstar, gui);
-		 rearrangiereWuerfel(fenstar, wuerfel, bank.getGui());		 
+		 rearrangiereWuerfel(fenstar, wuerfel, bank.getGui());		
+		 statusLabel.setBounds((int)(eimer.getWidth() * 0.28), (int)(eimer.getHeight() * 0.81), (int)(eimer.getWidth() * 0.3),100);
 	 }
 	 	 
 	 protected void rearrangiereWuerfel(Component e, WuerfelPresenter w, WuerfelBankGUI bank) {
@@ -152,22 +153,19 @@ public class SpielfeldPresenter {
 			int hoehe = e.getHeight();
 						
 			bank.getPanel().setBounds((int)Math.floor(breite*bank.getProzentFlaecheX()), 
-									  (int)Math.floor(hoehe*bank.getProzentFlaecheY()), 280, 60);
+									  (int)Math.floor(hoehe*bank.getProzentFlaecheY()), 300, 80);
 			
 			w.getAlleWuerfelGUI().forEach(t -> { 
 				if(t.isIstinBank()) {						
-					t.setxPos((int) ((bank.getProzentFlaecheX() * breite ) + 5  ) + 55* (bank.getReihenfolge().indexOf(t)));
-					t.setyPos((int) ((bank.getProzentFlaecheY() * hoehe ) + 6 )  );
-					t.setProzentXAufFeld(t.getxPos() * 1.0 / breite);
-					t.setProzentYAufFeld(t.getyPos() * 1.0 / hoehe);
-					t.getButton().setBounds(t.getxPos(), t.getyPos(), 50, 50);	
+					t.setxPos((int) ((bank.getProzentFlaecheX() * breite ) + 15 ) + 55 * (bank.getReihenfolge().indexOf(t)));
+					t.setyPos((int) ((bank.getProzentFlaecheY() * hoehe ) + 7 ) );
 				} else {
-					t.setxPos( (int) Math.round(t.prozentXAufFeld * breite)  );
-					t.setyPos( (int) Math.round(t.prozentYAufFeld * hoehe));
-					t.setProzentXAufFeld(t.getxPos() * 1.0 / breite);
-					t.setProzentYAufFeld(t.getyPos() * 1.0 / hoehe);
-					t.getButton().setBounds(t.getxPos(), t.getyPos(), 50, 50);													
+					t.setxPos( (int) Math.round(t.prozentXAufFeld * breite));
+					t.setyPos( (int) Math.round(t.prozentYAufFeld * hoehe));												
 					}
+				t.setProzentXAufFeld(t.getxPos() * 1.0 / breite);
+				t.setProzentYAufFeld(t.getyPos() * 1.0 / hoehe);
+				t.getButton().setBounds(t.getxPos(), t.getyPos(), 50, 50);	
 			});				
 		}
 		
@@ -193,7 +191,7 @@ public class SpielfeldPresenter {
 	 
 
 		private void updateStatusLabel() {
-			String maxWurf = String.valueOf(wuerfel.getMaxWuerfe());
+			String maxWurf = menueDaten.isDebugingModus() ? "inf" : String.valueOf(wuerfel.getMaxWuerfe());
 			String status = "Runde " + spielLogik.getRunde() + 
 					"\nSpieler: " + spielLogik.getAktiverSpieler().getName() + 
 					"\nWürfe: " + wuerfel.getWurfAnzahl() + "/" + maxWurf;

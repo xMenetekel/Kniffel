@@ -237,8 +237,8 @@ public class WuerfelPresenter  {
 		int x = (int)(eimer.getWidth() * bank.getProzentFlaecheX());
 		int y = (int)(eimer.getHeight() * bank.getProzentFlaecheY());
 		
-		x = ((gui.getButton().getWidth() + 5) * bank.getReihenfolge().indexOf(null) ) + x+4;
-		y = y + 6;
+		x = ((gui.getButton().getWidth() + 5) * bank.getReihenfolge().indexOf(null) ) + x+14;
+		y = y + 10;
 	
 		gui.zeichneLinie(gui.getButton(), x, y, false);	
 	}
