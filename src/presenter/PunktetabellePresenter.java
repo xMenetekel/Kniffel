@@ -1,9 +1,6 @@
 package presenter;
 
-
-
 import java.awt.Container;
-import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
@@ -18,89 +15,136 @@ import model.WuerfelLogik;
 
 public class PunktetabellePresenter implements SpielEreignisListener{
 	
-	private PunkteTabelleGUI gui;
-	private PunktetabelleLogik logik;
+	private PunkteTabelleGUI view;
+	private PunktetabelleLogik model;
 	private MoeglicheZuege moeglicheZuege;
 	private SpielLogik spielLogik;
-	int wurfAnzahl = 0;
-	int maxWuerfe = 3;
-	private SpielfeldPresenter presenter;
+	private StartmenueLogik menueDaten;
 	
-	public PunktetabellePresenter(Container eimer, StartmenueLogik menueDaten,SpielLogik spielLogik, SpielfeldPresenter presenter) {
+	public PunktetabellePresenter(Container eimer, StartmenueLogik menueDaten,SpielLogik spielLogik) {
+		this.menueDaten = menueDaten;
 		this.spielLogik = spielLogik;
-		this.presenter = presenter;
-		gui = new PunkteTabelleGUI(eimer, menueDaten,spielLogik, this);
-		logik = new PunktetabelleLogik();
+		this.view = new PunkteTabelleGUI(eimer, menueDaten);
+		this.model = new PunktetabelleLogik(menueDaten.getSpieleranzahl());
 		this.moeglicheZuege = new MoeglicheZuege();	
+		
+		view.setPresenter(this);
+		updateView();
 	}
 	
-	public void PunkteTabelle() {
-
-        Map<Kategorie, Integer> moeglichePunkte = moeglicheZuege.getAktiveMoeglichePunkte();
-        
-        if(moeglichePunkte == null || moeglichePunkte.isEmpty()) {
-        	System.out.println("Keine möglichen Punkte zum Anzeigen"); // DEBUG
-        return;
-        }
-        System.out.println("Mögliche Punkte: " + moeglichePunkte); // DEBUG
-        
-        if (gui != null) {
-            gui.zeigeMoeglichePunkte(moeglichePunkte, spielLogik.getAktiverSpielerIndex());
-            System.out.println("Punkte aktualisiert "+moeglichePunkte);
-        }
-    }
-	/* public void speichereWuerfelWerte(List<Integer> werte) {	        
-	        moeglicheZuege.setWuerfelWerte(werte);
-	        System.out.println("Würfelwerte gespeichert: " + werte); // DEBUG
-	    }*/
-
-		//Gettlern und Settlern
-		public PunkteTabelleGUI getGui() {
-			return gui;
-		}
-
-		public void setGui(PunkteTabelleGUI gui) {
-			this.gui = gui;
-		}
-
-		public PunktetabelleLogik getLogik() {
-			return logik;
-		}
-
-		public void setLogik(PunktetabelleLogik logik) {
-			this.logik = logik;
-		}
+	public void onKategorieSelected(Kategorie kategorie) {
+		int aktuellerSpieler = spielLogik.getAktiverSpielerIndex();
 		
+		boolean hatMoeglichePunkte = model.kannKategorieEingetragenWerden(kategorie,aktuellerSpieler);
+		boolean feldIstLeer = model.istFeldLeer(kategorie,aktuellerSpieler);
+		boolean dreiMalGewuerfelt = (spielLogik.getWuerfeAnzahl() >= 3);
 		
-		@Override
-		public void wennNeueRundeStartet(List<WuerfelLogik> alleWuerfelLogik) {
+		if(hatMoeglichePunkte || (feldIstLeer && dreiMalGewuerfelt)) {
+			Integer punkte = model.getMoeglichePunkteFuerKategorie(kategorie);
+			if(punkte == null) punkte = 0;
 			
-			if(gui != null) {
-				gui.zeigeMoeglichePunkte(new HashMap<>(),spielLogik.getAktiverSpielerIndex());
+			boolean erfolg = model.tragePunkteEin(kategorie,punkte,aktuellerSpieler);
+			
+			if(erfolg) {
+				System.out.println ("Kategorie ausgewählt: " + kategorie + "mit " + punkte + "Punkten");
+				model.clearMoeglichePunkte();
+				updateView();
+				
+				if(model.istSpielBeendet()) {
+					System.out.println("Spiel beendet!");
+				}
 			}
-			System.out.println("Neue Runde in PunktetabellePresenter gestartet");
+		}else if (feldIstLeer && !dreiMalGewuerfelt) {
+			System.out.println("Null kann erst nach 3 Würfen eingetragen werden!");
+		}else {
+			System.out.println("Kategorie kann nicht ausgewählt werden!");
 		}
-
-
-		@Override
-		public void wennWuerfelGeworfenWerden(List<Integer> wuerfel) {
-			moeglicheZuege.setWuerfelWerte(wuerfel);
-			PunkteTabelle();
-			
-		}
-
-		@Override
-		public void zeigeMoeglichePunkte(HashMap hashMap) {
-			// TODO Auto-generated method stub
-			
-		}
-
-		public void spielBeendet() {
-			presenter.spielBeendet();
-			
+	}
+	
+	public void zeigeMoeglichePunkte(Map<Kategorie,Integer> moeglichePunkte,int spielerIndex) {
+		if(moeglichePunkte == null || moeglichePunkte.isEmpty()) {
+			System.out.println("Keine möglichen Punkte zum Anzeigen!");
+			model.clearMoeglichePunkte();
+			updateView();
+			return;
 		}
 		
-			
+		model.setMoeglichePunkte(moeglichePunkte,spielerIndex);
+		System.out.println("Mögliche Punkte angezeigt: " + moeglichePunkte);
+		updateView();
 	}
-	 
+	
+	public boolean istSpielBeendet() {
+		return model.istSpielBeendet();
+	}
+	
+	private void updateView() {
+		Object[][] tableData = extractTableData();
+		String[]columnNames = createColumnNames();
+		
+		view.updateTableData(tableData, columnNames);
+	}
+	
+	private Object [][] extractTableData(){
+		int rows = model.getRowCount();
+		int cols = model.getColumnCount();
+		Object[][] data = new Object[rows][cols];
+		
+		for(int row = 0; row <rows; row++) {
+			for(int col = 0; col<cols; col++) {
+				data[row][col] = model.getValueAt(row,col);
+			}
+		}
+		return data;
+	}
+	
+	private String [] createColumnNames() {
+		int spielerAnzahl = model.getSpielerAnzahl();
+		String[] columnNames = new String[2+spielerAnzahl];
+		columnNames[0] = "Kategorie";
+		columnNames[1] = "Kombinationen";
+		
+		for(int i = 0; i<spielerAnzahl; i++) {
+			String spielerName = menueDaten.getSpieler(i).getName();
+			columnNames [2+i] = spielerName;
+		}
+		return columnNames;
+	}
+	
+	@Override
+	
+	public void wennWuerfelGeworfenWerden(List<Integer>wuerfel) {
+		moeglicheZuege.setWuerfelWerte(wuerfel);
+		Map<Kategorie, Integer> punkte = moeglicheZuege.getAktiveMoeglichePunkte();
+		zeigeMoeglichePunkte(punkte, spielLogik.getAktiverSpielerIndex());
+		updateView();
+	}
+	
+	/*@Override 
+	public void wasPassiertWennWirEinenWuerfelWerfen(List<Integer>wuerfel) {
+		moeglicheZuege.setWuerfelWerte(wuerfel);
+		zeigeMoeglichePunkte();
+	}*/
+	
+	@Override
+	public void zeigeMoeglichePunkte(HashMap<Kategorie,Integer> hashmap) {
+		if (hashmap != null) {
+			model.setMoeglichePunkte(hashmap, spielLogik.getAktiverSpielerIndex());
+			updateView();
+		}
+	}
+	
+	public void wennNeueRundeStartet(List<WuerfelLogik> alleWuerfelLogik) {
+		model.clearMoeglichePunkte();
+		updateView();
+	}
+	
+	public PunkteTabelleGUI getView() {
+		return view;
+	}
+	
+	public PunktetabelleLogik getModel() {
+		return model;
+	}
+}
 

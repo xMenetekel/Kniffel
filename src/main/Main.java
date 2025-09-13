@@ -14,7 +14,7 @@ public class Main {
 		JFrame hauptfenster = new JFrame("Kniffel");
 		hauptfenster.setSize(1000,825);
 		hauptfenster.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
-		hauptfenster.setMinimumSize(new Dimension(500, 600)); //set maximum size geht nicht :(
+		hauptfenster.setMinimumSize(new Dimension(500, 600)); //set maximum size geht nicht :( test
 		hauptfenster.setMaximizedBounds(new Rectangle(0,0,1100,1000));
 		
 		Container eimer = hauptfenster.getContentPane();
