@@ -106,11 +106,7 @@ public class SpielfeldPresenter {
 			 }
 			 
 			 wuerfel.wuerfeln();
-
-			 
-			
-		 }	 
-
+		 }
 			 spielLogik.erhoeheWurfAnzahl();
 			 updateStatusLabel();
 			 
@@ -186,7 +182,7 @@ public class SpielfeldPresenter {
 	 
 
 		private void updateStatusLabel() {
-			String maxWurf = menueDaten.isDebugingModus() ? "inf" : String.valueOf(wuerfel.getMaxWuerfe());
+			String maxWurf = String.valueOf(wuerfel.getMaxWuerfe());
 			String status = "Runde " + spielLogik.getRunde() + 
 					"\nSpieler: " + spielLogik.getAktiverSpieler().getName() + 
 					"\nWürfe: " + wuerfel.getWurfAnzahl() + "/" + maxWurf;

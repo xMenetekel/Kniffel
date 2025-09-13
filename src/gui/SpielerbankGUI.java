@@ -8,13 +8,19 @@ import presenter.SpielerbankPresenter;
 
 public class SpielerbankGUI extends AbstractGUI{	
 	
-	private static final double X = 0.0625; // links
-	private static final double Y = 0.75;   // oben 
-	private static final double B = 0.2;	// Breite
-	private static final double H = 0.2;	// Hoehe
+	private static final double X = 0.0625;
+	private static final double Y = 0.75;
+	private static final double B = 0.2;
+	private static final double H = 0.2;
 	
-	private SpielerbankPresenter presenter;
+	private final SpielerbankPresenter presenter;
 
+	/**
+	 * Erzeugen der Spielerbank GUI
+	 * 
+	 * @param Eimer		container uebergeordneter Container
+	 * @param presenter	zuegehoriger Presenter liefert Bildname 
+	 */
 	public SpielerbankGUI(Container eimer, SpielerbankPresenter presenter) {
 		super(X, Y, B, H, eimer);
 		bildIcon = new ImageIcon("src/Other/" + presenter.getBildname(presenter.getAktiverSpieler()) + ".jpg" );		
@@ -23,7 +29,11 @@ public class SpielerbankGUI extends AbstractGUI{
 		panel.add(bild);						
 	}
 	
-	// aktualisiert Spieler Icon wenn Spieler wechselt
+	/**
+	 * Aktualisiert das angezeigte Spieler Icon
+	 * 
+	 * @param index Index des Spielers dessen Bild angezeigt werden soll
+	 */
 	public void aktualisiereIcon(int index){
 		setBildIcon(new ImageIcon("src/Other/" + presenter.getBildname(index) + ".jpg"));
 		setzeNeueGroesse((int)(B * eimer.getWidth()), (int)(H * eimer.getHeight()));
