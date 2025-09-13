@@ -6,6 +6,9 @@ public class SpielerLogik{
 	private int reihenfolge = 0;
 	private int iconIndex = 0;
 	
+	public SpielerLogik() {
+		
+	}
 	
 	public String getName() {
 		return name;

@@ -1,9 +1,13 @@
 package model;
 
-import presenter.WuerfelPresenter;
 
 public class WuerfelFactory {
-
+	
+	/**
+	 * Erzeugt Wuerfel z.B. hier W6
+	 * @param typ	Art des Wuerfels
+	 * @return		ein neues WuerfelLogik Objekt
+	 */
 	public static WuerfelLogik createWuerfel(String typ) {
 		switch(typ) {
 			case "W6":

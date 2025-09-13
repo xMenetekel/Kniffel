@@ -9,11 +9,43 @@ public class SpielLogik {
 	private int aktiverSpielerIndex = 0;
 	private int wuerfeAnzahl = 0;
 	private int runde = 1;
-	
-	public void eintragen(MoeglichkeitLogik moeglichkeit) { //? Do we need this
-		
-	}
 
+	/**
+	 * gibt den aktuellen Spieler oder null zurueck
+	 * 
+	 * @return	aktueller Spieler oder null
+	 */
+	public SpielerLogik getAktiverSpieler() {
+		if(spieler.isEmpty())return null;
+		return spieler.get(aktiverSpielerIndex);
+	}
+	
+	/**
+	 * setzt naechster spieler aktiv
+	 * wenn Runde zu ende wird die Anzahl erhoeht
+	 * Anzahl der Wuerfe wird zurueckgesetzt
+	 */
+	public void naechsterSpieler() {
+		if(spieler.isEmpty()) {
+			return;
+		}
+		
+		aktiverSpielerIndex = (aktiverSpielerIndex +1) % spieler.size();
+		
+		if(aktiverSpielerIndex == 0) {
+			runde++;
+		}
+		wuerfeAnzahl = 0;
+	}
+	
+	public void erhoeheWurfAnzahl() {
+		wuerfeAnzahl ++;
+	}
+	
+	public int getSpielerAnzahl() {
+		return spieler.size();
+	}	
+	
 	public int getAktiverSpielerIndex() {
 		return aktiverSpielerIndex;
 	}
@@ -30,32 +62,12 @@ public class SpielLogik {
 		this.wuerfeAnzahl = wuerfeAnzahl;
 	}
 
-	public List<SpielerLogik> getSpieler() {
+	public List<SpielerLogik> getAlleSpieler() {
 		return spieler;
 	}
 
-	public void setSpieler(List<SpielerLogik> spieler) {
+	public void setAlleSpieler(List<SpielerLogik> spieler) {
 		this.spieler = spieler;
-	}
-	
-	public SpielerLogik getAktiverSpieler() {
-		if(spieler.isEmpty())return null;
-		return spieler.get(aktiverSpielerIndex);
-	}
-	
-	public void naechsterSpieler() {
-		if(spieler.isEmpty()) {
-			return;
-		}
-		aktiverSpielerIndex = (aktiverSpielerIndex +1) % spieler.size();
-		if(aktiverSpielerIndex == 0) {
-			runde++;
-		}
-		wuerfeAnzahl = 0;
-	}
-	
-	public void erhoeheWurfAnzahl() {
-		wuerfeAnzahl ++;
 	}
 	
 	public int getRunde() {
@@ -65,9 +77,5 @@ public class SpielLogik {
 	public void setRunde(int runde) {
 		this.runde = runde;
 	}
-	
-	public int getSpielerAnzahl() {
-		return spieler.size();
-	}
-	
+
 }

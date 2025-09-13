@@ -20,14 +20,14 @@ public class WuerfelPresenter  {
 	private List<WuerfelGUI> alleWuerfelGUI = new ArrayList<>();
 	private List<WuerfelLogik> alleWuerfelLogik = new ArrayList<>();
 	
-	private Container container;
+	private Container eimer;
 	private MoeglicheZuege moeglicheZuege = new MoeglicheZuege();
 		
 	private SpielLogik spielLogik;	
 		
 	private WuerfelflaecheGUI flaeche;
-	private WuerfelBankGUI bank; //ich hasse das so sehr 
-	private DummeChatGPTLoesungIchHasseAlles keinBockMehr; //TODO umbennenenen
+	private WuerfelBankGUI bank;
+	private SpielEreignisListener spielListener; 
 	private StartmenueLogik menueDaten;
 	
 	int wurfAnzahl = 0;
@@ -37,35 +37,51 @@ public class WuerfelPresenter  {
 	
 	private boolean init;
 
-	public WuerfelPresenter(Container Eimer, SpielLogik spielLogik, 
+	/**
+	 * Erzeugt WuerfelPresenter, der die WuerfelLogik mit der Darstellung
+	 * und den Spielereignissen verbindet (schnittstelle)
+	 * @param eimer 			uebergeordneter Container
+	 * @param spielLogik		zentrale Logik Regeln und Zustaende 
+	 * @param flaeche			GUI Element Wuerfelflache
+	 * @param bank				GUI Element Wuerfelbank
+	 * @param spielErListener	Listener der auf Spielereignisse reagiert
+	 * @param menueDaten		Logik fuer Startmenue, Debug
+	 */
+	public WuerfelPresenter(Container eimer, SpielLogik spielLogik, 
 							WuerfelflaecheGUI flaeche, WuerfelBankGUI bank, 
-							DummeChatGPTLoesungIchHasseAlles keinBockMehr,
+							SpielEreignisListener spielErListener,
 							StartmenueLogik menueDaten){
-		this.container = Eimer;
+		this.eimer = eimer;
 		this.flaeche = flaeche;
 		this.bank = bank;
-		this.keinBockMehr = keinBockMehr;
+		this.spielListener = spielErListener;
 		this.spielLogik = spielLogik;
 		this.menueDaten = menueDaten;
 		this.init = true;
 		
-		for(int i = 0; i < 5; i++) {		//das erstellt 5 würfel und fügt in jeder iteration den wuerfel den entsprechenden arrays hinzu
+		for(int i = 0; i < 5; i++) {
 			WuerfelLogik model = new WuerfelLogik(6);
 			WuerfelGUI view = new WuerfelGUI(this, model, 
-											(i*55+((int)(bank.getProzentFlaecheX() * Eimer.getWidth())))+5, 
-												   (int)((bank.getProzentFlaecheY() * Eimer.getHeight())+6), Eimer); //+6 weil aus irgendeinem grund will es das nicht ordentlich mit 5 machen was aber sinn machen würde
+											(i*55+((int)(bank.getProzentFlaecheX() * eimer.getWidth())))+5, 
+											(int)((bank.getProzentFlaecheY() * eimer.getHeight())+6), eimer);
 			
 			model.setGui(view);
 			bank.getReihenfolge().add(view);
 			alleWuerfelGUI.add(view);
 			alleWuerfelLogik.add(model);		
-			container.add(view.getButton());
-		}
-		
-		container.revalidate();
-		container.repaint();	
+			eimer.add(view.getButton());
+		}	
+		eimer.revalidate();
+		eimer.repaint();	
 	}
-		
+	
+	/**
+	 * Reagiert auf Klicken auf Wuerfel
+	 * prueft ob Debugging Modus aktiv
+	 * aktualisiert Position und Tabgelle
+	 * 
+	 * @param gui WuerfelGUI
+	 */
 	public void wuerfelAngeklickt(WuerfelGUI gui) {
 		if(this.isInit()) { return; }
 		
@@ -73,14 +89,15 @@ public class WuerfelPresenter  {
 			String[] liste = {"1", "2", "3", "4", "5", "6"};
 			
 			int auswahl = JOptionPane.showOptionDialog(
-					container, 
+					eimer, 
 					"Zahl wählen", 
 					"Cheatermodus",
 					JOptionPane.DEFAULT_OPTION, 
 					JOptionPane.PLAIN_MESSAGE,
 					null, 
 					liste, 
-					liste[0]);
+					liste[0]
+			);
 			gui.getLogik().setAugen(auswahl+1); 
 			gui.fresherButton();
 			tabellenkommunikation();
@@ -88,67 +105,119 @@ public class WuerfelPresenter  {
 			WuerfelLogik zustandDerLogik = gui.getLogik();
 			boolean neuerZustand = !zustandDerLogik.istBehalten();										
 			zustandDerLogik.setBehalten(neuerZustand);
+			
 			gui.setIstinBank(!gui.isIstinBank());
+			
 			hochRunterhochRunter(zustandDerLogik);
 		}		
 	}
 	
-	
-	public int getValidesX(WuerfelflaecheGUI flaeche) {
+	/**
+	 * Berechnet zufaellige, gueltige X-Position auf der Wuerfelflache
+	 * 
+	 * @param flaeche 	Wuerfelflache
+	 * @return 			gibt eine gueltige X-Koordinate zurueck
+	 */
+	public int zufallsKoordinateX(WuerfelflaecheGUI flaeche) {
 		int validesX;
-		int xVon = (int) (flaeche.getProzentFlaecheX() * this.container.getWidth());
-		int xBis = (int) ((flaeche.getProzentFlaecheBreite() * this.container.getWidth()) + xVon);
+		int xVon = (int) (flaeche.getProzentFlaecheX() * this.eimer.getWidth());
+		int xBis = (int) ((flaeche.getProzentFlaecheBreite() * this.eimer.getWidth()) + xVon);
 		validesX = new Random().nextInt(xBis-xVon-WUERFEL_GROESSE)+xVon;	
 				
 		return validesX;
 	}
 	
-	public int getValidesY(WuerfelflaecheGUI flaeche) {
+	/**
+	 * Berechnet zufaellige, gueltige Y-Position auf der Wuerfelflache
+	 * 
+	 * @param flaeche 	Wuerfelflaeche
+	 * @return			gibt eine gueltige Y-Koordinate zurueck
+	 */
+	public int zufallsKoordinateY(WuerfelflaecheGUI flaeche) {
 		int validesY;
-		int YVon = (int) (flaeche.getProzentFlaecheY() * this.container.getHeight());
-		int YBis = (int) ((flaeche.getProzentFlaecheHoehe() * this.container.getHeight()) + YVon);
+		int YVon = (int) (flaeche.getProzentFlaecheY() * this.eimer.getHeight());
+		int YBis = (int) ((flaeche.getProzentFlaecheHoehe() * this.eimer.getHeight()) + YVon);
 		validesY = new Random().nextInt(YBis-YVon-WUERFEL_GROESSE)+YVon;			
 		
 		return validesY;
 	}
 
 	/**
-	 * Der ganze Spaß korrigiert Kollisionen. Es muss die WuerfelGUI übergeben werden, da dort die fertigen x/y pos gespeichert werden. der JButton an sich hat durch
-	 * den Timer sehr unterschiedliche x/y Werte und dann wird die Kollisionsprüfung absoluter Mist. 
-	 * KI viel befragt aber letztenendes hat die KI auch nicht die Lösung des Problems erkannt 
+	 * Das ganze korrigiert Kollisionen. Es muss die WuerfelGUI uebergeben werden, 
+	 * da dort die fertigen x/y pos gespeichert werden. 
+	 * der JButton an sich hat durch den Timer sehr unterschiedliche x/y Werte 
+	 * und dann wird die Kollisionspruefung absoluter Bescheiden. 
 	 * 
 	 * BLOSS NIEMALS ÄNDERN
-	 * es funktioniert !!!!!!!!!
+	 * es funktioniert !
 	 * 
 	 * @param aktuellerWuerfel 
 	 * @param zielX
 	 * @param zielY
 	 * @return
 	 */
-		private int[] korrigierteKollision(WuerfelGUI aktuellerWuerfel, int zielX, int zielY) {
-				
-			boolean kollisionGefunden;
-			do {
-				kollisionGefunden = false;
-				for(WuerfelGUI andererWuerfel : alleWuerfelGUI) {
-					if(andererWuerfel == aktuellerWuerfel || andererWuerfel.getLogik().istBehalten()) {	continue; }				
-					int andererX = andererWuerfel.getxPos(); //Es muss das von der gui sein, weil das die zielpositionen sind die auf kollisionen gecheckt werden omg
-					int andererY = andererWuerfel.getyPos(); // this mf cost me 3 hours of my life						
-					boolean kollisionX = (zielX < andererX + WUERFEL_GROESSE)   &&   (zielX + WUERFEL_GROESSE > andererX);
-					boolean kollisionY = (zielY < andererY + WUERFEL_GROESSE)   &&   (zielY + WUERFEL_GROESSE > andererY);										
-					if(kollisionX && kollisionY) {
-						kollisionGefunden = true;
-						zielX = getValidesX(flaeche);
-						zielY = getValidesY(flaeche);
-						break;
-					}
-				}					
-		} while (kollisionGefunden || zielX == aktuellerWuerfel.getStartX() || zielY == aktuellerWuerfel.getStartY());
-			return new int[] {zielX, zielY};
+	private int[] korrigierteKollision(WuerfelGUI aktuellerWuerfel, int zielX, int zielY) {
+		while(true) {
+			WuerfelGUI kollidierenderWuerfel = findeKollidierendeWuerfel(aktuellerWuerfel, zielX, zielY);
+			
+			if(kollidierenderWuerfel == null && !istStartPositionGleich(aktuellerWuerfel, zielX, zielY)) {
+				break;
+			}
+			zielX = zufallsKoordinateX(flaeche);
+			zielY = zufallsKoordinateY(flaeche);
 		}
+		return new int[] {
+			zielX, zielY
+		};
+	}
+	
+	/**
+	 * Hilfsmethode fuer korrigierteKoordinaten
+	 * 
+	 * @param aktuellerWuerfel	Pos des aktuellenn Wuerfels
+	 * @param x					x-Koordinate des Wuerfels
+	 * @param y					y-Koordinate des Wuerfels
+	 * @return					wenn kollision dann wuerfel sonst null
+	 */
+	private WuerfelGUI findeKollidierendeWuerfel(WuerfelGUI aktuellerWuerfel, int x, int y) {
+		for (WuerfelGUI andererWuerfel : alleWuerfelGUI) {
+			if(istIgnorierterWuerfel(aktuellerWuerfel, andererWuerfel)) continue;
+			if(pruefeKollision(x ,y , andererWuerfel)) return andererWuerfel;
+		}
+		return null;
+	}
+	
+	private boolean istIgnorierterWuerfel(WuerfelGUI aktueller, WuerfelGUI anderer) {
+		return anderer == aktueller || anderer.getLogik().istBehalten();
+	}
+	
+	/**
+	 * Hilfsmethode fuer korrigierteKoordinaten 
+	 * @param x			x-Koordinaten des Wuerfels
+	 * @param y			y-Koordinaten des Wuerfels
+	 * @param anderer	der andere Wuerfel
+	 * @return 			true, wenn Kollision
+	 */
+	private boolean pruefeKollision(int x, int y, WuerfelGUI anderer) {
+		int andererX = anderer.getxPos();
+		int andererY = anderer.getyPos();
+		boolean kollisionX = (x < andererX + WUERFEL_GROESSE) && (x + WUERFEL_GROESSE > andererX);
+		boolean kollisionY = (y < andererY + WUERFEL_GROESSE) && (y + WUERFEL_GROESSE > andererY);
+		return kollisionX && kollisionY;
+	}
+	
+	private boolean istStartPositionGleich(WuerfelGUI wuerfel, int x, int y) {
+		return x == wuerfel.getStartX() || y == wuerfel.getStartY();
+ 	}
 
+	/**
+	 * Verschiebt je klick Wuerfel in die WuerfelBank oder zurueck auf Wuerfelflache
+	 * Wenn behalten dann kommt er in die WuerfelBank 
+	 * wenn nicht behalten also erneut Wuerfeln dann Wuerfelflache
+	 * 
+	 * @param wuerfel	Der Wuerfel der verschoben wird
+	 */
 	private void hochRunterhochRunter(WuerfelLogik wuerfel) { 
-		
 		if(wuerfel.istBehalten()) {				
 			this.runter(wuerfel.getGui());
 			bank.getReihenfolge().set(bank.getReihenfolge().indexOf(null), wuerfel.getGui());		
@@ -158,70 +227,102 @@ public class WuerfelPresenter  {
 		}	
 	}
 	
+	/**
+	 * Verschiebt den Wuerfel in die Wuerfelbank
+	 * 
+	 * @param gui	WuerfelGUI
+	 */
 	private void runter(WuerfelGUI gui) {
 		gui.setIstinBank(true);
-		int x = (int)(container.getWidth() * bank.getProzentFlaecheX());
-		int y = (int)(container.getHeight() * bank.getProzentFlaecheY());
+		int x = (int)(eimer.getWidth() * bank.getProzentFlaecheX());
+		int y = (int)(eimer.getHeight() * bank.getProzentFlaecheY());
 		
-		x = ((gui.getButton().getWidth() + 5) * bank.getReihenfolge().indexOf(null) ) + x+4; //die +4 sind pixel ausgleiche weil meine völlig legitime rechnung nicht funktioniert
-		y = y + 6; //ebenso hier, eigentlich sollte es +5 sein aber das ist einen pixel zuviel verschoben weil natürlich ist es das
+		x = ((gui.getButton().getWidth() + 5) * bank.getReihenfolge().indexOf(null) ) + x+14;
+		y = y + 10;
 	
 		gui.zeichneLinie(gui.getButton(), x, y, false);	
 	}
 
+	/**
+	 * Verschiebt den Wuerfel in die Wuerfelflache
+	 * Berechnet zufaellige Pos und Korrigiert sie gegebenenfalls
+	 * siehe Methoden oben
+	 * 
+	 * @param gui 	WuerfelGUI
+	 */
 	private void hoch(WuerfelGUI gui) {
-		int x = getValidesX(flaeche);
-		int y = getValidesY(flaeche);
+		int x = zufallsKoordinateX(flaeche);
+		int y = zufallsKoordinateY(flaeche);
 		int xy[] = korrigierteKollision(gui, x, y);
 		gui.zeichneLinie(gui.getButton(), xy[0], xy[1], false);
-		gui.setIstinBank(false);
-		
+		gui.setIstinBank(false);		
 	}
 	
+	/**
+	 * Wuerfelt die Wuerfel
+	 * max Anzahl an Wuerfe je nach Debug oder normal 
+	 * Wuerfelt nur was nicht Bahlten wird
+	 */
 	public void wuerfeln() {
-		maxWuerfe = menueDaten.isEndloseWuerfe() ? 999 : 3;		
-		if(wurfAnzahl >= maxWuerfe) { return; }
-		
+		maxWuerfe = menueDaten.isEndloseWuerfe() ? 999 : 3;
+		if(wurfAnzahl >= maxWuerfe) return;
+
 		for(WuerfelLogik wuerfel : alleWuerfelLogik) {
-			if(!wuerfel.istBehalten()) {
-					wuerfel.wuerfeln();
-				
-			}				
-		
+			wuerfelWuerfelWennNichtBehalten(wuerfel);
 		}
-		getAlleWuerfelGUI().forEach(wuerfelGUI -> {
-			
-			if (!wuerfelGUI.getLogik().istBehalten()) {
-				
-				if(! (bank.getReihenfolge().indexOf(wuerfelGUI) == -1)) { bank.getReihenfolge().set(bank.getReihenfolge().indexOf(wuerfelGUI), null); } //bitte töten sie mich nicht dafür herr höppner
-				
-				
-				wuerfelGUI.setIstinBank(false);
-				int x, y;
-				x = getValidesX(flaeche);
-				y = getValidesY(flaeche);
-				int[] xy = korrigierteKollision(wuerfelGUI, x, y);
-			  wuerfelGUI.zeichneLinie(wuerfelGUI.getButton(), xy[0], xy[1], true);	
-		
-			}	
-		});				
-		
+		for (WuerfelGUI gui : getAlleWuerfelGUI()) {
+			zeigeWuerfelAufFlache(gui);
+		}
 		wurfAnzahl++;
-		
 		tabellenkommunikation();
 	}
 	
+	/**
+	 * Hilfsmethode zu wuerfeln
+	 * 
+	 * @param wuerfel	WuerfelLogik
+	 */
+	private void wuerfelWuerfelWennNichtBehalten(WuerfelLogik wuerfel) {
+		if(!wuerfel.istBehalten()) wuerfel.wuerfeln();
+	}
+	
+	/**
+	 * Berechnet neue Position des Wuerfel auf WuerfelBank
+	 * @param gui 		WuerfelGUI
+	 */
+	private void zeigeWuerfelAufFlache(WuerfelGUI gui) {
+		if (gui.getLogik().istBehalten()) return;
+		
+		int index = bank.getReihenfolge().indexOf(gui);
+		if(index != -1) bank.getReihenfolge().set(index, null);
+		
+		gui.setIstinBank(false);
+		int x = zufallsKoordinateX(flaeche);
+		int y = zufallsKoordinateY(flaeche);
+		int[] xy = korrigierteKollision(gui, x, y);
+		gui.zeichneLinie(gui.getButton(), xy[0], xy[1], true);
+	}
+
+	/**
+	 * kommuniziert die aktuellen Wuerfelwerte
+	 * erstellt eine Liste aller Augen der Wuerfel
+	 */
 	private void tabellenkommunikation() {
 		List<Integer> wuerfelWerte = new ArrayList<>();
 		for(WuerfelLogik wuerfel : alleWuerfelLogik) {
 			wuerfelWerte.add(wuerfel.getAugen());
 		}
-		if(keinBockMehr != null) {
-			keinBockMehr.wasPassiertWennWirEinenWuerfelWerfen(wuerfelWerte);
+		if(spielListener != null) {
+			spielListener.wennWuerfelGeworfenWerden(wuerfelWerte);
 		}
 		System.out.println("Wurf "+ wurfAnzahl + "/" + maxWuerfe + "-Würfel: "+ wuerfelWerte);		
 	}
 
+	/**
+	 * Startet eine neue Runde
+	 * setzt WurfAnzahl zurück und 
+	 * alle Wuerfel wieder nicht behalten
+	 */
 	public void neueRunde() {
 		wurfAnzahl = 0;
 	  	spielLogik.setWuerfeAnzahl(0); 
@@ -233,7 +334,7 @@ public class WuerfelPresenter  {
         System.out.println("Neue Runde Gestartet");
     }
 	
-	  // Getter und Setter
+	
 	  public List<WuerfelGUI> getAlleWuerfelGUI() {
 			return alleWuerfelGUI;
 		}
@@ -271,14 +372,8 @@ public class WuerfelPresenter  {
 		}
 
 		public int debug() {
-			// TODO Auto-generated method stub
 			return 0;
 		}
 }
-    
-  
 
-                        
-     
-   
   

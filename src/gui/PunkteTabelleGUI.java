@@ -25,6 +25,7 @@ import javax.swing.table.DefaultTableCellRenderer;
 
 import model.Kategorie;
 import model.StartmenueLogik;
+import presenter.PunktetabellePresenter;
 import model.SpielLogik;
 
 public class PunkteTabelleGUI extends AbstractGUI {
@@ -38,13 +39,15 @@ public class PunkteTabelleGUI extends AbstractGUI {
 	private final int spielerAnzahl;
 	private KategorieSelectListener selectListener;
 	private Set<Point>festeEintraege = new HashSet<>();
+	private PunktetabellePresenter presenter;
 		
 	public JTable getTable() {
 		return this.table;
 	}
 
-	public PunkteTabelleGUI(Container Eimer, StartmenueLogik menueDaten,SpielLogik spielLogik) {
-		super(X, Y, B, H, Eimer);
+	public PunkteTabelleGUI(Container eimer, StartmenueLogik menueDaten,SpielLogik spielLogik, PunktetabellePresenter presenter) {
+		super(X, Y, B, H, eimer);
+		this.presenter = presenter;
 		this.spielerAnzahl = menueDaten.getSpieleranzahl();
 		panel = new JPanel(new BorderLayout());
 		tableModel = new ZugTableModel(menueDaten);
@@ -56,7 +59,7 @@ public class PunkteTabelleGUI extends AbstractGUI {
 		Color mischmasch = new Color(150,190,140); // evtl muss raus
 		table.setBackground(mischmasch);
 
-		table.addKeyListener(new KeyAdapter(){
+		table.addKeyListener(new KeyAdapter(){ //TODO anthony kommentier das warum das da ist
 			
 			@Override
 			public void keyTyped(KeyEvent e) {
@@ -105,7 +108,7 @@ public class PunkteTabelleGUI extends AbstractGUI {
 		JScrollPane scroll = new JScrollPane(table);
 		panel.add(scroll, BorderLayout.CENTER);
 		
-		this.Eimer.add(panel);
+		this.eimer.add(panel);
 		
 		}
 
@@ -173,7 +176,7 @@ public class PunkteTabelleGUI extends AbstractGUI {
             System.out.println("Punkte erfolgreich eingetragen");
             
             if(istSpielBeendet()) {
-            	System.out.println("Spiel beendet!");
+            	
             }
             
     	}catch(Exception e) {
@@ -553,6 +556,7 @@ public class PunkteTabelleGUI extends AbstractGUI {
 	    	}
     	}
     	System.out.println("Spiel beendet!");
+    	presenter.spielBeendet();
     	return true;
     }
 

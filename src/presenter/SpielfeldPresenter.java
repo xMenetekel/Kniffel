@@ -36,24 +36,25 @@ public class SpielfeldPresenter {
 	 private SpielLogik spielLogik; 
 	 private MoeglicheZuege moeglicheZuege = new MoeglicheZuege();
 	 private StartmenueLogik menueDaten;
-	 
+	 private Container eimer;
 	
-	public SpielfeldPresenter(Container Eimer, SpielLogik spielLogik, StartmenueLogik menueDaten) {
+	public SpielfeldPresenter(Container eimer, SpielLogik spielLogik, StartmenueLogik menueDaten) {
 		 
 		 this.menueDaten = menueDaten;
 		 this.spielLogik = spielLogik; 
+		 this.eimer = eimer;
 		 
-		 gui = new SpielfeldGUI(Eimer, this, menueDaten);
+		 gui = new SpielfeldGUI(eimer, this, menueDaten);
 		 logik = new SpielfeldLogik();
 		 
-		 flaeche = new WuerfelflaechePresenter(Eimer);
-		 bank = new WuerfelbankPresenter(Eimer);
-		 tabelle = new PunktetabellePresenter(Eimer, menueDaten, spielLogik); 	
-		 wuerfel = new WuerfelPresenter(Eimer, spielLogik, flaeche.getGui(), bank.getGui(), tabelle, menueDaten);  			 	 
-		 spieler = new SpielerbankPresenter(Eimer, menueDaten.getSpielerListe(), spielLogik);
+		 flaeche = new WuerfelflaechePresenter(eimer);
+		 bank = new WuerfelbankPresenter(eimer);
+		 tabelle = new PunktetabellePresenter(eimer, menueDaten, spielLogik, this); 	
+		 wuerfel = new WuerfelPresenter(eimer, spielLogik, flaeche.getGui(), bank.getGui(), tabelle, menueDaten);  			 	 
+		 spieler = new SpielerbankPresenter(eimer, menueDaten.getSpielerListe(), spielLogik);
 	
-		 wuerfelnKlick = new WuerfelnButtonPresenter(Eimer, wuerfel, tabelle);
-		 punkteKlick = new PunkteEintragenButtonPresenter(Eimer, this);
+		 wuerfelnKlick = new WuerfelnButtonPresenter(eimer, wuerfel, tabelle);
+		 punkteKlick = new PunkteEintragenButtonPresenter(eimer, this);
 
 		 wuerfelnKlick.getGui().getKnopf().addActionListener(e->onWuerfelnClick());
 		 punkteKlick.getGui().getKnopf().addActionListener(e->eintragePunkteFuerAktuellenSpieler());
@@ -63,38 +64,36 @@ public class SpielfeldPresenter {
 		 }
 		 		 
 		 statusLabel = new JTextArea();
-			statusLabel.setBounds((int)(Eimer.getWidth() * 0.28), (int)(Eimer.getHeight() * 0.81), (int)(Eimer.getWidth() * 0.3),70);
-			statusLabel.setVisible(true);
+		 setupStatusLabel();
+			
+			
+		 eimer.add(statusLabel);
+		 eimer.add(flaeche.getGui().getPanel());
+		 eimer.add(bank.getGui().getPanel());
+		 eimer.add(tabelle.getGui().getPanel());
+		 eimer.add(spieler.getGui().getPanel());
+		 eimer.add(wuerfelnKlick.getGui().getPanel());
+		 eimer.add(punkteKlick.getGui().getPanel());
+		 eimer.add(gui.getPanel());
+		 
+		 rearrangiereAlles(eimer);
+		 highlightAktuelleSpalte();
+		
+		
+			eimer.revalidate();
+			eimer.repaint();
+	}
+	 
+	 private void setupStatusLabel() {
+		 statusLabel.setVisible(true);
 			statusLabel.setEditable(false);
 			statusLabel.setOpaque(false);
 			statusLabel.setFont(new Font(Font.SANS_SERIF, Font.BOLD, 20));
 			updateStatusLabel();
-			
-			if (spielLogik != null) {
-				updateStatusLabel();
-			}else {
-				statusLabel.setText("Spiel wird initialisiert...");
-			}
-			
-		 Eimer.add(statusLabel);
-		 Eimer.add(flaeche.getGui().getPanel());
-		 Eimer.add(bank.getGui().getPanel());
-		 Eimer.add(tabelle.getGui().getPanel());
-		 Eimer.add(spieler.getGui().getPanel());
-		 Eimer.add(wuerfelnKlick.getGui().getPanel());
-		 Eimer.add(punkteKlick.getGui().getPanel());
-		 Eimer.add(gui.getPanel());
-		 
-		 rearrangiereAlles(Eimer);
-		 highlightAktuelleSpalte();
 		
-		
-			Eimer.revalidate();
-			Eimer.repaint();
 	}
-	 
-	 public void onWuerfelnClick() {
-	     //tabelle.aktualisierePunkteTabelle();
+
+	public void onWuerfelnClick() {
 	     tabelle.PunkteTabelle();
 	     
 	     int aktuellesMaxWuerfeln = wuerfel.getMaxWuerfe();
@@ -114,12 +113,7 @@ public class SpielfeldPresenter {
 		      }	 
 =======
 			 
-			 if(wuerfel.isInit()) {  
-				wuerfel.setInit(false); 
-			 	for(int i=0;i<5;i++) {	
-			 		bank.getGui().getReihenfolge().set(i, null);
-			 	}
-			 }
+			
 		 }	 
 >>>>>>> 81e4c71adec527407e626440d60aaa215c86be46
 			 spielLogik.erhoeheWurfAnzahl();
@@ -150,7 +144,8 @@ public class SpielfeldPresenter {
 		 rearrangiere(fenstar, wuerfelnKlick.getGui());
 		 rearrangiere(fenstar, punkteKlick.getGui());
 		 rearrangiere(fenstar, gui);
-		 rearrangiereWuerfel(fenstar, wuerfel, bank.getGui());		 
+		 rearrangiereWuerfel(fenstar, wuerfel, bank.getGui());		
+		 statusLabel.setBounds((int)(eimer.getWidth() * 0.28), (int)(eimer.getHeight() * 0.81), (int)(eimer.getWidth() * 0.3),100);
 	 }
 	 	 
 	 protected void rearrangiereWuerfel(Component e, WuerfelPresenter w, WuerfelBankGUI bank) {
@@ -158,22 +153,19 @@ public class SpielfeldPresenter {
 			int hoehe = e.getHeight();
 						
 			bank.getPanel().setBounds((int)Math.floor(breite*bank.getProzentFlaecheX()), 
-									  (int)Math.floor(hoehe*bank.getProzentFlaecheY()), 280, 60);
+									  (int)Math.floor(hoehe*bank.getProzentFlaecheY()), 300, 80);
 			
 			w.getAlleWuerfelGUI().forEach(t -> { 
 				if(t.isIstinBank()) {						
-					t.setxPos((int) ((bank.getProzentFlaecheX() * breite ) + 5  ) + 55* (bank.getReihenfolge().indexOf(t)));
-					t.setyPos((int) ((bank.getProzentFlaecheY() * hoehe ) + 6 )  );
-					t.setProzentXAufFeld(t.getxPos() * 1.0 / breite);
-					t.setProzentYAufFeld(t.getyPos() * 1.0 / hoehe);
-					t.getButton().setBounds(t.getxPos(), t.getyPos(), 50, 50);	
+					t.setxPos((int) ((bank.getProzentFlaecheX() * breite ) + 15 ) + 55 * (bank.getReihenfolge().indexOf(t)));
+					t.setyPos((int) ((bank.getProzentFlaecheY() * hoehe ) + 7 ) );
 				} else {
-					t.setxPos( (int) Math.round(t.prozentXAufFeld * breite)  );
-					t.setyPos( (int) Math.round(t.prozentYAufFeld * hoehe));
-					t.setProzentXAufFeld(t.getxPos() * 1.0 / breite);
-					t.setProzentYAufFeld(t.getyPos() * 1.0 / hoehe);
-					t.getButton().setBounds(t.getxPos(), t.getyPos(), 50, 50);													
+					t.setxPos( (int) Math.round(t.prozentXAufFeld * breite));
+					t.setyPos( (int) Math.round(t.prozentYAufFeld * hoehe));												
 					}
+				t.setProzentXAufFeld(t.getxPos() * 1.0 / breite);
+				t.setProzentYAufFeld(t.getyPos() * 1.0 / hoehe);
+				t.getButton().setBounds(t.getxPos(), t.getyPos(), 50, 50);	
 			});				
 		}
 		
@@ -242,7 +234,15 @@ public class SpielfeldPresenter {
 			 }
 		 }
 		
-	 public SpielfeldGUI getGui() {
+	public void spielBeendet() {
+		System.out.println("ich bin hier gelandet\n\n\n yay");
+		eimer.removeAll();
+		eimer.revalidate();
+		eimer.repaint();
+		new EndePresenter(eimer, spielLogik, menueDaten);
+	}
+		
+	public SpielfeldGUI getGui() {
 		return gui;
 	}
 

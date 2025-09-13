@@ -16,7 +16,7 @@ import model.SpielLogik;
 import model.StartmenueLogik;
 import model.WuerfelLogik;
 
-public class PunktetabellePresenter implements DummeChatGPTLoesungIchHasseAlles{
+public class PunktetabellePresenter implements SpielEreignisListener{
 	
 	private PunkteTabelleGUI gui;
 	private PunktetabelleLogik logik;
@@ -24,17 +24,17 @@ public class PunktetabellePresenter implements DummeChatGPTLoesungIchHasseAlles{
 	private SpielLogik spielLogik;
 	int wurfAnzahl = 0;
 	int maxWuerfe = 3;
-
+	private SpielfeldPresenter presenter;
 	
-	public PunktetabellePresenter(Container Eimer, StartmenueLogik menueDaten,SpielLogik spielLogik) {
+	public PunktetabellePresenter(Container eimer, StartmenueLogik menueDaten,SpielLogik spielLogik, SpielfeldPresenter presenter) {
 		this.spielLogik = spielLogik;
-		gui = new PunkteTabelleGUI(Eimer, menueDaten,spielLogik);
+		this.presenter = presenter;
+		gui = new PunkteTabelleGUI(eimer, menueDaten,spielLogik, this);
 		logik = new PunktetabelleLogik();
 		this.moeglicheZuege = new MoeglicheZuege();	
 	}
 	
 	public void PunkteTabelle() {
-
 
         Map<Kategorie, Integer> moeglichePunkte = moeglicheZuege.getAktiveMoeglichePunkte();
         
@@ -73,7 +73,7 @@ public class PunktetabellePresenter implements DummeChatGPTLoesungIchHasseAlles{
 		
 		
 		@Override
-		public void wasPassiertWennWirEineNeueRundeAusloesen(List<WuerfelLogik> alleWuerfelLogik) {
+		public void wennNeueRundeStartet(List<WuerfelLogik> alleWuerfelLogik) {
 			
 			if(gui != null) {
 				gui.zeigeMoeglichePunkte(new HashMap<>(),spielLogik.getAktiverSpielerIndex());
@@ -81,16 +81,26 @@ public class PunktetabellePresenter implements DummeChatGPTLoesungIchHasseAlles{
 			System.out.println("Neue Runde in PunktetabellePresenter gestartet");
 		}
 
+
 		@Override
-		public void wasPassiertWennWirEinenWuerfelWerfen(List<Integer> wuerfel) {
+		public void wennWuerfelGeworfenWerden(List<Integer> wuerfel) {
 			moeglicheZuege.setWuerfelWerte(wuerfel);
-			PunkteTabelle();		
+			PunkteTabelle();
+			
 		}
 
 		@Override
 		public void zeigeMoeglichePunkte(HashMap hashMap) {
-			// TODO Auto-generated method stub			
-		}			
+			// TODO Auto-generated method stub
+			
+		}
+
+		public void spielBeendet() {
+			presenter.spielBeendet();
+			
+		}
+		
+			
 	}
 	 
 

@@ -23,13 +23,13 @@ public class StartmenuePresenter {
 	private StartmenueLogik menueDaten;
 	private JFrame hauptfenster;
 
-	public StartmenuePresenter(JFrame hauptfenster, Container Eimer) {
+	public StartmenuePresenter(JFrame hauptfenster, Container eimer) {
 		this.hauptfenster = hauptfenster;
 		this.menueDaten = new StartmenueLogik();
-		this.menueGUI = new StartmenueGUI(Eimer);		
+		this.menueGUI = new StartmenueGUI(eimer);		
 		starteStartmenue();
-		Eimer.revalidate();
-		Eimer.repaint();		
+		eimer.revalidate();
+		eimer.repaint();		
 	}
 	
 	private void starteStartmenue() {
@@ -59,6 +59,8 @@ public class StartmenuePresenter {
 			zeigeSpielerAuswahl(); //hier wird SpielfeldPresenter() aufgerufen
 		});		
 	}
+	
+	 
 		
 	private void zeigeSpielerAuswahl() {
 		//Hauptfenster Blockieren und eingabe User
@@ -82,7 +84,7 @@ public class StartmenuePresenter {
 				SpielerDaten(anzahl); //Namen hinzufügen
 				
 				SpielLogik spielLogik = new SpielLogik();
-				spielLogik.setSpieler(menueDaten.getSpielerListe()); //Initialisierung Spiellogik mit Spielern
+				spielLogik.setAlleSpieler(menueDaten.getSpielerListe()); //Initialisierung Spiellogik mit Spielern
 				
 				new SpielfeldPresenter(menueGUI.getEimer(), spielLogik, menueDaten);
 				

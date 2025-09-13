@@ -10,8 +10,8 @@ public class PunkteEintragenButtonPresenter {
 	private PunkteEintragenButtonLogik logik;
 	private SpielfeldPresenter ichBraucheNurDieseEineMethodeEsIstHalbDreiNachtsIchWillInsBett;
 	
-	public PunkteEintragenButtonPresenter(Container Eimer, SpielfeldPresenter arsch) {
-		gui = new PunkteEintragenButtonGUI(Eimer);
+	public PunkteEintragenButtonPresenter(Container eimer, SpielfeldPresenter arsch) {
+		gui = new PunkteEintragenButtonGUI(eimer);
 		logik = new PunkteEintragenButtonLogik();
 		
 		gui.getKnopf().addActionListener(klick -> {punkteEintragenButtonGeklickt();});

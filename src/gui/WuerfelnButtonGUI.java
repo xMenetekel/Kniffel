@@ -10,7 +10,9 @@ import javax.swing.JPanel;
 import javax.swing.JTable;
 
 
-
+/**
+ * Kuemmert sich um Darstellung und Groeßenanpassung
+ */
 public class WuerfelnButtonGUI extends AbstractGUI{
 	
 	private static final double X = 0.12;
@@ -18,11 +20,16 @@ public class WuerfelnButtonGUI extends AbstractGUI{
 	private static final double B = 0.25;	
 	private static final double H = 0.07;	
 	
-	public WuerfelnButtonGUI(Container Eimer){
-		super(X, Y, B, H, Eimer);
+	/**
+	 * Erstellt WuerfelButton und fuegt ihn dem Container hinzu
+	 * 
+	 * @param eimer		Container in dem der Button angezeigt wird
+	 */
+	public WuerfelnButtonGUI(Container eimer){
+		super(X, Y, B, H, eimer);
 		knopf = new JButton();
 		
-		bildIcon = new ImageIcon("Other/wuerfelnButton.jpg");		
+		bildIcon = new ImageIcon("src/Other/wuerfelnButton.jpg");		
 		
 		panel.addComponentListener(new ComponentAdapter() {
 			@Override
@@ -32,8 +39,8 @@ public class WuerfelnButtonGUI extends AbstractGUI{
 		});
 		
 		setzeNeueGroesse(
-			(int)(B * Eimer.getWidth()), 
-			(int)(H * Eimer.getHeight())
+			(int)(B * eimer.getWidth()), 
+			(int)(H * eimer.getHeight())
 		);
 
 		knopf.setIcon(bild.getIcon());

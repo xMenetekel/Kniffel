@@ -16,52 +16,50 @@ public class StartmenueGUI extends AbstractGUI{
 	private JButton starteSpiel;
 	private JButton einstellungen;
 	private JButton exit;
-	private Container Eimer;
+	
 	
 	private List<JButton> iconButtons = new ArrayList<>();
 		
-	// Konstruktor erstellt GUI, Layout und fuergt Buttons Hintergrund hinzu ohne Layout Manager
-	public StartmenueGUI(Container Eimer) {
-		super(0,0,1,1, Eimer);
-		this.Eimer = Eimer;
-		this.Eimer.setLayout(null); 
+	// Konstruktor erstellt GUI, Layout und fuegt Buttons Hintergrund hinzu ohne Layout Manager
+	public StartmenueGUI(Container eimer) {
+		super(0,0,1,1, eimer);
+		this.eimer.setLayout(null); 
 		
 		this.starteSpiel = new JButton();
 		this.einstellungen = new JButton();
 		this.exit = new JButton();
 		
-		starteSpiel.setIcon(new ImageIcon("Other/starteSpiel.jpg"));
-		einstellungen.setIcon(new ImageIcon("Other/einstellungen.jpg"));
-		exit.setIcon(new ImageIcon("Other/schliessen.jpg"));
+		starteSpiel.setIcon(new ImageIcon("src/Other/starteSpiel.jpg"));
+		einstellungen.setIcon(new ImageIcon("src/Other/einstellungen.jpg"));
+		exit.setIcon(new ImageIcon("src/Other/schliessen.jpg"));
 		
 		erstelleButtons();	
 		
 		// Listener groeßenanderungen anpassen 
-		this.Eimer.addComponentListener(new ComponentAdapter() {
+		this.eimer.addComponentListener(new ComponentAdapter() {
 			@Override
 			public void componentResized(ComponentEvent e) {
-				rearrangiereFelder(Eimer, starteSpiel, einstellungen, exit);
-				setzeNeueGroesse(Eimer.getWidth(), Eimer.getHeight());
-				Eimer.revalidate();
-				Eimer.repaint();
+				rearrangiereFelder(eimer, starteSpiel, einstellungen, exit);
+				setzeNeueGroesse(eimer.getWidth(), eimer.getHeight());
+				eimer.revalidate();
+				eimer.repaint();
 			}			
 		});
 		
-		// Hintergundbild
-		bildIcon = new ImageIcon("Other/startHintergrund.jpg");	
-		bild.setBounds(0,0, Eimer.getWidth(), Eimer.getHeight());
+		bildIcon = new ImageIcon("src/Other/startHintergrund.jpg");	
+		bild.setBounds(0,0, eimer.getWidth(), eimer.getHeight());
 		bild.setIcon(bildIcon);
 		panel.add(bild);
 				
-		this.Eimer.add(starteSpiel);
-		this.Eimer.add(exit);
-		this.Eimer.add(einstellungen); 
-		this.Eimer.add(panel);
-		Eimer.revalidate();
-		Eimer.repaint();		
+		this.eimer.add(starteSpiel);
+		this.eimer.add(exit);
+		this.eimer.add(einstellungen); 
+		this.eimer.add(panel);
+		eimer.revalidate();
+		eimer.repaint();		
 	}
 	
-	// und noch mehr groeßenberechnungen 
+	
 	private void rearrangiereFelder(Container eimer, JButton starteSpiel, JButton einstellungen, JButton exit) {
 		int breite = eimer.getWidth();
 		int hoehe = eimer.getHeight();
@@ -71,7 +69,7 @@ public class StartmenueGUI extends AbstractGUI{
 		exit.setBounds(			(int)Math.floor(breite*0.33), (int)Math.floor(hoehe*0.55), (int)Math.floor(breite*0.33),(int)Math.floor(hoehe*0.1));		
 	}
 	
-	// Icon Bilder erstellen weil wir Buttons lieben 
+	// Icon Bilder erstellen weil wir Buttons lieben  TODO umschreiben das es nur die bilder sind
 	private void erstelleButtons(){
 		JButton bebi = new JButton();
 		bebi.setName("bebi");
@@ -100,7 +98,7 @@ public class StartmenueGUI extends AbstractGUI{
 		this.iconButtons.add(fey);
 		
 		iconButtons.forEach(button -> {
-			button.setIcon(new ImageIcon("Other/" + button.getName() + "klein.jpg"));
+			button.setIcon(new ImageIcon("src/Other/" + button.getName() + "klein.jpg"));
 			button.setPreferredSize(new Dimension(50,50));
 			});		
 	}
@@ -161,8 +159,5 @@ public class StartmenueGUI extends AbstractGUI{
 	public void exit() {
 		
 	}	
-
-	public Container getEimer() {
-		return Eimer;
-	}	
+	
 }
