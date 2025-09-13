@@ -2,7 +2,7 @@ package gui;
 
 import java.awt.Container;
 import java.awt.Dimension;
-
+import java.awt.Image;
 import java.awt.event.ComponentAdapter;
 import java.awt.event.ComponentEvent;
 import java.util.ArrayList;
@@ -18,7 +18,7 @@ public class StartmenueGUI extends AbstractGUI{
 	private JButton exit;
 	
 	
-	private List<JButton> iconButtons = new ArrayList<>();
+	private List<ImageIcon> icons = new ArrayList<>();
 		
 	// Konstruktor erstellt GUI, Layout und fuegt Buttons Hintergrund hinzu ohne Layout Manager
 	public StartmenueGUI(Container eimer) {
@@ -33,14 +33,15 @@ public class StartmenueGUI extends AbstractGUI{
 		einstellungen.setIcon(new ImageIcon("src/Other/einstellungen.jpg"));
 		exit.setIcon(new ImageIcon("src/Other/schliessen.jpg"));
 		
-		erstelleButtons();	
+		erstelleBilder();	
 		
 		// Listener groeßenanderungen anpassen 
 		this.eimer.addComponentListener(new ComponentAdapter() {
 			@Override
 			public void componentResized(ComponentEvent e) {
-				rearrangiereFelder(eimer, starteSpiel, einstellungen, exit);
+				rearrangiereFelder();
 				setzeNeueGroesse(eimer.getWidth(), eimer.getHeight());
+				setzeNeueButtonBildGroesse(starteSpiel, einstellungen, exit);
 				eimer.revalidate();
 				eimer.repaint();
 			}			
@@ -49,18 +50,33 @@ public class StartmenueGUI extends AbstractGUI{
 		bildIcon = new ImageIcon("src/Other/startHintergrund.jpg");	
 		bild.setBounds(0,0, eimer.getWidth(), eimer.getHeight());
 		bild.setIcon(bildIcon);
-		panel.add(bild);
-				
-		this.eimer.add(starteSpiel);
-		this.eimer.add(exit);
-		this.eimer.add(einstellungen); 
-		this.eimer.add(panel);
+		
+		panel.add(starteSpiel);
+		panel.add(einstellungen);
+		panel.add(exit);
+		panel.add(bild);		
+		
+		eimer.add(panel);
 		eimer.revalidate();
 		eimer.repaint();		
 	}
+	/**
+	 * Skaliert die Groesse der Bilder der Buttons. Da es voreingestellte Icons in Images umwandelt, sie dann skaliert und wieder zu Icons verwandelt
+	 * entsteht hier der wunderschöne Effekt das der Button blurry wird wenn man das Menü zu oft groß- und kleinzieht. Ich finde das so lustig, das ich es
+	 * drinnenlasse.
+	 * @param buttons die Buttons dessen Bilder geklaut und geändert werden sollen
+	 */
+	public void setzeNeueButtonBildGroesse(JButton... buttons) {
+		for(JButton button : buttons) {		
+			ImageIcon bildneu = (ImageIcon) button.getIcon();
+			Image programmierenIstWeird = bildneu.getImage();
+			Image skaliertesBild = programmierenIstWeird.getScaledInstance(button.getWidth(), button.getHeight(), Image.SCALE_SMOOTH);
+			button.setIcon(new ImageIcon(skaliertesBild));
+		}
+	}
 	
 	
-	private void rearrangiereFelder(Container eimer, JButton starteSpiel, JButton einstellungen, JButton exit) {
+	private void rearrangiereFelder() {
 		int breite = eimer.getWidth();
 		int hoehe = eimer.getHeight();
 		
@@ -69,52 +85,35 @@ public class StartmenueGUI extends AbstractGUI{
 		exit.setBounds(			(int)Math.floor(breite*0.33), (int)Math.floor(hoehe*0.55), (int)Math.floor(breite*0.33),(int)Math.floor(hoehe*0.1));		
 	}
 	
-	// Icon Bilder erstellen weil wir Buttons lieben  TODO umschreiben das es nur die bilder sind
-	private void erstelleButtons(){
-		JButton bebi = new JButton();
-		bebi.setName("bebi");
-		JButton kiki = new JButton();
-		kiki.setName("kiki");
-		JButton bubu = new JButton();
-		bubu.setName("bubu");
-		JButton crystal = new JButton();
-		crystal.setName("crystal");
-		JButton schrinke = new JButton();
-		schrinke.setName("schrinke");
-		JButton transistor = new JButton();
-		transistor.setName("transistor");
-		JButton integral = new JButton();
-		integral.setName("integral");
-		JButton fey = new JButton();
-		fey.setName("fey");
-		
-		this.iconButtons.add(bebi);
-		this.iconButtons.add(kiki);
-		this.iconButtons.add(bubu);
-		this.iconButtons.add(crystal);
-		this.iconButtons.add(schrinke);
-		this.iconButtons.add(transistor);
-		this.iconButtons.add(integral);
-		this.iconButtons.add(fey);
-		
-		iconButtons.forEach(button -> {
-			button.setIcon(new ImageIcon("src/Other/" + button.getName() + "klein.jpg"));
-			button.setPreferredSize(new Dimension(50,50));
-			});		
+	/**
+	 * erstellt die ImageIcons für das Icon Auswahlfenster im Startmenue bei Spiel starten. 
+	 * Wenn man ein neues Bild einfügen soll, dann einfach den namen hier im Array hinten dran setzen. Im src/Other/ ordner muss es dann NAMEklein.jpg heißen
+	 */
+	private void erstelleBilder(){
+		String[] namen = new String[] {"bebi", "kiki", "bubu", "crystal", "schrinke", "transistor", "integral", "fey"};
+		for(String name : namen) {
+			icons.add(new ImageIcon("src/Other/" + name + "klein.jpg"));
+		}
+	
 	}
+	
+	
 	
 	// Getter und Setter
-	public List<JButton> getIconButtons() {
-		return iconButtons;
-	}
-	
-	public void setIconButtons(List<JButton> iconButtons) {
-		this.iconButtons = iconButtons;
-	}
 	
 	public JButton getStarteSpiel() {
 		return starteSpiel;
 	}
+
+	public List<ImageIcon> getIcons() {
+		return icons;
+	}
+
+
+	public void setIcons(List<ImageIcon> icons) {
+		this.icons = icons;
+	}
+
 
 	public void setStarteSpiel(JButton starteSpiel) {
 		this.starteSpiel = starteSpiel;

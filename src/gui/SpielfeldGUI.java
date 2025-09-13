@@ -1,26 +1,13 @@
 package gui;
-
-import java.awt.Component;
 import java.awt.Container;
-import java.awt.Font;
 import java.awt.event.ComponentAdapter;
 import java.awt.event.ComponentEvent;
-import java.awt.event.MouseAdapter;
-import java.awt.event.MouseEvent;
-import java.util.HashMap;
-import java.util.Map;
 
 import javax.swing.ImageIcon;
-import javax.swing.JLabel;
-import javax.swing.JTable;
 
 import model.Kategorie;
 import model.StartmenueLogik;
 import presenter.SpielfeldPresenter;
-import presenter.WuerfelPresenter;
-
-import model.SpielLogik;
-
 
 public class SpielfeldGUI extends AbstractGUI{
 	
@@ -28,17 +15,24 @@ public class SpielfeldGUI extends AbstractGUI{
 	private WuerfelnButtonGUI wuerfelnButton;
 	private PunkteEintragenButtonGUI punkteEintragenButton;
 	private PunkteTabelleGUI punkteTabelle;
+	
 	private StartmenueLogik menueDaten;
 		
-	private PunkteEintragenButtonGUI punkteEintragen;	
 	private Kategorie ausgewaehlteKategorie = null; 
 		
+	/**
+	 * Erstellt Spielfeld mit Hintergrundbild 
+	 * registriert  Groeßenanpassungen
+	 * 
+	 * @param Eimer			uebergeordneter Container
+	 * @param presenter		zugehoeriger SpielfeldPresenter
+	 * @param menueDaten	Daten aus dem Startmenue
+	 */
 	public SpielfeldGUI(Container eimer, SpielfeldPresenter presenter, StartmenueLogik menueDaten) {
 		super(0,0,1,1, eimer);
 		this.presenter = presenter;
 		this.menueDaten = menueDaten;
-		
-		
+				
 		eimer.removeAll();
 		eimer.setLayout(null);
 		bildIcon = new ImageIcon("src/Other/hintergrund.jpg");		
@@ -50,7 +44,6 @@ public class SpielfeldGUI extends AbstractGUI{
 		eimer.revalidate();
 		eimer.repaint();
 		
-		// Listener damit es funktioniert 
 		eimer.addComponentListener(new ComponentAdapter() {
 			@Override
 			public void componentResized(ComponentEvent e) {

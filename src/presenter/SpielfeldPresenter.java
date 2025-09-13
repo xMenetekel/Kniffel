@@ -104,7 +104,8 @@ public class SpielfeldPresenter {
 			 }
 			 
 			 wuerfel.wuerfeln();
-		 }	
+
+		 }
 			 spielLogik.erhoeheWurfAnzahl();
 			 updateStatusLabel();
 			 
@@ -135,7 +136,7 @@ public class SpielfeldPresenter {
 		 rearrangiere(fenstar, punkteKlick.getGui());
 		 rearrangiere(fenstar, gui);
 		 rearrangiereWuerfel(fenstar, wuerfel, bank.getGui());		
-		 statusLabel.setBounds((int)(eimer.getWidth() * 0.28), (int)(eimer.getHeight() * 0.81), (int)(eimer.getWidth() * 0.3),100);
+		 statusLabel.setBounds((int)(eimer.getWidth() * 0.28), (int)(eimer.getHeight() * 0.81), (int)(eimer.getWidth() * 0.22),100);
 	 }
 	 	 
 	 protected void rearrangiereWuerfel(Component e, WuerfelPresenter w, WuerfelBankGUI bank) {
@@ -175,7 +176,7 @@ public class SpielfeldPresenter {
 
 
 		private void updateStatusLabel() {
-			String maxWurf = menueDaten.isDebugingModus() ? "inf" : String.valueOf(wuerfel.getMaxWuerfe());
+			String maxWurf = String.valueOf(wuerfel.getMaxWuerfe());
 			String status = "Runde " + spielLogik.getRunde() + 
 					"\nSpieler: " + spielLogik.getAktiverSpieler().getName() + 
 					"\nWürfe: " + wuerfel.getWurfAnzahl() + "/" + maxWurf;

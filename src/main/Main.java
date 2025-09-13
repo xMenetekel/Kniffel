@@ -8,21 +8,26 @@ import javax.swing.JFrame;
 
 import presenter.StartmenuePresenter;
 
+/**
+ * Initialisiert Hauptfenster und startet 
+ * den Startmenue Presenter
+ */
 public class Main {
 	public static void main(String[] args) {	
 
 		JFrame hauptfenster = new JFrame("Kniffel");
 		hauptfenster.setSize(1000,825);
 		hauptfenster.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
-		hauptfenster.setMinimumSize(new Dimension(500, 600)); //set maximum size geht nicht :( test
-		hauptfenster.setMaximizedBounds(new Rectangle(0,0,1100,1000));
+
+		hauptfenster.setMinimumSize(new Dimension(740, 700));
+		hauptfenster.setMaximizedBounds(new Rectangle(0,0,1100,900));
 		
 		Container eimer = hauptfenster.getContentPane();
 	
 		new StartmenuePresenter(hauptfenster, eimer);
-		
-		hauptfenster.setVisible(true); //aus irgendeinem grund muss das hier sein damit das fenster sich nicht random entscheidet einfach nicht zu erscheinen.
-		eimer.revalidate();				//nach allem anderen. java warum
+	
+		hauptfenster.setVisible(true);
+		eimer.revalidate();				
 		eimer.repaint();
 		
 	}
