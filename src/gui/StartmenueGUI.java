@@ -41,6 +41,7 @@ public class StartmenueGUI extends AbstractGUI{
 			public void componentResized(ComponentEvent e) {
 				rearrangiereFelder();
 				setzeNeueGroesse(eimer.getWidth(), eimer.getHeight());
+				setzeNeueButtonBildGroesse(starteSpiel, einstellungen, exit);
 				eimer.revalidate();
 				eimer.repaint();
 			}			
@@ -59,28 +60,21 @@ public class StartmenueGUI extends AbstractGUI{
 		eimer.revalidate();
 		eimer.repaint();		
 	}
+	/**
+	 * Skaliert die Groesse der Bilder der Buttons. Da es voreingestellte Icons in Images umwandelt, sie dann skaliert und wieder zu Icons verwandelt
+	 * entsteht hier der wunderschöne Effekt das der Button blurry wird wenn man das Menü zu oft groß- und kleinzieht. Ich finde das so lustig, das ich es
+	 * drinnenlasse.
+	 * @param buttons die Buttons dessen Bilder geklaut und geändert werden sollen
+	 */
+	public void setzeNeueButtonBildGroesse(JButton... buttons) {
+		for(JButton button : buttons) {		
+			ImageIcon bildneu = (ImageIcon) button.getIcon();
+			Image programmierenIstWeird = bildneu.getImage();
+			Image skaliertesBild = programmierenIstWeird.getScaledInstance(button.getWidth(), button.getHeight(), Image.SCALE_SMOOTH);
+			button.setIcon(new ImageIcon(skaliertesBild));
+		}
+	}
 	
-	/*@Override
-	public void setzeNeueGroesse(int breite, int hoehe) {
-		for(Object knopf : panel.getComponents()) {
-			TODO do lol
-		}
-		panel.getComponents().
-		
-		
-		panel.setSize(breite, hoehe);
-		bild.setBounds(0,0, breite, hoehe);
-		skaliereBild(breite, hoehe);
-		Image bildii = bildIcon.getImage();
-		Image skaliertesBild = bildii.getScaledInstance(breite, hoehe, Image.SCALE_SMOOTH);
-		if(knopf != null) {
-			knopf.setIcon(new ImageIcon(skaliertesBild));
-		} else {
-		bild.setIcon(new ImageIcon(skaliertesBild));
-		}
-		
-		
-	}*/
 	
 	private void rearrangiereFelder() {
 		int breite = eimer.getWidth();
