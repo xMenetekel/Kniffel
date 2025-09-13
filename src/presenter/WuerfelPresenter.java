@@ -5,15 +5,14 @@ import java.util.ArrayList;
 import java.util.List;
 import java.util.Random;
 
-import javax.swing.JButton;
 import javax.swing.JOptionPane;
 
+import gui.WuerfelBankGUI;
 import gui.WuerfelGUI;
 import gui.WuerfelflaecheGUI;
-import gui.WuerfelBankGUI;
-import model.WuerfelLogik;
 import model.SpielLogik;
 import model.StartmenueLogik;
+import model.WuerfelLogik;
 
 public class WuerfelPresenter  {
 
@@ -62,8 +61,8 @@ public class WuerfelPresenter  {
 		for(int i = 0; i < 5; i++) {
 			WuerfelLogik model = new WuerfelLogik(6);
 			WuerfelGUI view = new WuerfelGUI(this, model, 
-											(i*55+((int)(bank.getProzentFlaecheX() * eimer.getWidth())))+5, 
-											(int)((bank.getProzentFlaecheY() * eimer.getHeight())+6), eimer);
+											(i*55+((int)(bank.getProzentFlaecheX() * eimer.getWidth())))+15, 
+											(int)((bank.getProzentFlaecheY() * eimer.getHeight())+16), eimer);
 			
 			model.setGui(view);
 			bank.getReihenfolge().add(view);

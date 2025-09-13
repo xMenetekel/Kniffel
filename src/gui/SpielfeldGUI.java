@@ -1,26 +1,13 @@
 package gui;
-
-import java.awt.Component;
 import java.awt.Container;
-import java.awt.Font;
 import java.awt.event.ComponentAdapter;
 import java.awt.event.ComponentEvent;
-import java.awt.event.MouseAdapter;
-import java.awt.event.MouseEvent;
-import java.util.HashMap;
-import java.util.Map;
 
 import javax.swing.ImageIcon;
-import javax.swing.JLabel;
-import javax.swing.JTable;
 
 import model.Kategorie;
 import model.StartmenueLogik;
 import presenter.SpielfeldPresenter;
-import presenter.WuerfelPresenter;
-
-import model.SpielLogik;
-
 
 public class SpielfeldGUI extends AbstractGUI{
 	
