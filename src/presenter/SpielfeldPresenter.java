@@ -64,18 +64,8 @@ public class SpielfeldPresenter {
 		 }
 		 		 
 		 statusLabel = new JTextArea();
-			statusLabel.setBounds((int)(eimer.getWidth() * 0.28), (int)(eimer.getHeight() * 0.81), (int)(eimer.getWidth() * 0.3),100);
-			statusLabel.setVisible(true);
-			statusLabel.setEditable(false);
-			statusLabel.setOpaque(false);
-			statusLabel.setFont(new Font(Font.SANS_SERIF, Font.BOLD, 20));
-			updateStatusLabel();
+		 setupStatusLabel();
 			
-			if (spielLogik != null) {
-				updateStatusLabel();
-			}else {
-				statusLabel.setText("Spiel wird initialisiert...");
-			}
 			
 		 eimer.add(statusLabel);
 		 eimer.add(flaeche.getGui().getPanel());
@@ -94,8 +84,16 @@ public class SpielfeldPresenter {
 			eimer.repaint();
 	}
 	 
-	 public void onWuerfelnClick() {
-	     //tabelle.aktualisierePunkteTabelle();
+	 private void setupStatusLabel() {
+		 statusLabel.setVisible(true);
+			statusLabel.setEditable(false);
+			statusLabel.setOpaque(false);
+			statusLabel.setFont(new Font(Font.SANS_SERIF, Font.BOLD, 20));
+			updateStatusLabel();
+		
+	}
+
+	public void onWuerfelnClick() {
 	     tabelle.PunkteTabelle();
 	     
 	     int aktuellesMaxWuerfeln = wuerfel.getMaxWuerfe();
@@ -139,7 +137,8 @@ public class SpielfeldPresenter {
 		 rearrangiere(fenstar, wuerfelnKlick.getGui());
 		 rearrangiere(fenstar, punkteKlick.getGui());
 		 rearrangiere(fenstar, gui);
-		 rearrangiereWuerfel(fenstar, wuerfel, bank.getGui());		 
+		 rearrangiereWuerfel(fenstar, wuerfel, bank.getGui());		
+		 statusLabel.setBounds((int)(eimer.getWidth() * 0.28), (int)(eimer.getHeight() * 0.81), (int)(eimer.getWidth() * 0.3),100);
 	 }
 	 	 
 	 protected void rearrangiereWuerfel(Component e, WuerfelPresenter w, WuerfelBankGUI bank) {
