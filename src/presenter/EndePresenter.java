@@ -14,12 +14,15 @@ public class EndePresenter {
 	private SpielLogik spielLogik;
 	private StartmenueLogik menueDaten;
 	
-	private Container Eimer;
+	private Container eimer;
 	
-	public EndePresenter(Container Eimer, SpielLogik spielLogik, StartmenueLogik menueDaten) {
-		this.Eimer = Eimer;
+	public EndePresenter(Container eimer, SpielLogik spielLogik, StartmenueLogik menueDaten) {
+		this.eimer = eimer;
 		this.spielLogik = spielLogik;
 		this.menueDaten = menueDaten;
+		
+		this.gui = new EndeGUI(eimer, this);
+		this.logik = new EndeLogik();
 		
 	}
 }

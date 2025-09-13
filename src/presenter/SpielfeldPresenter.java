@@ -36,25 +36,25 @@ public class SpielfeldPresenter {
 	 private SpielLogik spielLogik; 
 	 private MoeglicheZuege moeglicheZuege = new MoeglicheZuege();
 	 private StartmenueLogik menueDaten;
-	 private Container Eimer;
+	 private Container eimer;
 	
-	public SpielfeldPresenter(Container Eimer, SpielLogik spielLogik, StartmenueLogik menueDaten) {
+	public SpielfeldPresenter(Container eimer, SpielLogik spielLogik, StartmenueLogik menueDaten) {
 		 
 		 this.menueDaten = menueDaten;
 		 this.spielLogik = spielLogik; 
-		 this.Eimer = Eimer;
+		 this.eimer = eimer;
 		 
-		 gui = new SpielfeldGUI(Eimer, this, menueDaten);
+		 gui = new SpielfeldGUI(eimer, this, menueDaten);
 		 logik = new SpielfeldLogik();
 		 
-		 flaeche = new WuerfelflaechePresenter(Eimer);
-		 bank = new WuerfelbankPresenter(Eimer);
-		 tabelle = new PunktetabellePresenter(Eimer, menueDaten, spielLogik, this); 	
-		 wuerfel = new WuerfelPresenter(Eimer, spielLogik, flaeche.getGui(), bank.getGui(), tabelle, menueDaten);  			 	 
-		 spieler = new SpielerbankPresenter(Eimer, menueDaten.getSpielerListe(), spielLogik);
+		 flaeche = new WuerfelflaechePresenter(eimer);
+		 bank = new WuerfelbankPresenter(eimer);
+		 tabelle = new PunktetabellePresenter(eimer, menueDaten, spielLogik, this); 	
+		 wuerfel = new WuerfelPresenter(eimer, spielLogik, flaeche.getGui(), bank.getGui(), tabelle, menueDaten);  			 	 
+		 spieler = new SpielerbankPresenter(eimer, menueDaten.getSpielerListe(), spielLogik);
 	
-		 wuerfelnKlick = new WuerfelnButtonPresenter(Eimer, wuerfel, tabelle);
-		 punkteKlick = new PunkteEintragenButtonPresenter(Eimer, this);
+		 wuerfelnKlick = new WuerfelnButtonPresenter(eimer, wuerfel, tabelle);
+		 punkteKlick = new PunkteEintragenButtonPresenter(eimer, this);
 
 		 wuerfelnKlick.getGui().getKnopf().addActionListener(e->onWuerfelnClick());
 		 punkteKlick.getGui().getKnopf().addActionListener(e->eintragePunkteFuerAktuellenSpieler());
@@ -64,7 +64,7 @@ public class SpielfeldPresenter {
 		 }
 		 		 
 		 statusLabel = new JTextArea();
-			statusLabel.setBounds((int)(Eimer.getWidth() * 0.28), (int)(Eimer.getHeight() * 0.81), (int)(Eimer.getWidth() * 0.3),100);
+			statusLabel.setBounds((int)(eimer.getWidth() * 0.28), (int)(eimer.getHeight() * 0.81), (int)(eimer.getWidth() * 0.3),100);
 			statusLabel.setVisible(true);
 			statusLabel.setEditable(false);
 			statusLabel.setOpaque(false);
@@ -77,21 +77,21 @@ public class SpielfeldPresenter {
 				statusLabel.setText("Spiel wird initialisiert...");
 			}
 			
-		 Eimer.add(statusLabel);
-		 Eimer.add(flaeche.getGui().getPanel());
-		 Eimer.add(bank.getGui().getPanel());
-		 Eimer.add(tabelle.getGui().getPanel());
-		 Eimer.add(spieler.getGui().getPanel());
-		 Eimer.add(wuerfelnKlick.getGui().getPanel());
-		 Eimer.add(punkteKlick.getGui().getPanel());
-		 Eimer.add(gui.getPanel());
+		 eimer.add(statusLabel);
+		 eimer.add(flaeche.getGui().getPanel());
+		 eimer.add(bank.getGui().getPanel());
+		 eimer.add(tabelle.getGui().getPanel());
+		 eimer.add(spieler.getGui().getPanel());
+		 eimer.add(wuerfelnKlick.getGui().getPanel());
+		 eimer.add(punkteKlick.getGui().getPanel());
+		 eimer.add(gui.getPanel());
 		 
-		 rearrangiereAlles(Eimer);
+		 rearrangiereAlles(eimer);
 		 highlightAktuelleSpalte();
 		
 		
-			Eimer.revalidate();
-			Eimer.repaint();
+			eimer.revalidate();
+			eimer.repaint();
 	}
 	 
 	 public void onWuerfelnClick() {
@@ -238,10 +238,10 @@ public class SpielfeldPresenter {
 		
 	public void spielBeendet() {
 		System.out.println("ich bin hier gelandet\n\n\n yay");
-		Eimer.removeAll();
-		Eimer.revalidate();
-		Eimer.repaint();
-		new EndePresenter(Eimer, spielLogik, menueDaten);
+		eimer.removeAll();
+		eimer.revalidate();
+		eimer.repaint();
+		new EndePresenter(eimer, spielLogik, menueDaten);
 	}
 		
 	public SpielfeldGUI getGui() {

@@ -23,10 +23,10 @@ public class WuerfelnButtonGUI extends AbstractGUI{
 	/**
 	 * Erstellt WuerfelButton und fuegt ihn dem Container hinzu
 	 * 
-	 * @param Eimer		Container in dem der Button angezeigt wird
+	 * @param eimer		Container in dem der Button angezeigt wird
 	 */
-	public WuerfelnButtonGUI(Container Eimer){
-		super(X, Y, B, H, Eimer);
+	public WuerfelnButtonGUI(Container eimer){
+		super(X, Y, B, H, eimer);
 		knopf = new JButton();
 		
 		bildIcon = new ImageIcon("src/Other/wuerfelnButton.jpg");		
@@ -39,8 +39,8 @@ public class WuerfelnButtonGUI extends AbstractGUI{
 		});
 		
 		setzeNeueGroesse(
-			(int)(B * Eimer.getWidth()), 
-			(int)(H * Eimer.getHeight())
+			(int)(B * eimer.getWidth()), 
+			(int)(H * eimer.getHeight())
 		);
 
 		knopf.setIcon(bild.getIcon());

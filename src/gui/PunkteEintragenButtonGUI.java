@@ -18,8 +18,8 @@ public class PunkteEintragenButtonGUI extends AbstractGUI{
 	private static final double H = 0.07;	
 	
 	
-	public PunkteEintragenButtonGUI(Container Eimer){
-		super(X, Y, B, H, Eimer);
+	public PunkteEintragenButtonGUI(Container eimer){
+		super(X, Y, B, H, eimer);
 		knopf = new JButton();
 		
 		bildIcon = new ImageIcon("src/Other/punkteButton.jpg");
@@ -30,7 +30,7 @@ public class PunkteEintragenButtonGUI extends AbstractGUI{
 				knopf.setSize(panel.getSize());
 			}
 		});
-		setzeNeueGroesse((int)(B * Eimer.getWidth()), (int)(H * Eimer.getHeight()));
+		setzeNeueGroesse((int)(B * eimer.getWidth()), (int)(H * eimer.getHeight()));
 		
 		knopf.setIcon(bild.getIcon());
 		

@@ -20,7 +20,7 @@ public class WuerfelPresenter  {
 	private List<WuerfelGUI> alleWuerfelGUI = new ArrayList<>();
 	private List<WuerfelLogik> alleWuerfelLogik = new ArrayList<>();
 	
-	private Container container;
+	private Container eimer;
 	private MoeglicheZuege moeglicheZuege = new MoeglicheZuege();
 		
 	private SpielLogik spielLogik;	
@@ -40,18 +40,18 @@ public class WuerfelPresenter  {
 	/**
 	 * Erzeugt WuerfelPresenter, der die WuerfelLogik mit der Darstellung
 	 * und den Spielereignissen verbindet (schnittstelle)
-	 * @param Eimer 			uebergeordneter Container
+	 * @param eimer 			uebergeordneter Container
 	 * @param spielLogik		zentrale Logik Regeln und Zustaende 
 	 * @param flaeche			GUI Element Wuerfelflache
 	 * @param bank				GUI Element Wuerfelbank
 	 * @param spielErListener	Listener der auf Spielereignisse reagiert
 	 * @param menueDaten		Logik fuer Startmenue, Debug
 	 */
-	public WuerfelPresenter(Container Eimer, SpielLogik spielLogik, 
+	public WuerfelPresenter(Container eimer, SpielLogik spielLogik, 
 							WuerfelflaecheGUI flaeche, WuerfelBankGUI bank, 
 							SpielEreignisListener spielErListener,
 							StartmenueLogik menueDaten){
-		this.container = Eimer;
+		this.eimer = eimer;
 		this.flaeche = flaeche;
 		this.bank = bank;
 		this.spielListener = spielErListener;
@@ -62,17 +62,17 @@ public class WuerfelPresenter  {
 		for(int i = 0; i < 5; i++) {
 			WuerfelLogik model = new WuerfelLogik(6);
 			WuerfelGUI view = new WuerfelGUI(this, model, 
-											(i*55+((int)(bank.getProzentFlaecheX() * Eimer.getWidth())))+5, 
-											(int)((bank.getProzentFlaecheY() * Eimer.getHeight())+6), Eimer);
+											(i*55+((int)(bank.getProzentFlaecheX() * eimer.getWidth())))+5, 
+											(int)((bank.getProzentFlaecheY() * eimer.getHeight())+6), eimer);
 			
 			model.setGui(view);
 			bank.getReihenfolge().add(view);
 			alleWuerfelGUI.add(view);
 			alleWuerfelLogik.add(model);		
-			container.add(view.getButton());
+			eimer.add(view.getButton());
 		}	
-		container.revalidate();
-		container.repaint();	
+		eimer.revalidate();
+		eimer.repaint();	
 	}
 	
 	/**
@@ -89,7 +89,7 @@ public class WuerfelPresenter  {
 			String[] liste = {"1", "2", "3", "4", "5", "6"};
 			
 			int auswahl = JOptionPane.showOptionDialog(
-					container, 
+					eimer, 
 					"Zahl wählen", 
 					"Cheatermodus",
 					JOptionPane.DEFAULT_OPTION, 
@@ -120,8 +120,8 @@ public class WuerfelPresenter  {
 	 */
 	public int zufallsKoordinateX(WuerfelflaecheGUI flaeche) {
 		int validesX;
-		int xVon = (int) (flaeche.getProzentFlaecheX() * this.container.getWidth());
-		int xBis = (int) ((flaeche.getProzentFlaecheBreite() * this.container.getWidth()) + xVon);
+		int xVon = (int) (flaeche.getProzentFlaecheX() * this.eimer.getWidth());
+		int xBis = (int) ((flaeche.getProzentFlaecheBreite() * this.eimer.getWidth()) + xVon);
 		validesX = new Random().nextInt(xBis-xVon-WUERFEL_GROESSE)+xVon;	
 				
 		return validesX;
@@ -135,8 +135,8 @@ public class WuerfelPresenter  {
 	 */
 	public int zufallsKoordinateY(WuerfelflaecheGUI flaeche) {
 		int validesY;
-		int YVon = (int) (flaeche.getProzentFlaecheY() * this.container.getHeight());
-		int YBis = (int) ((flaeche.getProzentFlaecheHoehe() * this.container.getHeight()) + YVon);
+		int YVon = (int) (flaeche.getProzentFlaecheY() * this.eimer.getHeight());
+		int YBis = (int) ((flaeche.getProzentFlaecheHoehe() * this.eimer.getHeight()) + YVon);
 		validesY = new Random().nextInt(YBis-YVon-WUERFEL_GROESSE)+YVon;			
 		
 		return validesY;
@@ -234,8 +234,8 @@ public class WuerfelPresenter  {
 	 */
 	private void runter(WuerfelGUI gui) {
 		gui.setIstinBank(true);
-		int x = (int)(container.getWidth() * bank.getProzentFlaecheX());
-		int y = (int)(container.getHeight() * bank.getProzentFlaecheY());
+		int x = (int)(eimer.getWidth() * bank.getProzentFlaecheX());
+		int y = (int)(eimer.getHeight() * bank.getProzentFlaecheY());
 		
 		x = ((gui.getButton().getWidth() + 5) * bank.getReihenfolge().indexOf(null) ) + x+4;
 		y = y + 6;

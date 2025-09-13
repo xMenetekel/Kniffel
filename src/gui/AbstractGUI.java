@@ -13,7 +13,7 @@ public abstract class AbstractGUI{
 	JLabel bild;
 	ImageIcon bildIcon;
 	JButton knopf;
-	Container Eimer;
+	Container eimer;
 	
 	private final double prozentFlaecheX;
 	private final double prozentFlaecheHoehe;
@@ -21,8 +21,8 @@ public abstract class AbstractGUI{
 	private final double prozentFlaecheBreite;	
 	
 	//Konstruktor Prozentuale Positionierung und groeße der GUI-Elemente
-	protected AbstractGUI(double x, double y, double breite, double hoehe, Container Eimer) {
-		this.Eimer = Eimer;
+	protected AbstractGUI(double x, double y, double breite, double hoehe, Container eimer) {
+		this.eimer = eimer;
 		this.prozentFlaecheX = x;
 		this.prozentFlaecheY = y;
 		this.prozentFlaecheBreite = breite;
@@ -93,11 +93,11 @@ public abstract class AbstractGUI{
 	}
 	
 	public Container getEimer() {
-		return Eimer;
+		return eimer;
 	}
 	
 	public void setEimer(Container eimer) {
-		Eimer = eimer;
+		this.eimer = eimer;
 	}
 	
 	public void setPanel(JPanel panel) {

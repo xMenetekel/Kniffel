@@ -45,8 +45,8 @@ public class PunkteTabelleGUI extends AbstractGUI {
 		return this.table;
 	}
 
-	public PunkteTabelleGUI(Container Eimer, StartmenueLogik menueDaten,SpielLogik spielLogik, PunktetabellePresenter presenter) {
-		super(X, Y, B, H, Eimer);
+	public PunkteTabelleGUI(Container eimer, StartmenueLogik menueDaten,SpielLogik spielLogik, PunktetabellePresenter presenter) {
+		super(X, Y, B, H, eimer);
 		this.presenter = presenter;
 		this.spielerAnzahl = menueDaten.getSpieleranzahl();
 		panel = new JPanel(new BorderLayout());
@@ -108,7 +108,7 @@ public class PunkteTabelleGUI extends AbstractGUI {
 		JScrollPane scroll = new JScrollPane(table);
 		panel.add(scroll, BorderLayout.CENTER);
 		
-		this.Eimer.add(panel);
+		this.eimer.add(panel);
 		
 		}
 

@@ -21,16 +21,16 @@ public class WuerfelflaecheGUI extends AbstractGUI {
 	/**
 	 * erzeugt Wuerfelflaeche
 	 * 
-	 * @param Eimer Container in der die Wuerfelflaeche angezeigt wird
+	 * @param eimer Container in der die Wuerfelflaeche angezeigt wird
 	 */
-	public WuerfelflaecheGUI(Container Eimer) {
-		super(X, Y, B, H, Eimer);
+	public WuerfelflaecheGUI(Container eimer) {
+		super(X, Y, B, H, eimer);
 		
 		bildIcon = new ImageIcon("src/Other/wuerfelflaeche.jpg");
 		
 		setzeNeueGroesse(
-			(int)(B * Eimer.getWidth()), 
-			(int)(H * Eimer.getHeight())
+			(int)(B * eimer.getWidth()), 
+			(int)(H * eimer.getHeight())
 		);					
 		
 		panel.add(bild);			

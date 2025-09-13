@@ -17,24 +17,24 @@ public class WuerfelGUI {
 	int startY;
 	public double prozentXAufFeld;
 	public double prozentYAufFeld;
-	Container Eimer;
+	Container eimer;
 	private Random rnjesus;
 	private WuerfelPresenter presenter; 
 	boolean istinBank;
 	
-	public WuerfelGUI(WuerfelPresenter presenter, WuerfelLogik model, int startX, int startY, Container Eimer){
+	public WuerfelGUI(WuerfelPresenter presenter, WuerfelLogik model, int startX, int startY, Container eimer){
 		this.setPresenter(presenter);
 		this.model = model;
 		this.wuerfel = new JButton();
 		this.startX = startX;
 		this.startY = startY;
 		this.rnjesus = new Random();
-		this.Eimer = Eimer;
+		this.eimer = eimer;
 		this.xPos = startX;
 		this.yPos = startY;
 		fresherButton();
-		this.prozentXAufFeld = startX * 1.0 / Eimer.getWidth();
-		this.prozentYAufFeld = startY * 1.0 / Eimer.getHeight();
+		this.prozentXAufFeld = startX * 1.0 / eimer.getWidth();
+		this.prozentYAufFeld = startY * 1.0 / eimer.getHeight();
 		wuerfel.addActionListener(klick -> presenter.wuerfelAngeklickt(this));
 		this.istinBank = true;	
 	}
@@ -55,6 +55,7 @@ public class WuerfelGUI {
 	 * ob man x ODER y Schrittweise inkrementiert) und wie Timer generell funktionieren wurde mit KI Hilfe verstanden. 
 	 * 
 	 * Für langsamer / Schneller das x bei new Timer{x, e -> ...} vergrößern / verkleinern
+	 * und TOL anpassen. je größer, desto schneller. aber auch desto unschöner wird die würfelbank, weils ungenauer zurückfliegt
 	 * 
 	 * @param wuerfel welche ich mitgebe um da die positionen zu ändern und da den würfelbutton rauszuziehen
 	 * @param zielX der x wert wo es hingezeichnet werden soll
@@ -69,9 +70,9 @@ public class WuerfelGUI {
 		else { m =(zielY - wuerfel.getY()) * 1.0 / ( zielX - wuerfel.getX()); } 
 		double n = zielY - (zielX * m);
 		int[] moduloBoi = wuerfeln ? new int[] {0} : new int[]{1}; //freche lösung		
-		final int TOL = 1; //für toleranz, damit es schneller ist :( darf nicht null sein
+		final int TOL = 4; //für toleranz, damit es schneller ist :( darf nicht null sein
 			
-		Timer zeichnenTimer = new Timer(16, e -> {
+		Timer zeichnenTimer = new Timer(6, e -> {
 					
 			int xJetzt = wuerfel.getX();
 			int yJetzt = wuerfel.getY();
@@ -170,11 +171,11 @@ public class WuerfelGUI {
 	}
 	
 	public Container getEimer() {
-		return Eimer;
+		return eimer;
 	}
 	
 	public void setEimer(Container eimer) {
-		Eimer = eimer;
+		this.eimer = eimer;
 	}
 
 	public WuerfelPresenter getPresenter() {
