@@ -40,7 +40,7 @@ public class SpielfeldPresenter {
 	 private Container eimer;
 	
 	public SpielfeldPresenter(Container eimer, SpielLogik spielLogik, StartmenueLogik menueDaten) {
-		 
+		
 		 this.menueDaten = menueDaten;
 		 this.spielLogik = spielLogik; 
 		 this.eimer = eimer;
@@ -60,12 +60,10 @@ public class SpielfeldPresenter {
 
 		 wuerfelnKlick.getGui().getKnopf().addActionListener(e->onWuerfelnClick());
 		 punkteKlick.getGui().getKnopf().addActionListener(e->eintragePunkteFuerAktuellenSpieler());
-	 
-	 
+	 	 
 		 statusLabel = new JTextArea();
 		 setupStatusLabel();
-			
-			
+				
 		 eimer.add(statusLabel);
 		 eimer.add(flaeche.getGui().getPanel());
 		 eimer.add(bank.getGui().getPanel());
@@ -78,48 +76,58 @@ public class SpielfeldPresenter {
 		 rearrangiereAlles(eimer);
 		 highlightAktuelleSpalte();
 		
-		
-			eimer.revalidate();
-			eimer.repaint();
+		eimer.revalidate();
+		eimer.repaint();
 	}
 	 
 	 private void setupStatusLabel() {
-		 statusLabel.setVisible(true);
-			statusLabel.setEditable(false);
-			statusLabel.setOpaque(false);
-			statusLabel.setFont(new Font(Font.SANS_SERIF, Font.BOLD, 20));
-			updateStatusLabel();
-		
+		statusLabel.setVisible(true);
+		statusLabel.setEditable(false);
+		statusLabel.setOpaque(false);
+		statusLabel.setFont(new Font(Font.SANS_SERIF, Font.BOLD, 20));
+		updateStatusLabel();
 	}
 
-	public void onWuerfelnClick() {
-	     
+	public void onWuerfelnClick() { 
 	     int aktuellesMaxWuerfeln = wuerfel.getMaxWuerfe();
-		 if(spielLogik.getWuerfeAnzahl() < aktuellesMaxWuerfeln && wuerfel.getWurfAnzahl() < aktuellesMaxWuerfeln) {
 	     
-			 if(wuerfel.isInit()) { wuerfel.setInit(false);
-		     	for(int i = 0; i < 5; i++) { 
-		     		bank.getGui().getReihenfolge().set(i, null); 
-		     	}
-			 }
+		 if(spielLogik.getWuerfeAnzahl() >= aktuellesMaxWuerfeln || wuerfel.getWurfAnzahl() >= aktuellesMaxWuerfeln) {
+			 return;
+		}
+		
+		 if(wuerfel.isInit()) {
 			 
-			 wuerfel.wuerfeln();
-
+			 wuerfel.setInit(false);
+			 resetBank();
 		 }
-			 spielLogik.erhoeheWurfAnzahl();
-			 updateStatusLabel();
+		 
+		wuerfel.wuerfeln();
+		spielLogik.erhoeheWurfAnzahl();
+		updateStatusLabel();
+		
+		List<Integer> wuerfelWerte = ermittleWuerfelWerte();
+		System.out.println("Neue Würfelwerte: "+ wuerfelWerte);
 			 
-			 List<Integer> wuerfelWerte = new ArrayList<>();
-			 for (WuerfelLogik wuerfelLogik : wuerfel.getAlleWuerfelLogik()) {
-				 wuerfelWerte.add(wuerfelLogik.getAugen());
-			 }
-			 System.out.println("Neue Würfelwerte: "+ wuerfelWerte);
-			 
-			 moeglicheZuege.setWuerfelWerte(wuerfelWerte);
-			 Map<Kategorie,Integer> moeglichePunkte = moeglicheZuege.getAktiveMoeglichePunkte();
-			 tabelle.zeigeMoeglichePunkte(moeglichePunkte, spielLogik.getAktiverSpielerIndex());
-			 System.out.println("Wuerfelwerte nach Wurf: "+ wuerfelWerte);
-		 }
+		moeglicheZuege.setWuerfelWerte(wuerfelWerte);
+		Map<Kategorie,Integer> moeglichePunkte = moeglicheZuege.getAktiveMoeglichePunkte();
+		tabelle.zeigeMoeglichePunkte(moeglichePunkte, spielLogik.getAktiverSpielerIndex());
+		
+		System.out.println("Wuerfelwerte nach Wurf: "+ wuerfelWerte);
+	}
+	
+	private void resetBank() {
+		for(int i = 0; i < 5; i++) {
+			bank.getGui().getReihenfolge().set(i, null);
+		}
+	}
+	
+	private List<Integer> ermittleWuerfelWerte(){
+		List<Integer> werte = new ArrayList<>();
+		for(WuerfelLogik wuerfelLogik : wuerfel.getAlleWuerfelLogik()) {
+			werte.add(wuerfelLogik.getAugen());
+		}
+		return werte;
+	}
  
 	 
 	 public void onKategorieAusgewaehlt(Kategorie kategorie) {
