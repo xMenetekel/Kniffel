@@ -2,11 +2,9 @@ package model;
 
 public class EndeLogik {
 	private SpielLogik spielLogik;
-	private StartmenueLogik menueDaten;
 	
-	public EndeLogik(SpielLogik spielLogik, StartmenueLogik menueDaten) {
-		this.setSpielLogik(spielLogik);
-		this.setMenueDaten(menueDaten);
+	public EndeLogik(SpielLogik spielLogik) {
+		this.setSpielLogik(spielLogik);		
 	}
 	
 	public int getGewinner() {
@@ -28,14 +26,6 @@ public class EndeLogik {
 
 	public void setSpielLogik(SpielLogik spielLogik) {
 		this.spielLogik = spielLogik;
-	}
-
-	public StartmenueLogik getMenueDaten() {
-		return menueDaten;
-	}
-
-	public void setMenueDaten(StartmenueLogik menueDaten) {
-		this.menueDaten = menueDaten;
 	}
 
 }

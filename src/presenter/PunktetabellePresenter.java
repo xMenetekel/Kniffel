@@ -52,7 +52,6 @@ public class PunktetabellePresenter implements SpielEreignisListener{
 		if(feldIstLeer || (hatMoeglichePunkte && (dreiMalGewuerfelt && istAktiverSpieler))) {
 			this.ausgewaehlteKategorie = kategorie;
 			System.out.println("Kategorie " + kategorie + "ausgewählt");
-			
 			if(hatMoeglichePunkte) {
 				Integer punkte = model.getMoeglichePunkteFuerKategorie(kategorie);
 				System.out.println("MöglichePunkte: "+ punkte);
