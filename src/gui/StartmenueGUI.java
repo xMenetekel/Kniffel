@@ -1,7 +1,6 @@
 package gui;
 
 import java.awt.Container;
-import java.awt.Dimension;
 import java.awt.Image;
 import java.awt.event.ComponentAdapter;
 import java.awt.event.ComponentEvent;
@@ -15,8 +14,7 @@ public class StartmenueGUI extends AbstractGUI{
 		
 	private JButton starteSpiel;
 	private JButton einstellungen;
-	private JButton exit;
-	
+	private JButton exit;	
 	
 	private List<ImageIcon> icons = new ArrayList<>();
 		
@@ -33,9 +31,9 @@ public class StartmenueGUI extends AbstractGUI{
 		this.einstellungen = new JButton();
 		this.exit = new JButton();
 		
-		starteSpiel.setIcon(new ImageIcon("src/Other/starteSpiel.jpg"));
-		einstellungen.setIcon(new ImageIcon("src/Other/einstellungen.jpg"));
-		exit.setIcon(new ImageIcon("src/Other/schliessen.jpg"));
+		starteSpiel.setIcon(new ImageIcon("src/other/starteSpiel.jpg"));
+		einstellungen.setIcon(new ImageIcon("src/other/einstellungen.jpg"));
+		exit.setIcon(new ImageIcon("src/other/schliessen.jpg"));
 		
 		erstelleBilder();	
 		
@@ -47,7 +45,7 @@ public class StartmenueGUI extends AbstractGUI{
 			}			
 		});
 		
-		bildIcon = new ImageIcon("src/Other/startHintergrund.jpg");	
+		bildIcon = new ImageIcon("src/other/startHintergrund.jpg");	
 		bild.setBounds(0,0, eimer.getWidth(), eimer.getHeight());
 		bild.setIcon(bildIcon);
 		
@@ -64,6 +62,10 @@ public class StartmenueGUI extends AbstractGUI{
 		
 	
 	}
+	
+	/**
+	 * Hilfsfunktion zum resizen der Komponenten auf dem Feld
+	 */
 	private void resizing() {
 		rearrangiereFelder();
 		setzeNeueGroesse(eimer.getWidth(), eimer.getHeight());
@@ -88,7 +90,9 @@ public class StartmenueGUI extends AbstractGUI{
 		}
 	}
 	
-	
+	/**
+	 * rearrangiert die Positionierung der Buttons anhand der übergeordneten Containergroesse
+	 */
 	private void rearrangiereFelder() {
 		int breite = eimer.getWidth();
 		int hoehe = eimer.getHeight();
@@ -105,11 +109,12 @@ public class StartmenueGUI extends AbstractGUI{
 	private void erstelleBilder(){
 		String[] namen = new String[] {"bebi", "kiki", "bubu", "crystal", "schrinke", "transistor", "integral", "fey"};
 		for(String name : namen) {
-			icons.add(new ImageIcon("src/Other/" + name + "klein.jpg"));
+			icons.add(new ImageIcon("src/other/" + name + "klein.jpg"));
 		}
 	
 	}
 	
+	//Getter und Setter
 	
 	public JButton getStarteSpiel() {
 		return starteSpiel;
@@ -119,11 +124,9 @@ public class StartmenueGUI extends AbstractGUI{
 		return icons;
 	}
 
-
 	public void setIcons(List<ImageIcon> icons) {
 		this.icons = icons;
 	}
-
 
 	public void setStarteSpiel(JButton starteSpiel) {
 		this.starteSpiel = starteSpiel;
@@ -143,30 +146,6 @@ public class StartmenueGUI extends AbstractGUI{
 
 	public void setExit(JButton exit) {
 		this.exit = exit;
-	}
-
-	public void moeglicheSpielModi() {
-		
-	}
-	
-	public void hauptmenue() {
-		
-	}
-	
-	public void einstellungen() {
-		
-	}
-	
-	public void auswahlSpiel() {
-	
-	}
-	
-	public void debugging() {
-		
-	}
-	
-	public void exit() {
-		
 	}	
 	
 }

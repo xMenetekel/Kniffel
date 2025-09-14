@@ -1,6 +1,5 @@
 package model;
 
-import java.awt.Color;
 import java.util.ArrayList;
 import java.util.List;
 
@@ -12,19 +11,8 @@ public class StartmenueLogik {
 	
 	private int spieleranzahl;
 	private List<SpielerLogik> spielerListe = new ArrayList<>();
-	
-	private Color hintergrundfarbe = Color.blue;
-	private boolean endloseWuerfe = false;
-	
-	
-	public int getSpieleranzahl() {
-		return spieleranzahl;
-	}
 
-	public void setSpieleranzahl(int spieleranzahl) {
-		this.spieleranzahl = spieleranzahl;
-		aktualisiereSpielerListe();
-	}
+	private boolean endloseWuerfe = false;	
 	
 	private void aktualisiereSpielerListe() {
 		spielerListe.clear();
@@ -33,6 +21,10 @@ public class StartmenueLogik {
 			spieler.setName("Spieler" + (i + 1));
 			spielerListe.add(spieler);
 		}
+	}
+
+	public void setSpielerIcon(int index, int iconIndex) {
+		spielerListe.get(index).setIconIndex(iconIndex);
 	}
 	
 	public SpielerLogik getSpieler(int index) {
@@ -43,6 +35,16 @@ public class StartmenueLogik {
 		spielerListe.get(index).setName(name);
 	}
 	
+	//Getter und Setter
+	public int getSpieleranzahl() {
+		return spieleranzahl;
+	}
+
+	public void setSpieleranzahl(int spieleranzahl) {
+		this.spieleranzahl = spieleranzahl;
+		aktualisiereSpielerListe();
+	}
+		
 	public List<SpielerLogik> getSpielerListe(){
 		return spielerListe;
 	}
@@ -63,19 +65,6 @@ public class StartmenueLogik {
 		this.einstellungenOffen = einstellungenOffen;
 	}
 
-	public Color getHintergrundfarbe() {
-		return hintergrundfarbe;
-	}
-
-	public void setHintergrundfarbe(Color hintergrundfarbe) {
-		this.hintergrundfarbe = hintergrundfarbe;
-	}
-
-	public void setSpielerIcon(int index, int iconIndex) {
-		spielerListe.get(index).setIconIndex(iconIndex);
-		
-	}
-	
 	public boolean isDebugingModus() {
 		return debugingModus;
 	}

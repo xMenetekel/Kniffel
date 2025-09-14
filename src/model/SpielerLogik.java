@@ -6,9 +6,15 @@ public class SpielerLogik{
 	private int reihenfolge = 0;
 	private int iconIndex = 0;
 	
-	public SpielerLogik() {
-		
+	/**
+	 * fügt punkte zum endpunktestand hinzu
+	 * @param punkte
+	 */
+	public void addPunkte(int punkte) {
+		this.punktestand += punkte;
 	}
+	
+	//Getter und Setter
 	
 	public String getName() {
 		return name;
@@ -33,10 +39,6 @@ public class SpielerLogik{
 	}
 	public void setIconIndex(int iconIndex) {
 		this.iconIndex = iconIndex;
-	}
-	
-	public void addPunkte(int punkte) {
-		this.punktestand += punkte;
 	}
 	
 }

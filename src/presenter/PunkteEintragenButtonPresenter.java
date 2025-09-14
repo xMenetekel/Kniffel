@@ -3,42 +3,34 @@ package presenter;
 import java.awt.Container;
 
 import gui.PunkteEintragenButtonGUI;
-import model.PunkteEintragenButtonLogik;
+
 
 public class PunkteEintragenButtonPresenter {
 	private PunkteEintragenButtonGUI gui;
-	private PunkteEintragenButtonLogik logik;
-	private SpielfeldPresenter ichBraucheNurDieseEineMethodeEsIstHalbDreiNachtsIchWillInsBett;
+	private SpielfeldPresenter presenter;
 	
-	public PunkteEintragenButtonPresenter(Container eimer, SpielfeldPresenter arsch) {
-		gui = new PunkteEintragenButtonGUI(eimer);
-		logik = new PunkteEintragenButtonLogik();
-		
-		gui.getKnopf().addActionListener(klick -> {punkteEintragenButtonGeklickt();});
-		
-		this.ichBraucheNurDieseEineMethodeEsIstHalbDreiNachtsIchWillInsBett = arsch;
+	public PunkteEintragenButtonPresenter(Container eimer, SpielfeldPresenter presenter) {
+		gui = new PunkteEintragenButtonGUI(eimer);		
+		gui.getKnopf().addActionListener(klick -> {punkteEintragenButtonGeklickt();});		
+		this.presenter = presenter;
 	}
-		
+	
+	/**
+	 * sagt dem presenter das der button gedrückt wurde
+	 */
 	private void punkteEintragenButtonGeklickt() {
-		ichBraucheNurDieseEineMethodeEsIstHalbDreiNachtsIchWillInsBett.eintragePunkteFuerAktuellenSpieler();
+		presenter.eintragePunkteFuerAktuellenSpieler();
 		
 	}
 
 	//Gettler und Settler
+	
 	public PunkteEintragenButtonGUI getGui() {
 		return gui;
 	}
 
 	public void setGui(PunkteEintragenButtonGUI gui) {
 		this.gui = gui;
-	}
-
-	public PunkteEintragenButtonLogik getLogik() {
-		return logik;
-	}
-
-	public void setLogik(PunkteEintragenButtonLogik logik) {
-		this.logik = logik;
 	}
 
 }

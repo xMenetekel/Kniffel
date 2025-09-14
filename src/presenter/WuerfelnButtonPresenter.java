@@ -3,13 +3,10 @@ package presenter;
 import java.awt.Container;
 
 import gui.WuerfelnButtonGUI;
-import model.WuerfelnButtonLogik;
 
 public class WuerfelnButtonPresenter {
 	
-	private WuerfelnButtonLogik logik;
-	private WuerfelnButtonGUI gui;
-	
+	private WuerfelnButtonGUI gui;	
 	private WuerfelPresenter wuerfel;
 	private PunktetabellePresenter tabelle;
 
@@ -22,7 +19,7 @@ public class WuerfelnButtonPresenter {
 	 * @param tabelle	Referenz auf PunktetabellenPresenter
 	 */
 	public WuerfelnButtonPresenter(Container eimer, WuerfelPresenter wuerfel, PunktetabellePresenter tabelle) {
-		this.logik = new WuerfelnButtonLogik();
+		
 		this.gui = new WuerfelnButtonGUI(eimer);
 				
 		this.wuerfel = wuerfel;
@@ -30,13 +27,8 @@ public class WuerfelnButtonPresenter {
 	}
 		
 	
-	public WuerfelnButtonLogik getLogik() {
-		return logik;
-	}
 
-	public void setLogik(WuerfelnButtonLogik logik) {
-		this.logik = logik;
-	}
+	//Getter und Setter
 
 	public WuerfelnButtonGUI getGui() {
 		return gui;

@@ -9,6 +9,7 @@ import javax.swing.JLabel;
 import javax.swing.JPanel;
 
 public abstract class AbstractGUI{
+	
 	JPanel panel;
 	JLabel bild;
 	ImageIcon bildIcon;
@@ -21,13 +22,14 @@ public abstract class AbstractGUI{
 	private final double prozentFlaecheBreite;	
 	
 	/**
-	 * Initialisiert ein GUI Element mit relativer Positionierung
+	 * Initialisiert ein GUI Element mit relativer Positionierung, in allen Klassen die diese Klasse erben sind die Werte mit X, Y, B, H als 0.0-1.0 Werte festgesetzt um 
+	 * sich dann individuell an den Container berechnen zu können.
 	 * 
 	 * @param x			x Position
 	 * @param y			y Position
 	 * @param breite	Breite
 	 * @param hoehe		Hoehe
-	 * @param Eimer		uebergeordneter Container auf dem sich die werte Beziehen
+	 * @param Eimer		uebergeordneter Container auf den sich die Werte beziehen
 	 */
 	protected AbstractGUI(double x, double y, double breite, double hoehe, Container eimer) {
 		this.eimer = eimer;
@@ -44,6 +46,13 @@ public abstract class AbstractGUI{
 		panel.setOpaque(false);		
 	}
 	
+	/**
+	 * hilfsfunktion für setzeNeueGroesse, welche das gespeicherte Icon des Objects in ein Image zwischenspeichert und dann an die neuen breiten/hoehen Werte skaliert
+	 * Danach wird das Bild auf den Button gesetzt, wenn vorhanden. Ansonsten wird einfach die Hintergrundfläche angepasst.
+	 * 
+	 * @param breite
+	 * @param hoehe
+	 */
 	private void skaliereBild(int breite, int hoehe) {
 		Image bildii = bildIcon.getImage();
 		Image skaliertesBild = bildii.getScaledInstance(breite, hoehe, Image.SCALE_SMOOTH);
@@ -54,12 +63,20 @@ public abstract class AbstractGUI{
 		}
 	}
 
+	/**
+	 * setzt das Panel indem alle Komponenten der übergeordneten Komponente auf seine neue Größe und passt danach das Bild des Panels auf entsprechend neue Groesse an.
+	 * 
+	 * @param breite
+	 * @param hoehe
+	 */
 	public void setzeNeueGroesse(int breite, int hoehe) {
 		panel.setSize(breite, hoehe);
 		bild.setBounds(0,0, breite, hoehe);
 		skaliereBild(breite, hoehe);			
 	}
 	
+	
+	//Getter und Setter
 	
 	public double getProzentFlaecheX() {
 		return this.prozentFlaecheX;
