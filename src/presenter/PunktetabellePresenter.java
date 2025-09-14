@@ -135,6 +135,16 @@ public class PunktetabellePresenter implements SpielEreignisListener{
 		view.updateTableData(tableData, columnNames);
 	}
 	
+	public boolean istBerechnetesFeld(int row) {
+		Kategorie kategorie = Kategorie.fromTabellenIndex(row);
+		return kategorie == Kategorie.GESAMT_OBEN||
+				kategorie == Kategorie.BONUS||
+				kategorie == Kategorie.GESAMT_OBEN_BONUS||
+				kategorie == Kategorie.GESAMT_OBEN_ZWEI||
+				kategorie == Kategorie.ENDSUMME||
+				kategorie == null;
+	}
+	
 	private Object [][] extractTableData(){
 		int rows = model.getRowCount();
 		int cols = model.getColumnCount();

@@ -119,6 +119,10 @@ public class PunkteTabelleGUI extends AbstractGUI {
 		macheTabelleNichtEditierbar();
 		table.setRowHeight(40);
 		Color mischmasch = new Color (150, 190,140);
+		Color ausWahlFarbe = new Color (255,255,150);
+		Color festeFarbe = new Color (200,255,200);
+		Color selectFarbe = new Color (255,200,200);
+		Color berechneteFarbe = new Color(200,230,255);
 		table.setBackground(mischmasch);
 		
 		symbolRenderer = new DefaultTableCellRenderer() {
@@ -165,16 +169,20 @@ public class PunkteTabelleGUI extends AbstractGUI {
 				int spielerIndex = column -2;
 				c.setBackground(mischmasch);
 				
-				if (value != null) {
+				if(presenter != null && presenter.istBerechnetesFeld(row)) {
+					c.setBackground(berechneteFarbe);
+				}
+				
+				else if (value != null) {
 					if(presenter != null && presenter.getAusgewaehlteKategorie() == kategorie && spielerIndex == presenter.getAktiverSpielerIndex()) {
-						c.setBackground(new Color (255,255,150));
+						c.setBackground(ausWahlFarbe);
 					}else if (presenter != null && presenter.istPunktEndgueltig(kategorie, spielerIndex)) {
-						c.setBackground(new Color (200,255,200));
+						c.setBackground(festeFarbe);
 					}else {
-						c.setBackground(new Color (255,200,200));
+						c.setBackground(selectFarbe);
 					} 
 				}else if (presenter != null && presenter.getAusgewaehlteKategorie() == kategorie && spielerIndex == presenter.getAktiverSpielerIndex() && presenter.istNullwurfMoeglich()) {
-					c.setBackground(new Color(255,255,150));
+					c.setBackground(ausWahlFarbe);
 				}
 				setHorizontalAlignment(CENTER);
 				return c;
