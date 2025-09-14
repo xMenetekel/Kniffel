@@ -38,7 +38,14 @@ public class PunkteTabelleGUI extends AbstractGUI {
 	private DefaultTableCellRenderer textRenderer;
 	private DefaultTableCellRenderer punkteRenderer;
 	private PunktetabellePresenter presenter;
-
+	private static final int STANDARD_ROW_HEIGHT = 40;
+	private static final Color HINTERGRUND_FARBE = new Color (150,190,140);
+	private static final Color AUSWAHL_FARBE = new Color (255,255,150);
+	private static final Color FESTE_FARBE = new Color (200,255,200);
+	private static final Color SELECTION_FARBE = new Color (255,200,200);
+	private static final Color BERECHNETE_FARBE = new Color (200,230,255);
+			
+	
 	public PunkteTabelleGUI(Container eimer, StartmenueLogik menueDaten) {
 		super(X, Y, B, H, eimer);
 		this.spielerAnzahl = menueDaten.getSpieleranzahl();
@@ -117,13 +124,7 @@ public class PunkteTabelleGUI extends AbstractGUI {
 	
 	private void setupTable() {
 		macheTabelleNichtEditierbar();
-		table.setRowHeight(40);
-		Color mischmasch = new Color (150, 190,140);
-		Color ausWahlFarbe = new Color (255,255,150);
-		Color festeFarbe = new Color (200,255,200);
-		Color selectFarbe = new Color (255,200,200);
-		Color berechneteFarbe = new Color(200,230,255);
-		table.setBackground(mischmasch);
+		table.setRowHeight(STANDARD_ROW_HEIGHT);
 		
 		symbolRenderer = new DefaultTableCellRenderer() {
 			private static final long serialVersionUID = 1L;
@@ -131,7 +132,7 @@ public class PunkteTabelleGUI extends AbstractGUI {
 			@Override
 			public Component getTableCellRendererComponent(JTable table, Object value, boolean isSelected, boolean hasFocus, int row, int column) {
 				Component c = super.getTableCellRendererComponent(table, value, isSelected, hasFocus, row, column);
-				c.setBackground(mischmasch);
+				c.setBackground(HINTERGRUND_FARBE);
 				setHorizontalAlignment(CENTER);
 				setVerticalAlignment(CENTER);
 				
@@ -153,7 +154,7 @@ public class PunkteTabelleGUI extends AbstractGUI {
 			@Override
 			public Component getTableCellRendererComponent(JTable table, Object value, boolean isSelected, boolean hasFocus, int row, int column) {
 				Component c = super.getTableCellRendererComponent(table, value, isSelected, hasFocus, row, column);
-				c.setBackground(mischmasch);
+				c.setBackground(HINTERGRUND_FARBE);
 				setHorizontalAlignment(LEFT);
 				return c;
 			}
@@ -167,22 +168,22 @@ public class PunkteTabelleGUI extends AbstractGUI {
 				Component c = super.getTableCellRendererComponent(table, value, isSelected, hasFocus, row, column);
 				Kategorie kategorie = Kategorie.fromTabellenIndex(row);
 				int spielerIndex = column -2;
-				c.setBackground(mischmasch);
+				c.setBackground(HINTERGRUND_FARBE);
 				
 				if(presenter != null && presenter.istBerechnetesFeld(row)) {
-					c.setBackground(berechneteFarbe);
+					c.setBackground(BERECHNETE_FARBE);
 				}
 				
 				else if (value != null) {
 					if(presenter != null && presenter.getAusgewaehlteKategorie() == kategorie && spielerIndex == presenter.getAktiverSpielerIndex()) {
-						c.setBackground(ausWahlFarbe);
+						c.setBackground(AUSWAHL_FARBE);
 					}else if (presenter != null && presenter.istPunktEndgueltig(kategorie, spielerIndex)) {
-						c.setBackground(festeFarbe);
+						c.setBackground(FESTE_FARBE);
 					}else {
-						c.setBackground(selectFarbe);
+						c.setBackground(SELECTION_FARBE);
 					} 
 				}else if (presenter != null && presenter.getAusgewaehlteKategorie() == kategorie && spielerIndex == presenter.getAktiverSpielerIndex() && presenter.istNullwurfMoeglich()) {
-					c.setBackground(ausWahlFarbe);
+					c.setBackground(AUSWAHL_FARBE);
 				}
 				setHorizontalAlignment(CENTER);
 				return c;

@@ -140,6 +140,7 @@ public class PunktetabellePresenter implements SpielEreignisListener{
 		return kategorie == Kategorie.GESAMT_OBEN||
 				kategorie == Kategorie.BONUS||
 				kategorie == Kategorie.GESAMT_OBEN_BONUS||
+				kategorie == Kategorie.GESAMT_UNTEN||
 				kategorie == Kategorie.GESAMT_OBEN_ZWEI||
 				kategorie == Kategorie.ENDSUMME||
 				kategorie == null;
