@@ -20,45 +20,86 @@ public class PunktetabellePresenter implements SpielEreignisListener{
 	private MoeglicheZuege moeglicheZuege;
 	private SpielLogik spielLogik;
 	private StartmenueLogik menueDaten;
+	private Kategorie ausgewaehlteKategorie = null;
 	
 	public PunktetabellePresenter(Container eimer, StartmenueLogik menueDaten,SpielLogik spielLogik) {
 		this.menueDaten = menueDaten;
 		this.spielLogik = spielLogik;
 		this.view = new PunkteTabelleGUI(eimer, menueDaten);
-		this.model = new PunktetabelleLogik(menueDaten.getSpieleranzahl());
+		this.model = new PunktetabelleLogik(menueDaten.getSpieleranzahl(), spielLogik.getAlleSpieler());
 		this.moeglicheZuege = new MoeglicheZuege();	
 		
 		view.setPresenter(this);
 		updateView();
 	}
 	
+	
 	public void onKategorieSelected(Kategorie kategorie) {
 		int aktuellerSpieler = spielLogik.getAktiverSpielerIndex();
 		
-		boolean hatMoeglichePunkte = model.kannKategorieEingetragenWerden(kategorie,aktuellerSpieler);
 		boolean feldIstLeer = model.istFeldLeer(kategorie,aktuellerSpieler);
+		boolean hatMoeglichePunkte = model.kannKategorieEingetragenWerden(kategorie,aktuellerSpieler);
+		boolean dreiMalGewuerfelt = (spielLogik.getWuerfeAnzahl() >= 3);
+		boolean istAktiverSpieler = (aktuellerSpieler == model.getAktuellerSpieler());
+		
+		if(this.ausgewaehlteKategorie == kategorie) {
+			this.ausgewaehlteKategorie = null;
+			System.out.println("Auswahl von " + kategorie + "aufgehoben");
+			updateView();
+			return;
+		}
+		
+		if(feldIstLeer || (hatMoeglichePunkte && (dreiMalGewuerfelt && istAktiverSpieler))) {
+			this.ausgewaehlteKategorie = kategorie;
+			System.out.println("Kategorie " + kategorie + "ausgewählt");
+			if(hatMoeglichePunkte) {
+				Integer punkte = model.getMoeglichePunkteFuerKategorie(kategorie);
+				System.out.println("MöglichePunkte: "+ punkte);
+			} else if (!feldIstLeer) {
+				System.out.println("Feld bereit belegt - kann nicht ausgewählt werden");
+			} else {
+				System.out.println("Kategorie kann nicht ausgewählt werden");
+			}
+			updateView();
+		}
+	}
+	
+	public boolean gewaehltePunkteEin(int spielerIndex, List<Integer>wuerfelWerte) {
+		if(ausgewaehlteKategorie == null){
+			System.out.println("keine Kategorie ausgewählt!");
+			return false;
+		}
+		
+		boolean hatMoeglichePunkte = model.hatMoeglichePunkteFuerKategorie(ausgewaehlteKategorie);
 		boolean dreiMalGewuerfelt = (spielLogik.getWuerfeAnzahl() >= 3);
 		
-		if(hatMoeglichePunkte || (feldIstLeer && dreiMalGewuerfelt)) {
-			Integer punkte = model.getMoeglichePunkteFuerKategorie(kategorie);
-			if(punkte == null) punkte = 0;
-			
-			boolean erfolg = model.tragePunkteEin(kategorie,punkte,aktuellerSpieler);
-			
-			if(erfolg) {
-				System.out.println ("Kategorie ausgewählt: " + kategorie + "mit " + punkte + "Punkten");
-				model.clearMoeglichePunkte();
-				updateView();
-				
-				if(model.istSpielBeendet()) {
-					System.out.println("Spiel beendet!");
-				}
-			}
-		}else if (feldIstLeer && !dreiMalGewuerfelt) {
-			System.out.println("Null kann erst nach 3 Würfen eingetragen werden!");
-		}else {
-			System.out.println("Kategorie kann nicht ausgewählt werden!");
+		if(!hatMoeglichePunkte && !dreiMalGewuerfelt) {
+			System.out.println("Null-Eintrag erst nach 3 Würfen möglich!");
+			return false;
 		}
+		
+		int punkte = 0;
+		if(model.hatMoeglichePunkteFuerKategorie(ausgewaehlteKategorie)) {
+			punkte = moeglicheZuege.berechnePunkte(ausgewaehlteKategorie,wuerfelWerte);
+		}
+		boolean erfolg = model.tragePunkteEin(ausgewaehlteKategorie, punkte, spielerIndex);
+		
+		if(erfolg) {
+			System.out.println("punkte eingetragen: " + ausgewaehlteKategorie + " = " + punkte);
+			ausgewaehlteKategorie = null;
+			updateView();
+			return true;
+		}
+		return false;
+	}
+	
+	public Kategorie getAusgewaehlteKategorie() {
+		return ausgewaehlteKategorie;
+	}
+	
+	public boolean istPunktEndgueltig(Kategorie kategorie, int spielerIndex) {
+		if (kategorie == null) return false;
+		return model.istPunktEndgueltig(kategorie, spielerIndex);
 	}
 	
 	public void zeigeMoeglichePunkte(Map<Kategorie,Integer> moeglichePunkte,int spielerIndex) {
@@ -78,11 +119,30 @@ public class PunktetabellePresenter implements SpielEreignisListener{
 		return model.istSpielBeendet();
 	}
 	
+	public boolean istNullwurfMoeglich() {
+		return spielLogik.getWuerfeAnzahl() >= 3;
+	}
+	
+	public int getAktiverSpielerIndex() {
+		return spielLogik.getAktiverSpielerIndex();
+	}
+		
 	private void updateView() {
 		Object[][] tableData = extractTableData();
 		String[]columnNames = createColumnNames();
 		
 		view.updateTableData(tableData, columnNames);
+	}
+	
+	public boolean istBerechnetesFeld(int row) {
+		Kategorie kategorie = Kategorie.fromTabellenIndex(row);
+		return kategorie == Kategorie.GESAMT_OBEN||
+				kategorie == Kategorie.BONUS||
+				kategorie == Kategorie.GESAMT_OBEN_BONUS||
+				kategorie == Kategorie.GESAMT_UNTEN||
+				kategorie == Kategorie.GESAMT_OBEN_ZWEI||
+				kategorie == Kategorie.ENDSUMME||
+				kategorie == null;
 	}
 	
 	private Object [][] extractTableData(){
@@ -119,12 +179,6 @@ public class PunktetabellePresenter implements SpielEreignisListener{
 		zeigeMoeglichePunkte(punkte, spielLogik.getAktiverSpielerIndex());
 		updateView();
 	}
-	
-	/*@Override 
-	public void wasPassiertWennWirEinenWuerfelWerfen(List<Integer>wuerfel) {
-		moeglicheZuege.setWuerfelWerte(wuerfel);
-		zeigeMoeglichePunkte();
-	}*/
 	
 	@Override
 	public void zeigeMoeglichePunkte(HashMap<Kategorie,Integer> hashmap) {

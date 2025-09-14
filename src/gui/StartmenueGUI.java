@@ -42,17 +42,15 @@ public class StartmenueGUI extends AbstractGUI{
 		this.eimer.addComponentListener(new ComponentAdapter() {
 			@Override
 			public void componentResized(ComponentEvent e) {
-				rearrangiereFelder();
-				setzeNeueGroesse(eimer.getWidth(), eimer.getHeight());
-				setzeNeueButtonBildGroesse(starteSpiel, einstellungen, exit);
-				eimer.revalidate();
-				eimer.repaint();
+				resizing();
 			}			
 		});
 		
 		bildIcon = new ImageIcon("src/Other/startHintergrund.jpg");	
 		bild.setBounds(0,0, eimer.getWidth(), eimer.getHeight());
 		bild.setIcon(bildIcon);
+		
+		resizing();
 		
 		panel.add(starteSpiel);
 		panel.add(einstellungen);
@@ -61,8 +59,19 @@ public class StartmenueGUI extends AbstractGUI{
 		
 		eimer.add(panel);
 		eimer.revalidate();
-		eimer.repaint();		
+		eimer.repaint();	
+		
+	
 	}
+	private void resizing() {
+		rearrangiereFelder();
+		setzeNeueGroesse(eimer.getWidth(), eimer.getHeight());
+		setzeNeueButtonBildGroesse(starteSpiel, einstellungen, exit);
+		eimer.revalidate();
+		eimer.repaint();
+	}
+	
+	
 	/**
 	 * Skaliert die Groesse der Bilder der Buttons. Da es voreingestellte Icons in Images umwandelt, sie dann skaliert und wieder zu Icons verwandelt
 	 * entsteht hier der wunderschöne Effekt das der Button blurry wird wenn man das Menü zu oft groß- und kleinzieht. Ich finde das so lustig, das ich es

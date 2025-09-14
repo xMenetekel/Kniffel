@@ -4,19 +4,22 @@ import java.util.HashMap;
 import java.util.Map;
 import java.util.Set;
 import java.util.HashSet;
+import java.util.List;
 import java.awt.Point;
 
 
 public class PunktetabelleLogik {
 	
 	private final int spielerAnzahl;
+	private final List<SpielerLogik> alleSpieler;
 	private Object [][] data;
 	private Set<Point> festeEintraege = new HashSet<>();
 	private Map<Kategorie,Integer> moeglichePunkte = new HashMap<>();
 	private int aktuellerSpieler = -1;
 	
-	public PunktetabelleLogik(int spielerAnzahl) {
+	public PunktetabelleLogik(int spielerAnzahl, List<SpielerLogik> alleSpieler) {
 		this.spielerAnzahl = spielerAnzahl;
+		this.alleSpieler = alleSpieler;
 		initializeTableData();
 	}
 	
@@ -78,6 +81,12 @@ public class PunktetabelleLogik {
 			data[row][column] = punkte;
 			System.out.println("Punkte eingetragen: " + kategorie + " = " + punkte + "für Spieler " + spielerIndex);
 			
+			if (spielerIndex >= 0 && spielerIndex < alleSpieler.size()) {
+				SpielerLogik spieler = alleSpieler.get(spielerIndex);
+				spieler.addPunkte(punkte);
+				System.out.println("Spieler "+ spieler.getName() + "hat jetzt" + spieler.getPunktestand() + "Punkte");
+			}
+
 			if(kategorie.ordinal() <= Kategorie.SECHSER.ordinal()) {
 				berechneUndSetzeGesamtOben(spielerIndex);
 			}
@@ -229,6 +238,24 @@ public class PunktetabelleLogik {
 			}
 		}
 		return null;
+	}
+	
+	public boolean istPunktEndgueltig(Kategorie kategorie, int spielerIndex) {
+		if(kategorie == null)return false;
+		int row = kategorie.getTabellenIndex();
+		int column = 2+ spielerIndex;
+		Point point = new Point (row, column);
+		return festeEintraege.contains(point);
+	}
+	
+	public Object [][] getTableData(){
+		Object[][] result = new Object[data.length][data[0].length];
+		for(int row = 0; row < data.length; row++) {
+			for(int col = 0; col < data[0].length; col++) {
+				result[row][col] = getValueAt(row,col);
+			}
+		}
+		return result;
 	}
 	
 	public int getRowCount() {

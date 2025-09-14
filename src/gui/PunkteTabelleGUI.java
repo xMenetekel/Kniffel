@@ -13,6 +13,7 @@ import javax.swing.ImageIcon;
 import javax.swing.JPanel;
 import javax.swing.JScrollPane;
 import javax.swing.JTable;
+import javax.swing.KeyStroke;
 import javax.swing.ListSelectionModel;
 import javax.swing.table.AbstractTableModel;
 import javax.swing.table.DefaultTableCellRenderer;
@@ -34,8 +35,17 @@ public class PunkteTabelleGUI extends AbstractGUI {
 	private Object[][] currentTableData;
 	private String[] columnNames;
 	private DefaultTableCellRenderer symbolRenderer;
+	private DefaultTableCellRenderer textRenderer;
+	private DefaultTableCellRenderer punkteRenderer;
 	private PunktetabellePresenter presenter;
-
+	private static final int STANDARD_ROW_HEIGHT = 40;
+	private static final Color HINTERGRUND_FARBE = new Color (150,190,140);
+	private static final Color AUSWAHL_FARBE = new Color (255,255,150);
+	private static final Color FESTE_FARBE = new Color (200,255,200);
+	private static final Color SELECTION_FARBE = new Color (255,200,200);
+	private static final Color BERECHNETE_FARBE = new Color (200,230,255);
+			
+	
 	public PunkteTabelleGUI(Container eimer, StartmenueLogik menueDaten) {
 		super(X, Y, B, H, eimer);
 		this.spielerAnzahl = menueDaten.getSpieleranzahl();
@@ -58,6 +68,7 @@ public class PunkteTabelleGUI extends AbstractGUI {
 	private void initializeComponents() {
 		panel = new JPanel(new BorderLayout ());
 		tableModel = new AbstractTableModel() {
+			private static final long serialVersionUID = 1L;	 
 			@Override
 			public int getRowCount() {
 				return currentTableData != null ? currentTableData.length : 19;
@@ -113,45 +124,80 @@ public class PunkteTabelleGUI extends AbstractGUI {
 	
 	private void setupTable() {
 		macheTabelleNichtEditierbar();
-		table.setRowHeight(40);
-		
-		Color mischmasch = new Color (150,190,140);
-		table.setBackground(mischmasch);
+		table.setRowHeight(STANDARD_ROW_HEIGHT);
 		
 		symbolRenderer = new DefaultTableCellRenderer() {
+			private static final long serialVersionUID = 1L;
+			
+			@Override
+			public Component getTableCellRendererComponent(JTable table, Object value, boolean isSelected, boolean hasFocus, int row, int column) {
+				Component c = super.getTableCellRendererComponent(table, value, isSelected, hasFocus, row, column);
+				c.setBackground(HINTERGRUND_FARBE);
+				setHorizontalAlignment(CENTER);
+				setVerticalAlignment(CENTER);
+				
+				Kategorie kategorie = Kategorie.fromTabellenIndex(row);
+				if(kategorie != null && kategorie.hatBild()) {
+					setIcon(new ImageIcon(kategorie.getBildDatei()));
+					setText("");
+				}else {
+					setIcon(null);
+					setText(value != null ? value.toString() : "");
+				}
+				return c;
+			}
+		};
+		
+		textRenderer = new DefaultTableCellRenderer() {
+			private static final long serialVersionUID = 1L;
+			
+			@Override
+			public Component getTableCellRendererComponent(JTable table, Object value, boolean isSelected, boolean hasFocus, int row, int column) {
+				Component c = super.getTableCellRendererComponent(table, value, isSelected, hasFocus, row, column);
+				c.setBackground(HINTERGRUND_FARBE);
+				setHorizontalAlignment(LEFT);
+				return c;
+			}
+		};
+		
+		punkteRenderer = new DefaultTableCellRenderer() {
+			private static final long serialVersionUID = 1L;
+			
 			@Override
 			public Component getTableCellRendererComponent(JTable table, Object value, boolean isSelected, boolean hasFocus, int row, int column) {
 				Component c = super.getTableCellRendererComponent(table, value, isSelected, hasFocus, row, column);
 				Kategorie kategorie = Kategorie.fromTabellenIndex(row);
+				int spielerIndex = column -2;
+				c.setBackground(HINTERGRUND_FARBE);
 				
-				if(kategorie != null) {
-					if(kategorie.hatBild()) {
-						setIcon(new ImageIcon(kategorie.getBildDatei()));
-						setText("");
-					}else {
-						setIcon(null);
-						if(value != null) {
-						setText(value.toString());
-					}else {
-						setText(""); 
-					}
-					}
-				}else {
-					setIcon(null);
-					if(value != null) {
-					setText(value.toString());
-				}else {
-					setText(""); 
+				if(presenter != null && presenter.istBerechnetesFeld(row)) {
+					c.setBackground(BERECHNETE_FARBE);
 				}
-			}
-			setHorizontalAlignment(CENTER);
-			setVerticalAlignment(CENTER);
-			return c;
-		}
-	};
-		
+				
+				else if (value != null) {
+					if(presenter != null && presenter.getAusgewaehlteKategorie() == kategorie && spielerIndex == presenter.getAktiverSpielerIndex()) {
+						c.setBackground(AUSWAHL_FARBE);
+					}else if (presenter != null && presenter.istPunktEndgueltig(kategorie, spielerIndex)) {
+						c.setBackground(FESTE_FARBE);
+					}else {
+						c.setBackground(SELECTION_FARBE);
+					} 
+				}else if (presenter != null && presenter.getAusgewaehlteKategorie() == kategorie && spielerIndex == presenter.getAktiverSpielerIndex() && presenter.istNullwurfMoeglich()) {
+					c.setBackground(AUSWAHL_FARBE);
+				}
+				setHorizontalAlignment(CENTER);
+				return c;
+				}
+		};
 		table.getColumnModel().getColumn(0).setCellRenderer(symbolRenderer);
+		table.getColumnModel().getColumn(1).setCellRenderer(textRenderer);
+		
+		for (int i = 2; i<table.getColumnCount();i++) {
+			table.getColumnModel().getColumn(i).setCellRenderer(punkteRenderer);
+		}
 	}
+	
+	
 		
 	private void setupEventHandlers() {
 		table.addKeyListener(new KeyAdapter() {
@@ -186,8 +232,9 @@ public class PunkteTabelleGUI extends AbstractGUI {
 			Kategorie kategorie =Kategorie.fromTabellenIndex(row);
 			
 			if (kategorie != null && presenter != null) {
-				presenter.onKategorieSelected(kategorie);;
+				presenter.onKategorieSelected(kategorie);
 				System.out.println("Kategorie in GUI ausgewählt"+ kategorie);
+				table.repaint();
 			}
 		}else if (col >= 2) {
 			System.out.println("Berechnungsfeld - kann nicht ausgegeben werden");
@@ -200,21 +247,12 @@ public class PunkteTabelleGUI extends AbstractGUI {
 			table.setFocusable(true);
 			
 			table.setSelectionMode(ListSelectionModel.SINGLE_SELECTION);
-			table.setRowSelectionAllowed(false);
+			table.setRowSelectionAllowed(true);
 			table.setColumnSelectionAllowed(false);
-			table.setCellSelectionEnabled(false);
+			table.setCellSelectionEnabled(true);
 			
-		for(int i = 0; i<table.getColumnCount(); i++) {
-			table.getColumnModel().getColumn(i).setCellEditor(null);
-		}
-			table.setDefaultEditor(Object.class, null);
-			table.setDefaultEditor(String.class, null);
-			table.setDefaultEditor(Integer.class, null);
-			table.setDefaultEditor(Double.class, null);
-			table.setDefaultEditor(Boolean.class, null);
-			
-			table.getInputMap().clear();
-			table.getActionMap().clear();
+			table.getInputMap().put(KeyStroke.getKeyStroke(KeyEvent.VK_F2,0), "none");
+			table.getInputMap().put(KeyStroke.getKeyStroke(KeyEvent.VK_ENTER,0), "none");
 		}
 	}
 	
@@ -250,7 +288,6 @@ public class PunkteTabelleGUI extends AbstractGUI {
 				Kategorie.ENDSUMME
 		};
 		return row < kategorien.length ? kategorien[row] : null;
-	
 	}
 	
 	private String getDefaultBeschreibung(int row) {
