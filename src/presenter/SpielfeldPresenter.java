@@ -304,11 +304,7 @@ public class SpielfeldPresenter {
 	
 
 	public void spielBeendet() {
-		System.out.println("ich bin hier gelandet\n\n\n yay");
-		eimer.removeAll();
-		eimer.revalidate();
-		eimer.repaint();
-		new EndePresenter(eimer, spielLogik, menueDaten);
+		new EndePresenter(eimer, spielLogik);
 	}
 	
 	public void highlightAktuelleSpalte() {

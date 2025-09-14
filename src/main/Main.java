@@ -6,6 +6,8 @@ import java.awt.Rectangle;
 
 import javax.swing.JFrame;
 
+import model.SpielLogik;
+import presenter.EndePresenter;
 import presenter.StartmenuePresenter;
 
 /**
@@ -23,10 +25,12 @@ public class Main {
 		hauptfenster.setMaximizedBounds(new Rectangle(0,0,1100,900));
 		
 		Container eimer = hauptfenster.getContentPane();
-	
-		new StartmenuePresenter(hauptfenster, eimer);
-	
 		hauptfenster.setVisible(true);
+		
+		new StartmenuePresenter(hauptfenster, eimer);
+		
+		
+		
 		eimer.revalidate();				
 		eimer.repaint();
 		
