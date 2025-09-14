@@ -1,12 +1,7 @@
 package model;
 
 import java.util.Random;
-
-import javax.swing.JButton;
-import javax.swing.Timer;
-
 import gui.WuerfelGUI;
-
 
 public class WuerfelLogik {
 
@@ -14,8 +9,6 @@ public class WuerfelLogik {
 	private int augen;
 	private boolean behalten;
 	private Random zufall;
-	private int bankXPosition;
-	private int bankYPosition;
 	private WuerfelGUI gui;
 		
 	/**
@@ -56,7 +49,6 @@ public class WuerfelLogik {
 	
 	public void setBehalten(boolean behalten) {
 		this.behalten = behalten;
-		
 	}
 	
 	public boolean istBehalten() {
@@ -65,30 +57,6 @@ public class WuerfelLogik {
 	
 	public void nichtBehalten() {
 		behalten = false;
-	}
-
-	public void anzahlZuege() {
-		
-	}
-	
-	public void positionWuerfel() {
-		
-	}
-
-	public int getBankXPosition() {
-		return bankXPosition;
-	}
-
-	public void setBankXPosition(int bankXPosition) {
-		this.bankXPosition = bankXPosition;
-	}
-
-	public int getBankYPosition() {
-		return bankYPosition;
-	}
-
-	public void setBankYPosition(int bankYPosition) {
-		this.bankYPosition = bankYPosition;
 	}
 
 	public WuerfelGUI getGui() {

@@ -16,9 +16,10 @@ public class EndeGUI extends AbstractGUI {
 	JTextArea endeNachricht;
 
 	/**
-	 * erstellt den Endbildschirm
+	 * erstellt den Endbildschirm mit einem Hintergrund, einer Gewinnernachricht und einem neustart Button, der das Spiel wieder im Startmenue einsteigen lässt.
+	 * 
 	 * @param eimer			uebergeordneter Container
-	 * @param presenter		zuegehoeriger Presenter liefert gewinner Daten
+	 * @param presenter		zuegehoeriger Presenter um die Daten abzurufen
 	 */
 	public EndeGUI(Container eimer, EndePresenter presenter) {
 		super(0,0,1,1, eimer);
@@ -26,26 +27,20 @@ public class EndeGUI extends AbstractGUI {
 		
 		eimer.setLayout(null); 
 		
-		bildIcon = new ImageIcon("src/Other/startHintergrund.jpg");	
+		bildIcon = new ImageIcon("src/other/startHintergrund.jpg");	
 		bild.setBounds(0,0, eimer.getWidth(), eimer.getHeight());
-		bild.setIcon(bildIcon);
-		
-		
+		bild.setIcon(bildIcon);			
 
-		endeNachricht = new JTextArea();
-		
-		
+		endeNachricht = new JTextArea();		
 		endeNachricht.setVisible(true);
 		endeNachricht.setEditable(false);
 		endeNachricht.setOpaque(false);
-		endeNachricht.setFont(new Font(Font.SANS_SERIF, Font.BOLD, 20));
-		
+		endeNachricht.setFont(new Font(Font.SANS_SERIF, Font.BOLD, 20));		
 		endeNachricht.setText("Der Gewinner ist\n" 
 				+ presenter.getGewinner() + "\nmit "
 				+  presenter.getGewinnerPunkte() + " Punkten\nYay!");
 		
-		neustart = new JButton("Neustart!");
-				
+		neustart = new JButton("Neustart!");				
 		
 		panel.add(neustart);
 		panel.add(endeNachricht);	
@@ -64,6 +59,10 @@ public class EndeGUI extends AbstractGUI {
 		eimer.revalidate();
 		eimer.repaint();
 	}
+	
+	/**
+	 * Hilfsfunktion, damit alle Elemente richtig an den Eimer angepasst und gesetzt werden. Und das sie im Component listener aufgerufen werden kann.
+	 */
 	private void resizing() {
 		setzeNeueGroesse(eimer.getWidth(), eimer.getHeight());
 		neustart.setBounds((int)(eimer.getWidth() * 0.43),(int) (eimer.getHeight() * 0.8),(int) (eimer.getWidth() * 0.4), 60);
@@ -76,6 +75,9 @@ public class EndeGUI extends AbstractGUI {
 		eimer.revalidate();
 		eimer.repaint();
 	}
+	
+	
+	//Settzen und Gettzen
 
 	public JButton getNeustart() {
 		return neustart;

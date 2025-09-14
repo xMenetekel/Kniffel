@@ -7,6 +7,10 @@ public class EndeLogik {
 		this.setSpielLogik(spielLogik);		
 	}
 	
+	/**
+	 * rechnet den Gewinner des Spiels aus
+	 * @return gibt den Index des siegenden Spielers zurück
+	 */
 	public int getGewinner() {
 		int mostWantedWerHatDieMeistenPunkte = 0;
 		int spielerIndex = -1;
@@ -20,6 +24,9 @@ public class EndeLogik {
 		return spielerIndex;
 	}
 
+	
+	//Getter Setter
+	
 	public SpielLogik getSpielLogik() {
 		return spielLogik;
 	}

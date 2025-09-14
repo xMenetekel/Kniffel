@@ -72,6 +72,8 @@ public class SpielerbankPresenter {
 		gui.aktualisiereIcon(spielerIndex);
 	}
 		
+	
+	//Getter und Setter
 
 	public SpielerbankGUI getGui() {
 		return gui;

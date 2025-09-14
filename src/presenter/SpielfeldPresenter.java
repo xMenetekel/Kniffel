@@ -11,31 +11,25 @@ import java.util.Map;
 import javax.swing.JTable;
 import javax.swing.JTextArea;
 
-import gui.AbstractGUI;
-import gui.PunkteTabelleGUI;
 import gui.SpielfeldGUI;
-import gui.WuerfelBankGUI;
-import gui.WuerfelGUI;
 import model.Kategorie;
 import model.SpielLogik;
-import model.SpielfeldLogik;
 import model.StartmenueLogik;
 import model.WuerfelLogik;
 
 public class SpielfeldPresenter {
-	private SpielfeldGUI gui;
-	private SpielfeldLogik logik;
+	public SpielfeldGUI gui;
 	 
-	private WuerfelPresenter wuerfel;	
-	private WuerfelbankPresenter bank;
-	private PunktetabellePresenter tabelle;
-	private SpielerbankPresenter spieler;
-	private WuerfelflaechePresenter flaeche;
-	private WuerfelnButtonPresenter wuerfelnKlick;
-	private PunkteEintragenButtonPresenter punkteKlick;
+	public WuerfelPresenter wuerfel;	
+	public WuerfelbankPresenter bank;
+	public PunktetabellePresenter tabelle;
+	public SpielerbankPresenter spieler;
+	public WuerfelflaechePresenter flaeche;
+	public WuerfelnButtonPresenter wuerfelnKlick;
+	public PunkteEintragenButtonPresenter punkteKlick;
 	 
 	private Kategorie ausgewaehlteKategorie = null; 
-	private JTextArea statusLabel;	
+	public JTextArea statusLabel;	
 	private SpielLogik spielLogik; 
 	private MoeglicheZuege moeglicheZuege = new MoeglicheZuege();
 	private StartmenueLogik menueDaten;
@@ -56,9 +50,7 @@ public class SpielfeldPresenter {
 		 
 		 this.eimer = eimer;
 		 
-		 gui = new SpielfeldGUI(eimer, this, menueDaten);
-		 logik = new SpielfeldLogik();
-		 
+		 gui = new SpielfeldGUI(eimer, this);	 
 		 
 		 flaeche = new WuerfelflaechePresenter(eimer);
 		 bank = new WuerfelbankPresenter(eimer);
@@ -90,7 +82,9 @@ public class SpielfeldPresenter {
 		eimer.revalidate();
 		eimer.repaint();
 	}
-	 
+	 /**
+	  * Initialisiert das Statuslabel (Sollte besser zu SpielerGUI)
+	  */
 	 private void setupStatusLabel() {
 		statusLabel.setVisible(true);
 		statusLabel.setEditable(false);
@@ -135,74 +129,43 @@ public class SpielfeldPresenter {
 		 }
 	 }
  
-	
+	/**
+	 * Resettet bei einer neuen Runde die Logik, mit der die Bank befüllt wird und immer den ersten freien Platz nimmt
+	 */
 	private void resetBank() {
 		for(int i = 0; i < 5; i++) {
 			bank.getGui().getReihenfolge().set(i, null);
 		}
 	}
-		 
+	
+	/**
+	 * Updated was passiert wenn man eine Kategorie für die Punkte auswählt
+	 * @param kategorie
+	 */
 	public void onKategorieAusgewaehlt(Kategorie kategorie) {
 		 this.ausgewaehlteKategorie = kategorie;
 		 System.out.println("Kategorie Ausgewählt: "+kategorie);
 		 tabelle.onKategorieSelected(kategorie);
 	 }
-	 
+	 /**
+	  * 
+	  * @param fenstar
+	  */
 	 public void rearrangiereAlles(Component fenstar) {
-		 rearrangiere(fenstar, flaeche.getGui());
-		 rearrangiere(fenstar, tabelle.getView());
-		 rearrangiere(fenstar, spieler.getGui());		 
-		 rearrangiere(fenstar, wuerfelnKlick.getGui());
-		 rearrangiere(fenstar, punkteKlick.getGui());
-		 rearrangiere(fenstar, gui);
-		 rearrangiereWuerfel(fenstar, wuerfel, bank.getGui());		
+		 gui.rearrangiere(fenstar, flaeche.getGui());
+		 gui.rearrangiere(fenstar, tabelle.getView());
+		 gui.rearrangiere(fenstar, spieler.getGui());		 
+		 gui.rearrangiere(fenstar, wuerfelnKlick.getGui());
+		 gui.rearrangiere(fenstar, punkteKlick.getGui());
+		 gui.rearrangiere(fenstar, gui);
+		 gui.rearrangiereWuerfel(fenstar, wuerfel, bank.getGui());		
 		 statusLabel.setBounds((int)(eimer.getWidth() * 0.28), (int)(eimer.getHeight() * 0.81), (int)(eimer.getWidth() * 0.22),100);
 	 }
 	 	 
-	protected void rearrangiereWuerfel(Component e, WuerfelPresenter w, WuerfelBankGUI bank) {
-		int breite = e.getWidth();
-		int hoehe = e.getHeight();
-						
-		bank.getPanel().setBounds(
-			(int)Math.floor(breite*bank.getProzentFlaecheX()), 
-			(int)Math.floor(hoehe*bank.getProzentFlaecheY()), 300, 80
-		);
-			
-		w.getAlleWuerfelGUI().forEach(t -> { 
-			positioniereWuerfel(t,bank, breite,hoehe);
-			t.setProzentXAufFeld(t.getxPos() * 1.0 / breite);
-			t.setProzentYAufFeld(t.getyPos() * 1.0 / hoehe);
-			t.getButton().setBounds(t.getxPos(), t.getyPos(), 50, 50);	
-		});				
-	}
-	
-	private void positioniereWuerfel(WuerfelGUI t, WuerfelBankGUI bank, int breite, int hoehe) {
-		if(t.isIstinBank()) {						
-			t.setxPos((int) ((bank.getProzentFlaecheX() * breite ) + 15 ) + 55 * (bank.getReihenfolge().indexOf(t)));
-			t.setyPos((int) ((bank.getProzentFlaecheY() * hoehe ) + 7 ) );
-		} else {
-			t.setxPos( (int) Math.round(t.prozentXAufFeld * breite));
-			t.setyPos( (int) Math.round(t.prozentYAufFeld * hoehe));												
-			}
-	}
-	
-	public void rearrangiere(Component e, AbstractGUI gui) {
-		int breite = e.getWidth();
-		int hoehe = e.getHeight();
-			
-		gui.getPanel().setBounds(
-				(int)Math.floor(breite*gui.getProzentFlaecheX()), 
-				(int)Math.floor(hoehe*gui.getProzentFlaecheY()), 
-				(int)Math.floor(breite*gui.getProzentFlaecheBreite()),
-				(int)Math.floor(hoehe*gui.getProzentFlaecheHoehe())
-		);
-			
-		if(!(gui instanceof PunkteTabelleGUI)){
-		gui.setzeNeueGroesse((int)(breite * gui.getProzentFlaecheBreite()), (int)(hoehe * gui.getProzentFlaecheHoehe()));
-		}
-	}
 
-
+	/** 
+	 * updated das statuslabel
+	 */
 	private void updateStatusLabel() {
 		String maxWurf = String.valueOf(wuerfel.getMaxWuerfe());
 		String status = "Runde " + spielLogik.getRunde() + 
@@ -210,30 +173,6 @@ public class SpielfeldPresenter {
 						"\nWürfe: " + wuerfel.getWurfAnzahl() + "/" + maxWurf;
 		statusLabel.setText(status);
 	}
-		
-
-	/*private boolean kannPunkteEingetragenWerden() {
-		return ausgewaehlteKategorie != null && spielLogik.getWuerfeAnzahl() > 0;
-	}
-	
-	private void versuchePunkteEinzutragen() {
-		try {
-			List<Integer>wuerfelWerte = ermittleWuerfelWerte();
-			int punkte = moeglicheZuege.berechnePunkte(ausgewaehlteKategorie, wuerfelWerte);
-			System.out.println("Berechnet Punkte fuer " + ausgewaehlteKategorie + " : " + punkte);
-			
-			boolean erfolg = tabelle.getModel().tragePunkteEin(
-				ausgewaehlteKategorie, punkte, spielLogik.getAktiverSpielerIndex()
-			);
-			
-			if(erfolg) {
-				nachErfolgreichemEintrag();
-			}
-		} catch (Exception e) {
-			System.out.println("Fehler beim Punkteeintragen: " + e.getMessage());
-			e.printStackTrace();
-		}
-	}*/
 	
 	/**
 	 * ermittelt aktuelle Augenwerte aller Wuerfe
@@ -247,20 +186,6 @@ public class SpielfeldPresenter {
 		}
 		return werte;
 	}
-	
-	/*private void nachErfolgreichemEintrag() {
-		tabelle.getModel().clearMoeglichePunkte();
-		spielLogik.setWuerfeAnzahl(0);
-		spielLogik.naechsterSpieler();
-		spieler.aktualisiereAktivesSpielerIcon(spielLogik.getAktiverSpielerIndex());
-		wuerfel.neueRunde();
-		ausgewaehlteKategorie = null;
-		updateStatusLabel();
-		highlightAktuelleSpalte();
-		tabelle.zeigeMoeglichePunkte(new HashMap<>(), spielLogik.getAktiverSpielerIndex());
-		System.out.println("Punkte erfolgreich eingetragen!");
-	}*/
-		
 
 	public void eintragePunkteFuerAktuellenSpieler() {
 		System.out.println("==PUNKTE EINTRAGEN BUTTON GEDRÜCKT==");
@@ -301,12 +226,7 @@ public class SpielfeldPresenter {
 			System.out.println("Punkte konnten nicht eingetragen werden - keine Kategorie ausgewählt!");
 		}
 	}
-	
-
-	public void spielBeendet() {
-		new EndePresenter(eimer, spielLogik);
-	}
-	
+		
 	public void highlightAktuelleSpalte() {
 		if(tabelle!= null &&tabelle.getView() != null) {
 			JTable table = tabelle.getView().getTable();
@@ -315,6 +235,12 @@ public class SpielfeldPresenter {
 			table.repaint();
 		}
 	}
+	
+	public void spielBeendet() {
+		new EndePresenter(eimer, spielLogik);
+	}
+	
+	//Getter und Setter
 		
 	public SpielfeldGUI getGui() {
 		return gui;
@@ -322,14 +248,6 @@ public class SpielfeldPresenter {
 
 	public void setGui(SpielfeldGUI gui) {
 		this.gui = gui;
-	}
-
-	public SpielfeldLogik getLogik() {
-		return logik;
-	}
-
-	public void setLogik(SpielfeldLogik logik) {
-		this.logik = logik;
 	}
 
 	public WuerfelPresenter getWuerfel() {
