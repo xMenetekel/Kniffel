@@ -21,7 +21,10 @@ import javax.swing.table.DefaultTableCellRenderer;
 import model.Kategorie;
 import model.StartmenueLogik;
 import presenter.PunktetabellePresenter;
-
+/**
+ * GUI-Klasse für die Punktetabelle
+ * verwaltet die visuelle Darstellung und Benutzerinteraktion der Punktetabelle
+ */
 public class PunkteTabelleGUI extends AbstractGUI {
 	 
 	private JTable table;
@@ -60,11 +63,18 @@ public class PunkteTabelleGUI extends AbstractGUI {
 		
 		this.eimer.add(panel);
 	}
-	
+	/**
+	 * Setzt den Presenter für die GUI/View
+	 * 
+	 * @param PunkteTabellenPresenter, der ebenfalls die Logik der Punktetabelle verwaltet
+	 */
 	public void setPresenter(PunktetabellePresenter presenter) {
 		this.presenter = presenter;
 	}
-	
+	/**
+	 * Initialisiert alle GUI Komponenten der Punktetabelle
+	 * Erstellt, TableModel, JTable und ScrollPane
+	 */
 	private void initializeComponents() {
 		panel = new JPanel(new BorderLayout ());
 		tableModel = new AbstractTableModel() {
@@ -122,13 +132,36 @@ public class PunkteTabelleGUI extends AbstractGUI {
 		panel.add(scroll, BorderLayout.CENTER);
 	}
 	
+	/**
+	 * Konfiguriert die Tabelle mit Renderern und Eigenchaften
+	 * Setzt Zeilenhöhe, Hintergrundfarbe und weist Renderer zu
+	 */
 	private void setupTable() {
 		macheTabelleNichtEditierbar();
 		table.setRowHeight(STANDARD_ROW_HEIGHT);
+		table.setBackground(HINTERGRUND_FARBE);
 		
-		symbolRenderer = new DefaultTableCellRenderer() {
+		erstelleRenderer();
+		weiseRendererZu();
+	}
+	
+	/**
+	 * Erstellt alle benötigten TableCellRenderer
+	 * Initialisiert Symbol-Text und Punkte-Renderer
+	 */
+	private void erstelleRenderer() {
+		symbolRenderer = erstelleSymbolRenderer();
+		textRenderer = erstelleTextRenderer();
+		punkteRenderer = erstellePunkteRenderer();
+	}
+	
+	/**
+	 * Erstellt den Renderer für die Kategorie Spalte
+	 * zeigt Icons für Kategorien mit Bildern an, sonst Text
+	 */
+	private DefaultTableCellRenderer erstelleSymbolRenderer() {
+		return new DefaultTableCellRenderer() {
 			private static final long serialVersionUID = 1L;
-			
 			@Override
 			public Component getTableCellRendererComponent(JTable table, Object value, boolean isSelected, boolean hasFocus, int row, int column) {
 				Component c = super.getTableCellRendererComponent(table, value, isSelected, hasFocus, row, column);
@@ -146,9 +179,14 @@ public class PunkteTabelleGUI extends AbstractGUI {
 				}
 				return c;
 			}
-		};
-		
-		textRenderer = new DefaultTableCellRenderer() {
+		};		
+	}
+	/**
+	 * Erstellt den Renderer für die Beschreibungs-Spalte
+	 * zeit Text an
+	 */
+	private DefaultTableCellRenderer erstelleTextRenderer() {
+		return new DefaultTableCellRenderer() {
 			private static final long serialVersionUID = 1L;
 			
 			@Override
@@ -159,8 +197,14 @@ public class PunkteTabelleGUI extends AbstractGUI {
 				return c;
 			}
 		};
-		
-		punkteRenderer = new DefaultTableCellRenderer() {
+	}
+	
+	/**
+	 * Ertellt den Renderer für die Punktespalten
+	 * Färbt Zellen baierend auf den Spielzustand(ausgewählt, fest, berechnet)
+	 */
+	private DefaultTableCellRenderer erstellePunkteRenderer() {
+		return new DefaultTableCellRenderer() {
 			private static final long serialVersionUID = 1L;
 			
 			@Override
@@ -189,6 +233,12 @@ public class PunkteTabelleGUI extends AbstractGUI {
 				return c;
 				}
 		};
+	}
+	/**
+	 * weist den Tabellenspalten die entprechenden Renderer zu
+	 * Spalte 0: Symbol, Spalte 1: Text, Spalte 2+: Punkte
+	 */		
+	private void weiseRendererZu() {
 		table.getColumnModel().getColumn(0).setCellRenderer(symbolRenderer);
 		table.getColumnModel().getColumn(1).setCellRenderer(textRenderer);
 		
@@ -197,8 +247,10 @@ public class PunkteTabelleGUI extends AbstractGUI {
 		}
 	}
 	
-	
-		
+	/**
+	 * Konfiguriert Event-Handler für Maus- und Tastatureingaben
+	 * Verhindert Editierung und behandelt Klicks
+	 */	
 	private void setupEventHandlers() {
 		table.addKeyListener(new KeyAdapter() {
 		@Override
@@ -223,7 +275,10 @@ public class PunkteTabelleGUI extends AbstractGUI {
 			}
 		});
 	}
-	
+	/**
+	 * Behandelt Mausclicks auf die Tabelle
+	 * Prüft, ob Kategorie auswählbar ist und informiert den Presenter
+	 */
 	private void handleMouseClick(MouseEvent evt) {
 		int row = table.rowAtPoint(evt.getPoint());
 		int col = table.columnAtPoint(evt.getPoint());
@@ -241,6 +296,10 @@ public class PunkteTabelleGUI extends AbstractGUI {
 		}
 	}
 	
+	/**
+	 * Konfiguriert die Tabelle als nicht-editierbar
+	 * Deaktiviert Standard-Editier-TastenKombinationen
+	 */
 	public void macheTabelleNichtEditierbar() {
 		if(table != null) {
 			table.setEnabled(true);
@@ -256,6 +315,12 @@ public class PunkteTabelleGUI extends AbstractGUI {
 		}
 	}
 	
+	/**
+	 * aktualisiert die angezeigten Tabellendaten
+	 * 
+	 * @param data: neue Tabellendaten als 2d Array
+	 * @param columnNames: neue Spaltennamen 
+	 */
 	public void updateTableData(Object[][] data, String[] columnNames) {
 		this.currentTableData= data;
 		this.columnNames =columnNames;
@@ -263,10 +328,16 @@ public class PunkteTabelleGUI extends AbstractGUI {
 		table.repaint();
 	}
 	
+	/**
+	 * Gibt die JTable-Instanz zurück
+	 */
 	public JTable getTable() {
 		return this.table;
 	}
 	
+	/**
+	 * Liefert die Standard-Kategorie für eine Tabellenzeile
+	 */
 	private Object getDefaultKategorie(int row) {
 		Kategorie[] kategorien = {
 				Kategorie.EINSER,
@@ -290,6 +361,9 @@ public class PunkteTabelleGUI extends AbstractGUI {
 		return row < kategorien.length ? kategorien[row] : null;
 	}
 	
+	/**
+	 * Liefert die Standard-Beschreibung für eine Tabellenzeile
+	 */
 	private String getDefaultBeschreibung(int row) {
 		String[] beschreibungen = {
 				"Nur Einser zaehlen",

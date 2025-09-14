@@ -7,9 +7,13 @@ import java.util.HashSet;
 import java.util.List;
 import java.awt.Point;
 
-
+/**
+ * Verwaltet die Logik der Punktetabelle
+ * Berechnet Summen, verwaltet Punkteeinträge und Spielstände
+ */
 public class PunktetabelleLogik {
 	
+
 	private final int spielerAnzahl;
 	private final List<SpielerLogik> alleSpieler;
 	private Object [][] data;
@@ -68,6 +72,14 @@ public class PunktetabelleLogik {
 		
 	}
 	
+	/**
+	 * Trägt Punkte für eine Kategorie in dei Tabelle ein
+	 * Aktualisiert automatisch Summen und Bonnuspunkte
+	 * @param kategorie: die Kniffelkategorie
+	 * @param punte: die einzutragenen Punkte
+	 * @param spielerIndex: Index de Spielers
+	 * @return true, wenn Eintrag erfolgreich, false bei Fehlern
+	 */
 	public boolean tragePunkteEin(Kategorie kategorie, int punkte, int spielerIndex) {
 		try {
 			int row = kategorie.getTabellenIndex();
@@ -100,7 +112,13 @@ public class PunktetabelleLogik {
 			return false;
 		}
 	}
-	
+	/**
+	 *Setzt die Möglichen Punkte für den aktuellen Spieler
+	 *Filtert bereits belegte Kategorien aus
+	 *
+	 *@param moeglichePunkte: Map mt Kategorie-Punkte-Zuprdnungen
+	 *@param spielerIndex: index des aktuellen Spielers
+	 */
 	public void setMoeglichePunkte(Map<Kategorie,Integer>moeglichePunkte, int spielerIndex) {
 		Map<Kategorie,Integer> gefiltertePunkte = new HashMap<>();
 		
@@ -115,13 +133,22 @@ public class PunktetabelleLogik {
 		
 		System.out.println("Mögliche Punkte gesetzt für Spieler " + spielerIndex + " : "+ gefiltertePunkte);
 	}
-	
+	/**
+	 *Löscht alle möglichen Punkte und setzt aktuellen Spieler zurück
+	 *wird bei Rundenende oder Spielerwechsel aufgerufen
+	 */
 	public void clearMoeglichePunkte() {
 		this.moeglichePunkte.clear();
 		this.aktuellerSpieler = -1;
 		System.out.println("Moegliche Punkte gelöscht");
 	}
-	
+	/**
+	 *Prüft, ob eine Kategorie für einen Spieler eingetragen werden kann
+	 *
+	 *@param kategorie: zu prüfende Kategorie
+	 *@param spielerIndex: Index des Spielers
+	 *@return true wenn Eintrag möglich, false sonst
+	 */
 	public boolean kannKategorieEingetragenWerden(Kategorie kategorie, int spielerIndex) {
 		if(!istFeldLeer(kategorie,spielerIndex)) {
 			return false;
@@ -132,20 +159,46 @@ public class PunktetabelleLogik {
 		return true;
 	}
 	
+	/**
+	 * Prüft, ob ein Tabelenfeld leer it
+	 * 
+	 * @param Kategorie: zu prüfende Kategorie
+	 * @param spielerIndex: Index des Spielers
+	 * @return true, wenn Feld leer, false wenn bereits belegt
+	 */
+	
 	public boolean istFeldLeer(Kategorie kategorie, int spielerIndex) {
 		int row = kategorie.getTabellenIndex();
 		int column = 2 + spielerIndex;
 		return data[row][column] == null;
 	}
 	
+	/**
+	 *Prüft, ob für eine Kategorie mögliche Punkte hinterlegt sind
+	 *
+	 *@param kategorie: zu prüfende Kategorie
+	 *@return true wenn mögliche Punkte vorhanden
+	 */
 	public boolean hatMoeglichePunkteFuerKategorie(Kategorie kategorie) {
 		return moeglichePunkte.containsKey(kategorie);
 	}
 	
+	/**
+	 * Liefert die möglichen Punkte für eine Kategorie
+	 * 
+	 * @param kategorie: gewünschte Kategorie
+	 * @return Punktzahl oder null wenn nicht verfügbar
+	 */
 	public Integer getMoeglichePunkteFuerKategorie(Kategorie kategorie) {
 		return moeglichePunkte.get(kategorie);
 	}
 	
+	/**
+	 *Berechnet und setzt die Summe der oberen Hälfte
+	 *Berechnet automatisch Bonus, wenn obere Hälfte vollständig ist
+	 *
+	 *@param spielerIndex: Index des Spielers
+	 */
 	private void berechneUndSetzeGesamtOben(int spielerIndex) {
 		int spielerSpalte = 2 + spielerIndex;
 		int gesamtOben = 0;
@@ -168,6 +221,12 @@ public class PunktetabelleLogik {
 		}
 	}
 	
+	/**
+	 *Berechnet und setzt die Summe der unteren Hälfte
+	 * aktualisiert automatisch die Endsumme
+	 * 
+	 * @param spielerIndex: Index des Spielers
+	 */
 	private void berechneUndSetzeGesamtUnten(int spielerIndex) {
 		int spielerSpalte = 2 + spielerIndex;
 		int gesamtUnten = 0;
@@ -182,7 +241,11 @@ public class PunktetabelleLogik {
 		
 		berechneEndsumme(spielerIndex);
 	}
-	
+	/**
+	 * Berechnet die Summe aus oberer ud unterer Hälfte
+	 * 	
+	 *  @param spielerIndex
+	 */
 	private void berechneEndsumme(int spielerIndex) {
 		int spielerSpalte = 2 + spielerIndex;
 		Integer gesamtObenMitBonus = (data[8][spielerSpalte] instanceof Integer) ? (Integer)data[8][spielerSpalte] : null;
@@ -194,7 +257,12 @@ public class PunktetabelleLogik {
 			data[18][spielerSpalte] = null;
 		}
 	}
-	
+	/**
+	 *Prüft, ob die obere Hälfte eines Spielers vollständig ausgefüllt ist
+	 *
+	 *@param spielerIndex: Index des Spielers
+	 *@return true, wenn alle Felder der oberen Hälfte belegt sind
+	 */
 	public boolean istObereHaelfteVoll(int spielerIndex) {
 		int spielerSpalte = 2 + spielerIndex;
 		for(int row = 0; row <= 5; row++) {
@@ -204,7 +272,12 @@ public class PunktetabelleLogik {
 		}
 		return true;
 	}
-
+	/**
+	 *Prüft, ob die untere Hälfte eines Spielers vollständig ausgefüllt ist
+	 *
+	 *@param spielerIndex: Index des Spielers
+	 *@return true, wenn alle Felder der unteren Hälfte belegt sind
+	 */
 	public boolean istUntereHaelfteVoll(int spielerIndex) {
 		int spielerSpalte = 2 + spielerIndex;
 		for(int row = 9; row <= 15; row++) {
@@ -214,7 +287,11 @@ public class PunktetabelleLogik {
 		}
 		return true;
 	}
-	
+	/**
+	 * Prüft, ob das Spiel für alle beendet ist
+	 * 
+	 * @return true, wenn alle Spieler beide Hälften vollständig haben
+	 */
 	public boolean istSpielBeendet() {
 		for(int spielerIndex = 0; spielerIndex < spielerAnzahl;spielerIndex++) {
 			if(!istObereHaelfteVoll(spielerIndex)|| !istUntereHaelfteVoll(spielerIndex)) {
@@ -223,7 +300,14 @@ public class PunktetabelleLogik {
 		}
 		return true;
 	}
-	
+	/**
+	 * Liefert den Wert einer Tabellenzelle
+	 * Berücksichtigt auch mögliche Punkte für den Aktuellen Spieler
+	 * 
+	 * @param row: Zeilenindex
+	 * @param column: Spaltenindex
+	 * @return Zellwert oder null wenn ausserhalb der Grenzen
+	 */
 	public Object getValueAt(int row, int column) {
 		if(row <0|| row >= data.length|| column < 0 || column >= data[0].length) {
 			return null;
@@ -239,7 +323,13 @@ public class PunktetabelleLogik {
 		}
 		return null;
 	}
-	
+	/**
+	 * prüft, ob ein Punkt endgültig eingetragen ist
+	 * 
+	 * @param kategorie: zu prüfende Kategorie
+	 * @param spielerIndex: Index des Spielers
+	 * @return true, wenn Punkt fest eingetragen false wenn noch änderbar
+	 */
 	public boolean istPunktEndgueltig(Kategorie kategorie, int spielerIndex) {
 		if(kategorie == null)return false;
 		int row = kategorie.getTabellenIndex();
@@ -247,7 +337,11 @@ public class PunktetabelleLogik {
 		Point point = new Point (row, column);
 		return festeEintraege.contains(point);
 	}
-	
+	/**
+	 * Erstellt Kopie der aktuellen Tabelendaten
+	 * 
+	 * @return 2D Array mit allen Tabellendaten
+	 */
 	public Object [][] getTableData(){
 		Object[][] result = new Object[data.length][data[0].length];
 		for(int row = 0; row < data.length; row++) {
@@ -257,24 +351,44 @@ public class PunktetabelleLogik {
 		}
 		return result;
 	}
-	
+	/**
+	 *Liefert die Anzahl der Tabellenzeilen
+	 *
+	 *@return Anzahl Zeilen
+	 */
 	public int getRowCount() {
 		return data.length;
 	}
 	
-	
+	/**
+	 * Liefert die Anzahl der Tabellenspalten
+	 * 
+	 * @return Anzahl Spalten
+	 */
 	public int getColumnCount() {
 		return data[0].length;
 	}
-	
+	/**
+	 *Liefert eine Kopie aller fest eingetragenen Punkte
+	 *
+	 *@return Set mit Point-Objekten der festen Einträge
+	 */
 	public Set<Point> getFesteEintraege(){
 		return new HashSet<>(festeEintraege);
 	}
-	
+	/**
+	 *Liefert den Index des aktuellen Spielers
+	 *
+	 *@return SpielerIndex oder -1 wenn kein aktiver Spieler
+	 */
 	public int getAktuellerSpieler() {
 		return aktuellerSpieler;
 	}
-	
+	/**
+	 *Liefert die Anzahl der Spieler
+	 *
+	 *@return Spieleranzahl
+	 */
 	public int getSpielerAnzahl() {
 		return spielerAnzahl;
 	}

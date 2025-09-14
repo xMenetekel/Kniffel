@@ -12,7 +12,9 @@ import model.PunktetabelleLogik;
 import model.SpielLogik;
 import model.StartmenueLogik;
 import model.WuerfelLogik;
-
+/**
+*Vermittelt zwischen GUI und Logik der Punktetabelle, verwaltet Benutzerinteraktionen
+*/
 public class PunktetabellePresenter implements SpielEreignisListener{
 	
 	private PunkteTabelleGUI view;
@@ -33,7 +35,12 @@ public class PunktetabellePresenter implements SpielEreignisListener{
 		updateView();
 	}
 	
-	
+	/**
+	 * Behandelt die Auswahl einer Kategorie durch den Benutzer
+	 * Prüft Gültigkeit und aktualisiert die Anzeige
+	 * 
+	 * @param kategorie: die ausgewählte Kategorie
+	 */
 	public void onKategorieSelected(Kategorie kategorie) {
 		int aktuellerSpieler = spielLogik.getAktiverSpielerIndex();
 		
@@ -64,6 +71,14 @@ public class PunktetabellePresenter implements SpielEreignisListener{
 		}
 	}
 	
+	/**
+	 *Trägt die Punkte für die gewählte Kategorie ein
+	 *Berechnet Punkte basierend auf Würfelwerten
+	 *
+	 *@param spielerIndex: Index des aktuellen Spielers
+	 *@param wuerfelWerte: Liste der aktuellen Würfelwerte
+	 *@return true wenn Eintrag erfolgreich, false bei Fehlern
+	 */
 	public boolean gewaehltePunkteEin(int spielerIndex, List<Integer>wuerfelWerte) {
 		if(ausgewaehlteKategorie == null){
 			System.out.println("keine Kategorie ausgewählt!");
@@ -93,15 +108,34 @@ public class PunktetabellePresenter implements SpielEreignisListener{
 		return false;
 	}
 	
+	/**
+	 *Liefert aktuell ausgewählte Kategorie
+	 *
+	 *@return ausgewählte Kategorie oder null wenn keine Auswahl
+	 */
 	public Kategorie getAusgewaehlteKategorie() {
 		return ausgewaehlteKategorie;
 	}
 	
+	/**
+	 *Prüft, ob ein Punkt endgültig eingetragen ist
+	 *
+	 *@param kategorie zu prüfende Kategorie
+	 *@param spielerIndex: Index des Spielers
+	 *@return true, wenn Punkt endgültig, false wenn änderbar
+	 */
 	public boolean istPunktEndgueltig(Kategorie kategorie, int spielerIndex) {
 		if (kategorie == null) return false;
 		return model.istPunktEndgueltig(kategorie, spielerIndex);
 	}
 	
+	/**
+	 *Zeigt mögliche Punkte für den aktuellen Spieler an
+	 *Aktualisiert die Tabellenanzeige entsprechend
+	 *
+	 *@param moeglichePunkte Map mit Kategorie-Punkte-Zuordnung
+	 *@param spielerIndex des aktuellen Spielers
+	 */
 	public void zeigeMoeglichePunkte(Map<Kategorie,Integer> moeglichePunkte,int spielerIndex) {
 		if(moeglichePunkte == null || moeglichePunkte.isEmpty()) {
 			System.out.println("Keine möglichen Punkte zum Anzeigen!");
@@ -115,18 +149,38 @@ public class PunktetabellePresenter implements SpielEreignisListener{
 		updateView();
 	}
 	
+	/**
+	 * Prüft, ob das spiel beendet ist
+	 * 
+	 * @return true wenn alle Spieler fertig sind
+	 */
 	public boolean istSpielBeendet() {
 		return model.istSpielBeendet();
 	}
 	
+	/**
+	 *Prüft, ob ein Nullwurf möglich ist
+	 *Nullwurf ist ert nach dem dritten wurf erlaubt
+	 *
+	 *@return true wen Nullwurf möglich
+	 */
 	public boolean istNullwurfMoeglich() {
 		return spielLogik.getWuerfeAnzahl() >= 3;
 	}
 	
+	/**
+	 *Liefert den Index des aktiven Spielers
+	 *
+	 *@return Index des aktuellen Spielers
+	 */
 	public int getAktiverSpielerIndex() {
 		return spielLogik.getAktiverSpielerIndex();
 	}
-		
+	
+	/**
+	 * Aktualisiert die View mit anderen Daten
+	 * Extrahiert Daten aus Model und übergibt sie an die GUI
+	 */
 	private void updateView() {
 		Object[][] tableData = extractTableData();
 		String[]columnNames = createColumnNames();
@@ -134,6 +188,13 @@ public class PunktetabellePresenter implements SpielEreignisListener{
 		view.updateTableData(tableData, columnNames);
 	}
 	
+	/**
+	 * Prüft, ob ein tabellenfeld ein berechnete Feld ist
+	 * Berechnete felder können nicht direkt bearbeitet werden
+	 * 
+	 * @param row: zeilenIndex, der zu prüfen ist
+	 * @return true, wenn Feld automatisch berechnet wird
+	 */
 	public boolean istBerechnetesFeld(int row) {
 		Kategorie kategorie = Kategorie.fromTabellenIndex(row);
 		return kategorie == Kategorie.GESAMT_OBEN||
@@ -145,6 +206,11 @@ public class PunktetabellePresenter implements SpielEreignisListener{
 				kategorie == null;
 	}
 	
+	/**
+	 * Extrahiert die aktuellen Tabellendaten aus dem Model
+	 * 
+	 * @return 2D Array mit allen Tabellendaten
+	 */
 	private Object [][] extractTableData(){
 		int rows = model.getRowCount();
 		int cols = model.getColumnCount();
@@ -158,6 +224,12 @@ public class PunktetabellePresenter implements SpielEreignisListener{
 		return data;
 	}
 	
+	/**
+	 *Erstellt die Spaltennamen für die Tabelle
+	 *Verwendet Spielernamen aus den Menüdaten
+	 *
+	 *@return Array mit Spaltennamen
+	 */
 	private String [] createColumnNames() {
 		int spielerAnzahl = model.getSpielerAnzahl();
 		String[] columnNames = new String[2+spielerAnzahl];
@@ -171,8 +243,13 @@ public class PunktetabellePresenter implements SpielEreignisListener{
 		return columnNames;
 	}
 	
+	/**
+	 * Callback wenn würfel geworfen werden 
+	 * Berechnet mögliche Punkte und aktualisiert Anzeige
+	 * 
+	 * @param wuerfel_ Liste der gewürfelten werte
+	 */
 	@Override
-	
 	public void wennWuerfelGeworfenWerden(List<Integer>wuerfel) {
 		moeglicheZuege.setWuerfelWerte(wuerfel);
 		Map<Kategorie, Integer> punkte = moeglicheZuege.getAktiveMoeglichePunkte();
@@ -180,6 +257,11 @@ public class PunktetabellePresenter implements SpielEreignisListener{
 		updateView();
 	}
 	
+	/**
+	 *Alternative Callback-Methode für mögliche Punkte
+	 *
+	 *@param hashmap: Hashmap mit möglichen Punkten
+	 */
 	@Override
 	public void zeigeMoeglichePunkte(HashMap<Kategorie,Integer> hashmap) {
 		if (hashmap != null) {
@@ -188,15 +270,31 @@ public class PunktetabellePresenter implements SpielEreignisListener{
 		}
 	}
 	
+	/**
+	 * Callback, wenn eine neue Runde startet
+	 * Löscht mögliche Punkte und aktualisiert anzeige
+	 * 
+	 * @param alleWuerfelLogik Liste aller Würfel-Logik-Objekte
+	 */
 	public void wennNeueRundeStartet(List<WuerfelLogik> alleWuerfelLogik) {
 		model.clearMoeglichePunkte();
 		updateView();
 	}
 	
+	/**
+	 * Liefert die View.Instanz
+	 * 
+	 * @return die verwaltete GUI instanz
+	 */
 	public PunkteTabelleGUI getView() {
 		return view;
 	}
 	
+	/**Liefert die Model instanz
+	 * 
+	 * @return die verwaltete Logik Instanz
+	 *
+	 */
 	public PunktetabelleLogik getModel() {
 		return model;
 	}
