@@ -11,6 +11,9 @@ der SpielEreignisListener wurde mit AI generiert weil wir zu diesem zeitpunkt ei
 nicht wusste, wie ich das ordentlich ausseinanderziehen kann ohne zu weinen. 
 -anne
 
+Die Befehle für den Aufruf eines zweiten Fensters JDialog z.B.  Debuggin sowie eine zentrale Positioniren  wurde mit  hilfe von KI erfragt in StartmenuePresenter
+- Conny
+
 	 
 			
 			
