@@ -2,6 +2,8 @@ package presenter;
 
 import java.awt.Container;
 
+import javax.swing.JFrame;
+
 import gui.EndeGUI;
 import model.EndeLogik;
 import model.SpielLogik;
@@ -24,7 +26,15 @@ public class EndePresenter {
 		this.logik = new EndeLogik(spielLogik, menueDaten);
 		this.gui = new EndeGUI(eimer, this);
 		
+		gui.getNeustart().addActionListener(klick ->{starteNeuesSpiel();});
 		
+		
+	}
+	private void starteNeuesSpiel() {
+		eimer.removeAll();
+		eimer.revalidate();
+		eimer.repaint();
+		new StartmenuePresenter((JFrame)eimer.getParent(), eimer);
 	}
 
 	public String getGewinner() {
