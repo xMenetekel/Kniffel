@@ -6,8 +6,6 @@ import java.awt.Rectangle;
 
 import javax.swing.JFrame;
 
-import model.SpielLogik;
-import presenter.EndePresenter;
 import presenter.StartmenuePresenter;
 
 /**

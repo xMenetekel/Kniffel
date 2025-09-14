@@ -54,7 +54,7 @@ public class WuerfelGUI {
 	 * Setzt Icon entsprechend der Augenzahl 
 	 */
 	public void fresherButton() {
-		ImageIcon bildi = new ImageIcon("src/Other/wuerfel" + model.getAugen() + "und50.png" );
+		ImageIcon bildi = new ImageIcon("src/other/wuerfel" + model.getAugen() + "und50.png" );
 		wuerfel.setIcon(bildi);
 		wuerfel.setVisible(true);
 		wuerfel.setBounds(this.xPos, this.yPos, 50, 50);
@@ -89,13 +89,26 @@ public class WuerfelGUI {
 		timer.start();
 	}
 	
+	/**
+	 * Ausgelagerte Hilfsfunktion für zeichne Linie
+	 * 
+	 * @param wuerfel
+	 * @param zielX
+	 * @param zielY
+	 * @param m gradengleichungs m
+	 * @param n gradengleichungs n
+	 * @param moduloBoi (Nimmt nur aller paar Timerschritte einen Bildwechsel auf, wichtig für Windows)
+	 * @param TOL Toleranz (Wichtig damit es auf Windows schön aussieht)
+	 * @param wuerfeln
+	 * @param timer
+	 */
 	private void animiereSchritt(JButton wuerfel, int zielX, int zielY, 
 			double m, double n, int[] moduloBoi, int TOL, 
 			boolean wuerfeln, Timer timer) {
 		int xJetzt = wuerfel.getX();
 		int yJetzt = wuerfel.getY();
 		moduloBoi[0]++;
-		if (wuerfeln && moduloBoi[0] % 5 == 0) wuerfel.setIcon(new ImageIcon("src/Other/wuerfel" + (zufall.nextInt(5)+1) + "und50.png"));
+		if (wuerfeln && moduloBoi[0] % 5 == 0) wuerfel.setIcon(new ImageIcon("src/other/wuerfel" + (zufall.nextInt(5)+1) + "und50.png"));
 		
 		if(Math.abs(m) <= 1) {
 			xJetzt = bewegeRichtung(xJetzt, zielX, TOL);
@@ -146,15 +159,20 @@ public class WuerfelGUI {
 			int toleranz, Timer timer) {
 		if(x >= zielX - toleranz && x <= zielX + toleranz && y >= zielY - toleranz && y <= zielY + toleranz) {
 			timer.stop();
-			wuerfel.setIcon(new ImageIcon ("src/Other/wuerfel" + this.model.getAugen() + "und50.png"));
+			wuerfel.setIcon(new ImageIcon ("src/other/wuerfel" + this.model.getAugen() + "und50.png"));
 		}
 	}
-	
+	/**
+	 * hilfsmethode um die Positionen upzudaten
+	 */
 	private void updateProzentAufFeld() {
 		this.setProzentXAufFeld(this.getxPos() * 1.0 / this.getEimer().getWidth());
 		this.setProzentYAufFeld(this.getyPos() * 1.0 / this.getEimer().getHeight());
 	}
 	
+	
+	
+	//Getter und Setter
 	
 	public JButton getButton() {
 		return this.wuerfel;

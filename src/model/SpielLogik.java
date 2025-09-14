@@ -46,6 +46,8 @@ public class SpielLogik {
 		return spieler.size();
 	}	
 	
+	//Getter und Setter
+	
 	public int getAktiverSpielerIndex() {
 		return aktiverSpielerIndex;
 	}
@@ -65,7 +67,6 @@ public class SpielLogik {
 	public List<SpielerLogik> getAlleSpieler() {
 		return spieler;
 	}
-
 	
 	public void setAlleSpieler(List<SpielerLogik> spieler) {
 		this.spieler = spieler;

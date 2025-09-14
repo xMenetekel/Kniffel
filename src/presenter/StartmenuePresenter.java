@@ -5,7 +5,6 @@ import model.*;
 import java.awt.Container;
 import java.awt.Dimension;
 import java.awt.GridLayout;
-import java.util.List;
 
 import javax.swing.BorderFactory;
 import javax.swing.JButton;
@@ -43,7 +42,28 @@ public class StartmenuePresenter {
 		menueGUI.getEinstellungen().addActionListener(klick -> oeffneEinstellungenDialog());
 		menueGUI.getStarteSpiel().addActionListener(klick -> zeigeSpielerAuswahl());
 	}
+	
+	/**
+	 * setzt die spieleranzahl und startet das Spiel, wenn alle spieler ihre Daten eingegeben haben
+	 * @param anzahl
+	 * @param abrage
+	 */
+	private void spielerButtonGeklickt(int anzahl, JDialog abrage) {
+		menueDaten.setSpieleranzahl(anzahl);
+		abrage.dispose();
 		
+		SpielerDaten(anzahl);
+		
+		SpielLogik spielLogik = new SpielLogik();
+		spielLogik.setAlleSpieler(menueDaten.getSpielerListe());
+		
+		new SpielfeldPresenter(menueGUI.getEimer(), spielLogik, menueDaten);
+		menueGUI.getEimer().setVisible(true);
+	}
+	
+	/**
+	 * zeigt dialog für die einstellungen
+	 */
 	private void oeffneEinstellungenDialog() {
 		JCheckBox debugBox = new JCheckBox("Debugging aktivieren");
 		debugBox.setSelected(menueDaten.isDebugingModus());
@@ -67,7 +87,9 @@ public class StartmenuePresenter {
 		}
 	}
 
-	
+	/**
+	 * zeigt vier buttons um auszuwählen wie viele spieler das spiel haben soll
+	 */
 	private void zeigeSpielerAuswahl() {
 		JDialog abfrage = erstelleSpielerDialog();
 		
@@ -80,6 +102,10 @@ public class StartmenuePresenter {
 		abfrage.setVisible(true);
 	}
 	
+	/**
+	 * erstellt das JDialog fenster für die anzahl spieler abfrage
+	 * @return
+	 */
 	private JDialog erstelleSpielerDialog() {
 		JDialog abfrage = new JDialog(hauptfenster, "Anzahl Spieler", true);
 		abfrage.setLayout(new GridLayout(2, 2, 15, 15));
@@ -101,19 +127,11 @@ public class StartmenuePresenter {
 		return button;
 	}
 	
-	private void spielerButtonGeklickt(int anzahl, JDialog abrage) {
-		menueDaten.setSpieleranzahl(anzahl);
-		abrage.dispose();
-		
-		SpielerDaten(anzahl);
-		
-		SpielLogik spielLogik = new SpielLogik();
-		spielLogik.setAlleSpieler(menueDaten.getSpielerListe());
-		
-		new SpielfeldPresenter(menueGUI.getEimer(), spielLogik, menueDaten);
-		menueGUI.getEimer().setVisible(true);
-	}
 	
+	/**
+	 * speichert spielerdaten
+	 * @param spieleranzahl
+	 */
 	private void SpielerDaten(int spieleranzahl) {
 		for(int i = 0; i < spieleranzahl; i++) {
 			String name = frageSpielerNachName(i);
@@ -122,6 +140,11 @@ public class StartmenuePresenter {
 		}
 	}
 	
+	/**
+	 * öffnet die JOptionPane für den Dialog mit dem Spieler um seinen Namen zu bekommen
+	 * @param spielerNummer
+	 * @return returned den namen des spielers
+	 */
 	private String frageSpielerNachName(int spielerNummer) {
 		return JOptionPane.showInputDialog(
 			menueGUI.getEimer(),
@@ -132,6 +155,12 @@ public class StartmenuePresenter {
 	}
 			
 
+	/**
+	 * setzt den spielernamen in den daten
+	 * @param index index des spielers dessen name gesetzt wird
+	 * @param name
+	 * @param iconIndex index welches icon der spieler gewählt hat
+	 */
 	private void speichereSpielerWennName(int index, String name, int iconIndex) {
 		if(name != null) {		
 			menueDaten.setSpielerName(index, name);
@@ -160,6 +189,9 @@ public class StartmenuePresenter {
 		
 		return auswahl;
 	}
+	
+	
+	//Getter und Setter
 	
 	public void setMenueGUI(StartmenueGUI menueGUI) {
 		this.menueGUI = menueGUI;

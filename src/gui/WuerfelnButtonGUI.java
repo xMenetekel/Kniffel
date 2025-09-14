@@ -6,8 +6,6 @@ import java.awt.event.ComponentEvent;
 
 import javax.swing.ImageIcon;
 import javax.swing.JButton;
-import javax.swing.JPanel;
-import javax.swing.JTable;
 
 
 /**
@@ -29,7 +27,7 @@ public class WuerfelnButtonGUI extends AbstractGUI{
 		super(X, Y, B, H, eimer);
 		knopf = new JButton();
 		
-		bildIcon = new ImageIcon("src/Other/wuerfelnButton.jpg");		
+		bildIcon = new ImageIcon("src/other/wuerfelnButton.jpg");		
 		
 		panel.addComponentListener(new ComponentAdapter() {
 			@Override

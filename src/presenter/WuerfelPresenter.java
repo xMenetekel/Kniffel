@@ -186,6 +186,12 @@ public class WuerfelPresenter  {
 		return null;
 	}
 	
+	/**
+	 * vergleicht zwei würfel miteinander und sagt ob es der gleiche ist
+	 * @param aktueller
+	 * @param anderer
+	 * @return
+	 */
 	private boolean istIgnorierterWuerfel(WuerfelGUI aktueller, WuerfelGUI anderer) {
 		return anderer == aktueller || anderer.getLogik().istBehalten();
 	}
@@ -334,45 +340,44 @@ public class WuerfelPresenter  {
     }
 	
 	
-	  public List<WuerfelGUI> getAlleWuerfelGUI() {
-			return alleWuerfelGUI;
-		}
+	//Getter und Setter
+	
+	public List<WuerfelGUI> getAlleWuerfelGUI() {
+		return alleWuerfelGUI;
+	}
 
-		public void setAlleWuerfelGUI(List<WuerfelGUI> alleWuerfelGUI) {
-			this.alleWuerfelGUI = alleWuerfelGUI;
-		}
+	public void setAlleWuerfelGUI(List<WuerfelGUI> alleWuerfelGUI) {
+		this.alleWuerfelGUI = alleWuerfelGUI;
+	}
 
-		public List<WuerfelLogik> getAlleWuerfelLogik() {
-			return alleWuerfelLogik;
-		}
+	public List<WuerfelLogik> getAlleWuerfelLogik() {
+		return alleWuerfelLogik;
+	}
 
-		public void setAlleWuerfelLogik(List<WuerfelLogik> alleWuerfelLogik) {
-			this.alleWuerfelLogik = alleWuerfelLogik;
-		}
-		 
-	    public int getWurfAnzahl() {
-	        return wurfAnzahl;
-	    }
-	    
-	    public int getMaxWuerfe() {
-	        return maxWuerfe;
-	    }
-	    
-	    public MoeglicheZuege getMoeglicheZuege() {
-	        return moeglicheZuege;
-	    }
-	    
-	    public boolean isInit() {
-			return init;
-		}
+	public void setAlleWuerfelLogik(List<WuerfelLogik> alleWuerfelLogik) {
+		this.alleWuerfelLogik = alleWuerfelLogik;
+	}
+	 
+    public int getWurfAnzahl() {
+        return wurfAnzahl;
+    }
+    
+    public int getMaxWuerfe() {
+        return maxWuerfe;
+    }
+    
+    public MoeglicheZuege getMoeglicheZuege() {
+        return moeglicheZuege;
+    }
+    
+    public boolean isInit() {
+		return init;
+	}
 
-		public void setInit(boolean init) {
-			this.init = init;
-		}
+	public void setInit(boolean init) {
+		this.init = init;
+	}
 
-		public int debug() {
-			return 0;
-		}
 }
 
   

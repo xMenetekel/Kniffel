@@ -23,19 +23,19 @@ public class SpielerbankGUI extends AbstractGUI{
 	 */
 	public SpielerbankGUI(Container eimer, SpielerbankPresenter presenter) {
 		super(X, Y, B, H, eimer);
-		bildIcon = new ImageIcon("src/Other/" + presenter.getBildname(presenter.getAktiverSpieler()) + ".jpg" );		
+		bildIcon = new ImageIcon("src/other/" + presenter.getBildname(presenter.getAktiverSpieler()) + ".jpg" );		
 		this.presenter = presenter;
 		setzeNeueGroesse((int)(B * eimer.getWidth()), (int)(H * eimer.getHeight()));
 		panel.add(bild);						
 	}
 	
 	/**
-	 * Aktualisiert das angezeigte Spieler Icon
+	 * Aktualisiert das angezeigte Spieler Icon bei einem Rundenwechsel
 	 * 
 	 * @param index Index des Spielers dessen Bild angezeigt werden soll
 	 */
 	public void aktualisiereIcon(int index){
-		setBildIcon(new ImageIcon("src/Other/" + presenter.getBildname(index) + ".jpg"));
+		setBildIcon(new ImageIcon("src/other/" + presenter.getBildname(index) + ".jpg"));
 		setzeNeueGroesse((int)(B * eimer.getWidth()), (int)(H * eimer.getHeight()));
 		getPanel().revalidate();
 		getPanel().repaint();
