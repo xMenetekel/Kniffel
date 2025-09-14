@@ -11,10 +11,12 @@ der SpielEreignisListener wurde mit AI generiert weil wir zu diesem zeitpunkt ei
 nicht wusste, wie ich das ordentlich ausseinanderziehen kann ohne zu weinen. 
 -anne
 
-Die Befehle für den Aufruf eines zweiten Fensters JDialog z.B.  Debuggin sowie eine zentrale Positioniren  wurde mit  hilfe von KI erfragt in StartmenuePresenter
+Die Befehle für den Aufruf eines zweiten Fensters JDialog z.B.  Debugging sowie eine zentrale Positioniren  wurde mit  hilfe von KI erfragt in StartmenuePresenter
 - Conny
 
 	 
-			
-			
+Um die gelbe Markierung der DefaultCellRenderern aufzuheben schaute ich in der KI, serialVersionUID notwendig sind.
+Bei setupEventHandlers wurde ebenfalls die KI gefragt , welche Keyevents für welche Tasten wie verwendet werden müssen.
+
+	
 	
