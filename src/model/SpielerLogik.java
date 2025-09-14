@@ -35,4 +35,8 @@ public class SpielerLogik{
 		this.iconIndex = iconIndex;
 	}
 	
+	public void addPunkte(int punkte) {
+		this.punktestand += punkte;
+	}
+	
 }

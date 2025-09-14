@@ -5,15 +5,14 @@ import java.util.ArrayList;
 import java.util.List;
 import java.util.Random;
 
-import javax.swing.JButton;
 import javax.swing.JOptionPane;
 
+import gui.WuerfelBankGUI;
 import gui.WuerfelGUI;
 import gui.WuerfelflaecheGUI;
-import gui.WuerfelBankGUI;
-import model.WuerfelLogik;
 import model.SpielLogik;
 import model.StartmenueLogik;
+import model.WuerfelLogik;
 
 public class WuerfelPresenter  {
 

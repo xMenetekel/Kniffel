@@ -1,12 +1,14 @@
 package gui;
 
-import model.*;
-import presenter.WuerfelPresenter;
-
 import java.awt.Container;
 import java.util.Random;
 
-import javax.swing.*;
+import javax.swing.ImageIcon;
+import javax.swing.JButton;
+import javax.swing.Timer;
+
+import model.WuerfelLogik;
+import presenter.WuerfelPresenter;
 
 public class WuerfelGUI {
 	JButton wuerfel;
@@ -18,17 +20,26 @@ public class WuerfelGUI {
 	public double prozentXAufFeld;
 	public double prozentYAufFeld;
 	Container eimer;
-	private Random rnjesus;
+	private Random zufall;
 	private WuerfelPresenter presenter; 
 	boolean istinBank;
 	
+	/**
+	 * Konstruktor
+	 * 
+	 * @param presenter		Presenter fuer Interaktion mit GUI
+	 * @param model			Logik der Wuerfels
+	 * @param startX		Start Position X
+	 * @param startY		Start Position Y
+	 * @param eimer			Container fuer Darstellung
+	 */
 	public WuerfelGUI(WuerfelPresenter presenter, WuerfelLogik model, int startX, int startY, Container eimer){
 		this.setPresenter(presenter);
 		this.model = model;
 		this.wuerfel = new JButton();
 		this.startX = startX;
 		this.startY = startY;
-		this.rnjesus = new Random();
+		this.zufall = new Random();
 		this.eimer = eimer;
 		this.xPos = startX;
 		this.yPos = startY;
@@ -39,6 +50,9 @@ public class WuerfelGUI {
 		this.istinBank = true;	
 	}
 	
+	/**
+	 * Setzt Icon entsprechend der Augenzahl 
+	 */
 	public void fresherButton() {
 		ImageIcon bildi = new ImageIcon("src/Other/wuerfel" + model.getAugen() + "und50.png" );
 		wuerfel.setIcon(bildi);
@@ -61,67 +75,87 @@ public class WuerfelGUI {
 	 * @param zielX der x wert wo es hingezeichnet werden soll
 	 * @param zielY der y wert wo es hingezeichnet werden soll
 	 */
-	
-	public void zeichneLinie(JButton wuerfel, int zielX, int zielY, boolean wuerfeln) { //methode irgendwann nochmal ausseinanderziehen da zu uncleancodig TODO
+	public void zeichneLinie (JButton wuerfel, int zielX, int zielY, boolean wuerfeln) {
 		this.setxPos(zielX);
-		this.setyPos(zielY); //WICHTIG DAS NICHT ENTFERNEN ANSONSTEN KOLLISIONENNNNNNN
-		double m;
-		if(zielX - wuerfel.getX() == 0) { m = 0; }
-		else { m =(zielY - wuerfel.getY()) * 1.0 / ( zielX - wuerfel.getX()); } 
-		double n = zielY - (zielX * m);
-		int[] moduloBoi = wuerfeln ? new int[] {0} : new int[]{1}; //freche lösung		
-		final int TOL = 4; //für toleranz, damit es schneller ist :( darf nicht null sein
-			
-		Timer zeichnenTimer = new Timer(6, e -> {
-					
-			int xJetzt = wuerfel.getX();
-			int yJetzt = wuerfel.getY();
-			
-			moduloBoi[0]++;	
-			if(wuerfeln && moduloBoi[0] % 5 == 0) {
-			ImageIcon bildi = new ImageIcon("src/Other/wuerfel" + (rnjesus.nextInt(5)+1) + "und50.png" );
-			wuerfel.setIcon(bildi); }
-			
-			
-			if(Math.abs(m) <= 1) {
-				if (xJetzt > zielX) xJetzt = xJetzt - TOL;
-				if (xJetzt < zielX) xJetzt = xJetzt + TOL;	
-				int yNeu = (int) (m * xJetzt + n);				
-				wuerfel.setLocation(xJetzt, yNeu);	
-				
-				this.setProzentXAufFeld(this.getxPos() * 1.0 / this.getEimer().getWidth());
-				this.setProzentYAufFeld(this.getyPos() * 1.0 / this.getEimer().getHeight());
-			
-				if( xJetzt >= (zielX - TOL) && xJetzt <= (zielX + TOL) && yNeu <= (zielY + TOL) && yNeu >= (zielY - TOL)) { 
-					
-					((Timer)e.getSource()).stop();
-									
-				ImageIcon bildi = new ImageIcon("src/Other/wuerfel" + this.model.getAugen() + "und50.png" );
-				wuerfel.setIcon(bildi);
-				
-				}
-			} else {
-				if (yJetzt > zielY) yJetzt = yJetzt - TOL;	
-				if (yJetzt < zielY) yJetzt = yJetzt + TOL;				
-				int xNeu = (int) ((yJetzt - n) / m);				
-				wuerfel.setLocation(xNeu, yJetzt);	
-				
-				this.setProzentXAufFeld(this.getxPos() * 1.0 / this.getEimer().getWidth());
-				this.setProzentYAufFeld(this.getyPos() * 1.0 / this.getEimer().getHeight());
-				
-				if(xNeu <= (zielX+TOL) && xNeu >= (zielX-TOL) && yJetzt <= (zielY+TOL) && yJetzt >= (zielY -TOL)) { 
-					
-					((Timer)e.getSource()).stop();
-					
-					ImageIcon bildi = new ImageIcon("src/Other/wuerfel" + this.model.getAugen() + "und50.png" );
-					wuerfel.setIcon(bildi);
-					}
-				}
-			});
-		zeichnenTimer.start();				
+		this.setyPos(zielY);
+		double m = (zielX - wuerfel.getX() == 0) ? 0 : (zielY - wuerfel.getY()) * 1.0 / (zielX - wuerfel.getX());
+		double n = zielY - m * zielX;
+		int[] moduloBoi = new int[] {
+				wuerfeln ? 0 : 1
+		};
+		final int TOL = 4;
+		
+		Timer timer = new Timer(6, e -> animiereSchritt(wuerfel, zielX, zielY, m, n, moduloBoi, TOL, wuerfeln, (Timer)e.getSource()));
+		timer.start();
 	}
-
-	// Getter und Setter
+	
+	private void animiereSchritt(JButton wuerfel, int zielX, int zielY, 
+			double m, double n, int[] moduloBoi, int TOL, 
+			boolean wuerfeln, Timer timer) {
+		int xJetzt = wuerfel.getX();
+		int yJetzt = wuerfel.getY();
+		moduloBoi[0]++;
+		if (wuerfeln && moduloBoi[0] % 5 == 0) wuerfel.setIcon(new ImageIcon("src/Other/wuerfel" + (zufall.nextInt(5)+1) + "und50.png"));
+		
+		if(Math.abs(m) <= 1) {
+			xJetzt = bewegeRichtung(xJetzt, zielX, TOL);
+			int yNeu = (int)(m * xJetzt + n);
+			wuerfel.setLocation(xJetzt, yNeu);
+			updateProzentAufFeld();
+			pruefeZiel(wuerfel, xJetzt, yNeu, zielX, zielY, TOL, timer);
+		} else {
+			yJetzt = bewegeRichtung(yJetzt, zielY, TOL);
+			int xNeu = (int)((yJetzt - n) / m);
+			wuerfel.setLocation(xNeu, yJetzt);
+			updateProzentAufFeld();
+			pruefeZiel(wuerfel, xNeu, yJetzt, zielX, zielY, TOL, timer);
+		}
+	}
+	
+	/**
+	 * Hilsfmethode
+	 * Berechnet den nachsten Schritt
+	 * wenn kleiner als Ziel dann wird erhoeht wenn großer verringert
+	 * wenn gleich dann gleich
+	 * 
+	 * @param aktuell		die aktuelle Position
+	 * @param ziel			die Ziel Position
+	 * @param schritt		Schrittweite
+	 * @return				gibt neue Position zurueck
+	 */
+	private int bewegeRichtung(int aktuell, int ziel, int schritt) {
+		if(aktuell < ziel)
+			return aktuell + schritt;
+		if(aktuell > ziel)
+			return aktuell - schritt;
+		return aktuell;
+	}
+	
+	/**
+	 * Prueft ob der Wuerfel das Ziel erreicht hat
+	 * 
+	 * @param wuerfel	JButton des Wuerfelst
+	 * @param x			aktuelle X Position
+	 * @param y			aktuelle Y Position
+	 * @param zielX		ziel in X
+	 * @param zielY 	ziel in Y
+	 * @param toleranz	erlaubte abweichung zum Ziel
+	 * @param timer		steuert die Animation
+	 */
+	private void pruefeZiel(JButton wuerfel, int x, int y, int zielX, int zielY,
+			int toleranz, Timer timer) {
+		if(x >= zielX - toleranz && x <= zielX + toleranz && y >= zielY - toleranz && y <= zielY + toleranz) {
+			timer.stop();
+			wuerfel.setIcon(new ImageIcon ("src/Other/wuerfel" + this.model.getAugen() + "und50.png"));
+		}
+	}
+	
+	private void updateProzentAufFeld() {
+		this.setProzentXAufFeld(this.getxPos() * 1.0 / this.getEimer().getWidth());
+		this.setProzentYAufFeld(this.getyPos() * 1.0 / this.getEimer().getHeight());
+	}
+	
+	
 	public JButton getButton() {
 		return this.wuerfel;
 	}

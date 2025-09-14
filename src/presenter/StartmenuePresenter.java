@@ -23,6 +23,12 @@ public class StartmenuePresenter {
 	private StartmenueLogik menueDaten;
 	private JFrame hauptfenster;
 
+	/**
+	 * Initalisiert GUI und Logik fuer Startmenues
+	 * 
+	 * @param hauptfenster		Hauptfenster der Anwendung
+	 * @param eimer				Container in dem die GUI ist
+	 */
 	public StartmenuePresenter(JFrame hauptfenster, Container eimer) {
 		this.hauptfenster = hauptfenster;
 		this.menueDaten = new StartmenueLogik();
@@ -33,90 +39,113 @@ public class StartmenuePresenter {
 	}
 	
 	private void starteStartmenue() {
-		menueGUI.getExit().addActionListener(klick -> {System.exit(0);});
+		menueGUI.getExit().addActionListener(klick -> System.exit(0));
+		menueGUI.getEinstellungen().addActionListener(klick -> oeffneEinstellungenDialog());
+		menueGUI.getStarteSpiel().addActionListener(klick -> zeigeSpielerAuswahl());
+	}
 		
-		menueGUI.getEinstellungen().addActionListener(klick -> {
-			JCheckBox debugBox = new JCheckBox("Debugging aktivieren");
-			debugBox.setSelected(menueDaten.isDebugingModus());
-			JCheckBox endloseWuerfeBox = new JCheckBox("Endlose Würfe aktivieren");
-			endloseWuerfeBox.setSelected(menueDaten.isEndloseWuerfe());
-			JPanel zusammen = new JPanel();
-			zusammen.add(endloseWuerfeBox);
-			zusammen.add(debugBox);			
-			int auswahl = JOptionPane.showConfirmDialog(menueGUI.getEimer(),
-					zusammen,
-					"Einstellungen",
-					JOptionPane.OK_CANCEL_OPTION,
-					JOptionPane.PLAIN_MESSAGE
-					);
-			if (auswahl == JOptionPane.OK_OPTION) {
-				menueDaten.setDebugingModus(debugBox.isSelected());
-				menueDaten.setEndloseWuerfe(endloseWuerfeBox.isSelected());
-			}
-		});
+	private void oeffneEinstellungenDialog() {
+		JCheckBox debugBox = new JCheckBox("Debugging aktivieren");
+		debugBox.setSelected(menueDaten.isDebugingModus());
 		
-		menueGUI.getStarteSpiel().addActionListener(klick ->{
-			zeigeSpielerAuswahl(); //hier wird SpielfeldPresenter() aufgerufen
-		});		
+		JCheckBox endloseWuerfeBox = new JCheckBox("Endlose Würfe aktivieren");
+		endloseWuerfeBox.setSelected(menueDaten.isEndloseWuerfe());
+		
+		JPanel zusammen = new JPanel();
+		zusammen.add(endloseWuerfeBox);
+		zusammen.add(debugBox);			
+		
+		int auswahl = JOptionPane.showConfirmDialog(menueGUI.getEimer(),
+			zusammen,
+			"Einstellungen",
+			JOptionPane.OK_CANCEL_OPTION,
+			JOptionPane.PLAIN_MESSAGE
+		);
+		if (auswahl == JOptionPane.OK_OPTION) {
+			menueDaten.setDebugingModus(debugBox.isSelected());
+			menueDaten.setEndloseWuerfe(endloseWuerfeBox.isSelected());
+		}
+	}
+
+	
+	private void zeigeSpielerAuswahl() {
+		JDialog abfrage = erstelleSpielerDialog();
+		
+		for(int i = 1; i<= 4; i++) {
+			abfrage.add(erstelleSpielerButton(i, abfrage));
+		}
+		
+		abfrage.pack();
+		abfrage.setLocationRelativeTo(menueGUI.getEimer());
+		abfrage.setVisible(true);
 	}
 	
-	 
-		
-	private void zeigeSpielerAuswahl() {
-		//Hauptfenster Blockieren und eingabe User
-		JDialog abfrage = new JDialog(hauptfenster, "Anzahl Spieler",true);
-		abfrage.setLayout(new GridLayout(2,2,15,15)); //Abstand zwischenButtons
+	private JDialog erstelleSpielerDialog() {
+		JDialog abfrage = new JDialog(hauptfenster, "Anzahl Spieler", true);
+		abfrage.setLayout(new GridLayout(2, 2, 15, 15));
 		abfrage.getRootPane().setBorder(BorderFactory.createEmptyBorder(25, 25, 25, 25));
-		//Banstand von Button zu Fenster oben, links, unten, rechts
-		//ja hier machen wir mal ein Layout 
+		return abfrage;
+	}
+	
+	/**
+	 * Erstellt Buttons fuer die Auswahl der Spieleranzahl
+	 * 
+	 * @param anzahl	Anzahl der Spieler
+	 * @param abfrage	Antwort auf Frage
+	 * @return			der ausgewahlte Button
+	 */
+	private JButton erstelleSpielerButton(int anzahl, JDialog abfrage) {
+		JButton button = new JButton(String.valueOf(anzahl));
+		button.setPreferredSize(new Dimension(200, 40));
+		button.addActionListener(e -> spielerButtonGeklickt(anzahl, abfrage));
+		return button;
+	}
+	
+	private void spielerButtonGeklickt(int anzahl, JDialog abrage) {
+		menueDaten.setSpieleranzahl(anzahl);
+		abrage.dispose();
 		
-		//Buttons anlegen zwar nur 1-4 dadurch aber keine Abfragefehler
-		for(int i = 1; i<= 4; i++) {
-			final int anzahl = i; 
-			JButton druecker = new JButton(String.valueOf(i));
-			//auswahl speichern und Schließen
-			druecker.setPreferredSize(new Dimension(200,40));
-			
-			druecker.addActionListener(e ->{
-				menueDaten.setSpieleranzahl(anzahl); //speichern 
-				abfrage.dispose(); //schließen
-				
-				SpielerDaten(anzahl); //Namen hinzufügen
-				
-				SpielLogik spielLogik = new SpielLogik();
-				spielLogik.setAlleSpieler(menueDaten.getSpielerListe()); //Initialisierung Spiellogik mit Spielern
-				
-				new SpielfeldPresenter(menueGUI.getEimer(), spielLogik, menueDaten);
-				
-				menueGUI.getEimer().setVisible(true);
-			});
-			abfrage.add(druecker);
-		}
-		abfrage.pack(); // größe anpassen es könnte so einfach sein
-		abfrage.setLocationRelativeTo(menueGUI.getEimer()); //schön zentrieren
-		abfrage.setVisible(true); 
+		SpielerDaten(anzahl);
+		
+		SpielLogik spielLogik = new SpielLogik();
+		spielLogik.setAlleSpieler(menueDaten.getSpielerListe());
+		
+		new SpielfeldPresenter(menueGUI.getEimer(), spielLogik, menueDaten);
+		menueGUI.getEimer().setVisible(true);
 	}
 	
 	private void SpielerDaten(int spieleranzahl) {
 		for(int i = 0; i < spieleranzahl; i++) {
-			String name = JOptionPane.showInputDialog(
-					menueGUI.getEimer(),
-					"Name fuer Spieler " + (i+1) + ":",
-					"Spieler benennen",
-					JOptionPane.PLAIN_MESSAGE);
-			
-
+			String name = frageSpielerNachName(i);
 			int iconIndex = icons(i);
-			if(name != null) {
-				menueDaten.setSpielerName(i, name);
-				menueDaten.setSpielerIcon(i, iconIndex);
-			}
+			speichereSpielerWennName(i, name, iconIndex);
 		}
 	}
 	
-	private int icons(int indexSpieler) {
-		
-		
+	private String frageSpielerNachName(int spielerNummer) {
+		return JOptionPane.showInputDialog(
+			menueGUI.getEimer(),
+			"Name fuer Spieler " + (spielerNummer + 1) + ":",
+			"Spieler benennen",
+			JOptionPane.PLAIN_MESSAGE
+		);
+	}
+			
+
+	private void speichereSpielerWennName(int index, String name, int iconIndex) {
+		if(name != null) {		
+			menueDaten.setSpielerName(index, name);
+			menueDaten.setSpielerIcon(index, iconIndex);
+		}
+	}
+	
+	/**
+	 * Dialog zuer Icon-Auswahl fuer jeweiligen Spieler
+	 * 
+	 * @param indexSpieler		Index des Spielers
+	 * @return					angeklicktes Icon 
+	 */
+	private int icons(int indexSpieler) {		
 		Object[] liste = menueGUI.getIcons().toArray();
 														
 		int auswahl = JOptionPane.showOptionDialog(
