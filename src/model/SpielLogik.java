@@ -66,6 +66,7 @@ public class SpielLogik {
 		return spieler;
 	}
 
+	
 	public void setAlleSpieler(List<SpielerLogik> spieler) {
 		this.spieler = spieler;
 	}
