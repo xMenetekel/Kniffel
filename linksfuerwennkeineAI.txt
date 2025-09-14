@@ -4,7 +4,12 @@ für Verständnishilfe genommen
 https://docs.oracle.com/javase/8/docs/api/javax/swing/Timer.html
 timer doku für das hin und hergemove
 
+im allgemeinen wurde AI (fast) nicht benutzt um code final zu generieren, sondern mehr zum verständnis was bestimmte dinge machen oder im falle von swing auch 
+sehr oft einfach um die reihenfolge zu überprüfen, wann revalidate(); repaint(); wichtig ist, plus um allzu anstrengende fehlersuche zu meiden. 
 
+der SpielEreignisListener wurde mit AI generiert weil wir zu diesem zeitpunkt eine sehr spaghettierte klasse voller Alles hatten und ich
+nicht wusste, wie ich das ordentlich ausseinanderziehen kann ohne zu weinen. 
+-anne
 
 	 
 			
